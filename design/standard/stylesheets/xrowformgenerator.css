@@ -303,13 +303,14 @@ table tr td {
     display:block;
     float:left;
 }
-
+/* removed to fix design in edit mode
 .defaultbutton{
     display:block;
     float:left;
     margin-bottom:15px;
     
 }
+*/
 
 span.option_bes{
     display:block;
