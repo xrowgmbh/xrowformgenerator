@@ -64,7 +64,10 @@ class xrowFormGeneratorType extends eZDataType
         }
         return eZInputValidator::STATE_INVALID;
     }
-
+    function strip($value)
+    {
+        return is_array($value) ? array_map('xrowFormGeneratorType::strip', $value) : strip_tags($value);
+	}
     /*
      * Fetches the input of the form generator config
      */
@@ -77,7 +80,7 @@ class xrowFormGeneratorType extends eZDataType
 
         if ( $http->hasPostVariable( $tplKey ) )
         {
-            $formElementArray = $http->postVariable( $tplKey );
+            $formElementArray = self::strip( $http->postVariable( $tplKey ) );
             $data = array();
             
             $tplKeyArray = array( 'XrowFormCaptcha' => 'use_captcha',
@@ -90,7 +93,7 @@ class xrowFormGeneratorType extends eZDataType
             {
                 if ( $http->hasPostVariable( $tplKeyIndex . $id ) )
                 {
-                    $data_array[$tplKeyItem] = $http->postVariable( $tplKeyIndex . $id );
+                    $data_array[$tplKeyItem] = self::strip( $http->postVariable( $tplKeyIndex . $id ) );
                 }
             }
 
@@ -114,7 +117,7 @@ class xrowFormGeneratorType extends eZDataType
                 $$varName = array();
                 if ( $http->hasPostVariable( $tplFormKey ) )
                 {
-                    $$varName = $http->postVariable( $tplFormKey );
+                    $$varName = self:strip($http->postVariable( $tplFormKey ));
                 }
             }
 
@@ -387,16 +390,16 @@ class xrowFormGeneratorType extends eZDataType
         $http = eZHTTPTool::instance();
         if ( $http->hasPostVariable( $httpKey ) )
         {
-            $inputAllKeyArray = $http->postVariable( $httpKey );
+            $inputAllKeyArray = self::strip( $http->postVariable( $httpKey ) );
             $inputKeyArray = $inputAllKeyArray[$id];
 
             if ( count( $inputKeyArray ) > 0 )
             {
                 $httpInput = true;
                 $content['has_http_input'] = true;
-                $inputAllArray = $http->postVariable( 'XrowFormInput' );
+                $inputAllArray = self::strip( $http->postVariable( 'XrowFormInput' ) );
                 $inputArray = $inputAllArray[$id];
-                $inputAllTypeArray = $http->postVariable( 'XrowFormInputType' );
+                $inputAllTypeArray = self::strip( $http->postVariable( 'XrowFormInputType' ) );
                 $inputTypeArray = $inputAllTypeArray[$id];
             }
         }
