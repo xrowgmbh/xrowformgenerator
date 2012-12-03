@@ -117,7 +117,7 @@ class xrowFormGeneratorType extends eZDataType
                 $$varName = array();
                 if ( $http->hasPostVariable( $tplFormKey ) )
                 {
-                    $$varName = self:strip($http->postVariable( $tplFormKey ));
+                    $$varName = self::strip($http->postVariable( $tplFormKey ));
                 }
             }
 
