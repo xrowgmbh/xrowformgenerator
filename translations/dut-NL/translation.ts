@@ -1,35 +1,35 @@
 <!DOCTYPE TS>
 <TS><context>
-    <name>design/basis</name>
+    <name>design/base</name>
     <message>
-      <source>Vul de tekens van de onderstaande afbeelding in</source>
+      <source>Please insert the signs of the image below</source>
       <translation>Vul de tekens van de onderstaande afbeelding in</translation>
       
     </message>
     <message>
-      <source>Formulier verzenden</source>
+      <source>Send form</source>
       <translation>Formulier verzenden</translation>
       
     </message>
     <message>
-      <source>Javascript moet geactiveerd zijn om dit formulier te verzenden.</source>
+      <source>Javascript must be enabled to submit this form.</source>
       <translation>Javascript moet geactiveerd zijn om dit formulier te verzenden.</translation>
       
     </message>
   </context><context>
     <name>design/ezwebin/collectedinfo/form</name>
     <message>
-      <source>Formulier %formname</source>
+      <source>Form %formname</source>
       <translation>Formulier %formname</translation>
       
     </message>
     <message>
-      <source>U hebt dit formulier al verzonden. Deze gegevens hebt u ingevuld:</source>
+      <source>You have already submitted this form. The data you entered was:</source>
       <translation>U hebt dit formulier al verzonden. Deze gegevens hebt u ingevuld:</translation>
       
     </message>
     <message>
-      <source>Terug naar site</source>
+      <source>Return to site</source>
       <translation>Terug naar site</translation>
       
     </message>
@@ -37,281 +37,278 @@
     <name>kernel/classes/datatypes</name>
     <message>
       <location filename="xrowformgeneratortype.php" line="18"/>
-      <source>Formuliergenerator</source>
-      <comment>Naam bestandssoort</comment>
+      <source>Form generator</source>
+      <comment>Datatype name</comment>
       <translation>Formuliergenerator</translation>
       
     </message>
     <message>
-      <location filename="xrowformgeneratortype.php" line="462"/>
-      <location filename="xrowformgeneratortype.php" line="481"/>
-      <location filename="xrowformgeneratortype.php" line="529"/>
-      <source>Verplicht veld</source>
+      <location filename="xrowformgeneratortype.php" line="462"/> <location filename="xrowformgeneratortype.php" line="481"/> <location filename="xrowformgeneratortype.php" line="529"/>
+      <source>Input required.</source>
       <translation>Verplicht veld</translation>
       
     </message>
     <message>
       <location filename="xrowformgeneratortype.php" line="490"/>
-      <source>E-mailadres is niet geldig.</source>
+      <source>E-mail address is not valid.</source>
       <translation>E-mailadres is niet geldig.</translation>
       
     </message>
     <message>
       <location filename="xrowformgeneratortype.php" line="509"/>
-      <source>U moet dit hokje aanvinken.</source>
+      <source>You need to select this checkbox.</source>
       <translation>U moet dit hokje aanvinken.</translation>
       
     </message>
     <message>
       <location filename="xrowformgeneratortype.php" line="541"/>
-      <source>Vul een geldig getal in.</source>
+      <source>Please enter a valid number.</source>
       <translation>Vul een geldig getal in.</translation>
       
     </message>
     <message>
-      <location filename="xrowformgeneratortype.php" line="583"/>
-      <location filename="xrowformgeneratortype.php" line="593"/>
-      <source>Selecteer ten minste één optie.</source>
+      <location filename="xrowformgeneratortype.php" line="583"/> <location filename="xrowformgeneratortype.php" line="593"/>
+      <source>Please select at least one option.</source>
       <translation>Selecteer ten minste één optie.</translation>
       
     </message>
     <message>
       <location filename="xrowformgeneratortype.php" line="622"/>
-      <source>Hang een geldig bestand aan voor upload.</source>
+      <source>Please add a valid file for upload.</source>
       <translation>Hang een geldig bestand aan voor upload.</translation>
       
     </message>
     <message>
       <location filename="xrowformgeneratortype.php" line="629"/>
-      <source>Het geüploade bestand is te groot. Kies een kleiner bestand.</source>
+      <source>The uploaded file is too big. Please select a smaller one.</source>
       <translation>Het geüploade bestand is te groot. Kies een kleiner bestand.</translation>
       
     </message>
     <message>
       <location filename="xrowformgeneratortype.php" line="676"/>
-      <source>Spamfilter. De tekens van de captcha-code zijn fout. Vul de correcte tekens van de onderstaande afbeelding in.</source>
+      <source>Spam protection. The signs of the captcha code didn't match. Please enter the correct code of the image at the bottom.</source>
       <translation>Spamfilter. De tekens van de captcha-code zijn fout. Vul de correcte tekens van de onderstaande afbeelding in.</translation>
       
     </message>
   </context><context>
     <name>xrowformgenerator/edit</name>
     <message>
-      <source>Geen formuliervelden gespecificeerd.</source>
+      <source>No form fields defined.</source>
       <translation>Geen formuliervelden gespecificeerd.</translation>
       
     </message>
     <message>
-      <source>Er zijn één of meer fouten opgetreden. Corrigeer de gegevens in de rood gemarkeerde velden.</source>
+      <source>One ore more errors at the input occured. Please correct the input of the fields which are marked red.</source>
       <translation>Er zijn één of meer fouten opgetreden. Corrigeer de gegevens in de rood gemarkeerde velden.</translation>
       
     </message>
     <message>
-      <source>Formulier maakt gebruik van een captcha</source>
+      <source>Form is using a captcha</source>
       <translation>Formulier maakt gebruik van een captcha</translation>
       
     </message>
     <message>
-      <source>Laat het aantal formulieren in de mail zien</source>
+      <source>Show the amount of forms in the mail</source>
       <translation>Laat het aantal formulieren in de mail zien</translation>
       
     </message>
     <message>
-      <source>Vertoon gegevens na verzenden</source>
+      <source>Display Data After Submit</source>
       <translation>Vertoon gegevens na verzenden</translation>
       
     </message>
     <message>
-      <source>Ontvanger (meervoudige adressen scheiden door puntkomma)</source>
+      <source>Receiver(separate multiple Emails with a semicolon)</source>
       <translation>Ontvanger (meervoudige adressen scheiden door puntkomma)</translation>
       
     </message>
     <message>
-      <source>Onderwerp</source>
+      <source>Subject</source>
       <translation>Onderwerp</translation>
       
     </message>
     <message>
-      <source>Afzender</source>
+      <source>Sender</source>
       <translation>Afzender</translation>
       
     </message>
     <message>
-      <source>Optie wissen</source>
+      <source>Delete option</source>
       <translation>Optie wissen</translation>
       
     </message>
     <message>
-      <source>Optie</source>
+      <source>Option</source>
       <translation>Optie</translation>
       
     </message>
     <message>
-      <source>Hier klikken om deze waarde als limiet te kiezen</source>
+      <source>Click here to select this value by default</source>
       <translation>Hier klikken om deze waarde als limiet te kiezen</translation>
       
     </message>
     <message>
-      <source>Waarde limiet</source>
+      <source>Default value</source>
       <translation>Waarde limiet</translation>
       
     </message>
     <message>
-      <source>Naar boven</source>
+      <source>Move up</source>
       <translation>Naar boven</translation>
       
     </message>
     <message>
-      <source>Naar beneden</source>
+      <source>Move down</source>
       <translation>Naar beneden</translation>
       
     </message>
     <message>
-      <source>Afbeelding selecteren</source>
+      <source>Select image</source>
       <translation>Afbeelding selecteren</translation>
       
     </message>
     <message>
-      <source>Inputvelden verbinden</source>
+      <source>String input field</source>
       <translation>Inputvelden verbinden</translation>
       
     </message>
     <message>
-      <source>Formulierelement wissen</source>
+      <source>Delete form element.</source>
       <translation>Formulierelement wissen</translation>
       
     </message>
     <message>
-      <source>Naam</source>
+      <source>Name</source>
       <translation>Naam</translation>
       
     </message>
     <message>
-      <source>Beschrijving</source>
+      <source>Description</source>
       <translation>Beschrijving</translation>
       
     </message>
     <message>
-      <source>Gebruik dit hokje als dit formulierveld verplicht is.</source>
+      <source>Use this checkbox if the input of this form field is required.</source>
       <translation>Gebruik dit hokje als dit formulierveld verplicht is.</translation>
       
     </message>
     <message>
-      <source>Vereist</source>
+      <source>Required</source>
       <translation>Vereist</translation>
       
     </message>
     <message>
-      <source>Beschrijving inputveld</source>
+      <source>Description input field</source>
       <translation>Beschrijving inputveld</translation>
       
     </message>
     <message>
-      <source>Verborgen inputveld</source>
+      <source>Hidden input field</source>
       <translation>Verborgen inputveld</translation>
       
     </message>
     <message>
-      <source>Waarde</source>
+      <source>Value</source>
       <translation>Waarde</translation>
       
     </message>
     <message>
-      <source>Opvulling</source>
+      <source>Spacer</source>
       <translation>Opvulling</translation>
       
     </message>
     <message>
-      <source>Tekst inputveld</source>
+      <source>Text input field</source>
       <translation>Tekst inputveld</translation>
       
     </message>
     <message>
-      <source>Cijfer inputveld</source>
+      <source>Number input field</source>
       <translation>Cijfer inputveld</translation>
       
     </message>
     <message>
-      <source>Gebruik dit hokje als dit formulierveld beoordeeld moet worden.</source>
+      <source>Use this checkbox if the input of this form field should be validated.</source>
       <translation>Gebruik dit hokje als dit formulierveld beoordeeld moet worden.</translation>
       
     </message>
     <message>
-      <source>Beoordeling input vereist</source>
+      <source>Input requires validation</source>
       <translation>Beoordeling input vereist</translation>
       
     </message>
     <message>
-      <source>Hokje inputveld</source>
+      <source>Checkbox input field</source>
       <translation>Hokje inputveld</translation>
       
     </message>
     <message>
-      <source>Vink dit hokje aan als het hokje gekozen moet worden als limiet.</source>
+      <source>Use this checkbox if the checkbox should be selected by default.</source>
       <translation>Vink dit hokje aan als het hokje gekozen moet worden als limiet.</translation>
       
     </message>
     <message>
-      <source>E-mail inputveld</source>
+      <source>Email input field</source>
       <translation>E-mail inputveld</translation>
       
     </message>
     <message>
-      <source>Opties inputveld</source>
+      <source>Options input field</source>
       <translation>Opties inputveld</translation>
       
     </message>
     <message>
-      <source>Kies soort optie</source>
+      <source>Choose option type</source>
       <translation>Kies soort optie</translation>
       
     </message>
     <message>
-      <source>Kies hoe uw lijst met opties in het formulier vertoond wordt.</source>
+      <source>Choose how to display your option list in the form.</source>
       <translation>Kies hoe uw lijst met opties in het formulier vertoond wordt.</translation>
       
     </message>
     <message>
-      <source>Lijst radiobuttons - 1 optie te kiezen</source>
+      <source>Radio button list - 1 option is choosable</source>
       <translation>Lijst radiobuttons - 1 optie te kiezen</translation>
       
     </message>
     <message>
-      <source>Lijst aanvinkhokjes - alle opties te kiezen</source>
+      <source>Checkbox list - all options are choosable</source>
       <translation>Lijst aanvinkhokjes - alle opties te kiezen</translation>
       
     </message>
     <message>
-      <source>Selecteer hokje - 1 optie te kiezen</source>
+      <source>Select box - 1 option is choosable</source>
       <translation>Selecteer hokje - 1 optie te kiezen</translation>
       
     </message>
     <message>
-      <source>Selecteer hokje - alle opties te kiezen</source>
+      <source>Select box - all options are choosable</source>
       <translation>Selecteer hokje - alle opties te kiezen</translation>
       
     </message>
     <message>
-      <source>Optie toevoegen</source>
+      <source>Add option</source>
       <translation>Optie toevoegen</translation>
       
     </message>
     <message>
-      <source>Met een klik op deze button wordt een optie toegevoegd.</source>
+      <source>A click on this button adds one option.</source>
       <translation>Met een klik op deze button wordt een optie toegevoegd.</translation>
       
     </message>
     <message>
-      <source>Inputveld uploaden</source>
+      <source>Upload input field</source>
       <translation>Inputveld uploaden</translation>
       
     </message>
     <message>
-      <source>Opties met afbeelding inputveld</source>
+      <source>Options with image input field</source>
       <translation>Opties met afbeelding inputveld</translation>
       
     </message>
     <message>
-      <source>Voeg een formulierveld toe</source>
+      <source>Add a form field</source>
       <translation>Voeg een formulierveld toe</translation>
       
     </message>
@@ -321,32 +318,32 @@
       
     </message>
     <message>
-      <source>tekst</source>
+      <source>text</source>
       <translation>tekst</translation>
       
     </message>
     <message>
-      <source>getal</source>
+      <source>number</source>
       <translation>getal</translation>
       
     </message>
     <message>
-      <source>aanvinkhokje</source>
+      <source>checkbox</source>
       <translation>aanvinkhokje</translation>
       
     </message>
     <message>
-      <source>opties</source>
+      <source>options</source>
       <translation>opties</translation>
       
     </message>
     <message>
-      <source>opties met afbeelding</source>
+      <source>options with image</source>
       <translation>opties met afbeelding</translation>
       
     </message>
     <message>
-      <source>e-mail</source>
+      <source>email</source>
       <translation>e-mail</translation>
       
     </message>
@@ -356,98 +353,95 @@
       
     </message>
     <message>
-      <source>verborgen</source>
+      <source>hidden</source>
       <translation>verborgen</translation>
       
     </message>
     <message>
-      <source>opvulling</source>
+      <source>spacer</source>
       <translation>opvulling</translation>
       
     </message>
     <message>
-      <source>beschrijving</source>
+      <source>description</source>
       <translation>beschrijving</translation>
       
     </message>
     <message>
-      <source>Element toevoegen</source>
+      <source>Add element</source>
       <translation>Element toevoegen</translation>
       
     </message>
     <message>
-      <source>Een nieuw formulierelement toevoegen</source>
+      <source>Add a new form element</source>
       <translation>Een nieuw formulierelement toevoegen</translation>
       
     </message>
     <message>
-      <source>Captcha voor input gebruiken.</source>
+      <source>Using captcha for input.</source>
       <translation>Captcha voor input gebruiken.</translation>
       
     </message>
     <message>
-      <source>Geen captcha voor input.</source>
+      <source>No captcha for input.</source>
       <translation>Geen captcha voor input.</translation>
       
     </message>
     <message>
-      <source>Vul het formulier in. De velden met een sterretje (*) zijn verplicht.</source>
+      <source>Please fill out the form. The input of fields which are marked with a asterisk (*) is required.</source>
       <translation>Vul het formulier in. De velden met een sterretje (*) zijn verplicht.</translation>
       
     </message>
   </context><context>
     <name>xrowformgenerator/kernel/classes/datatypes</name>
     <message>
-      <source>Verplicht veld</source>
+      <source>Input required</source>
       <translation>Verplicht veld</translation>
       
     </message>
   </context><context>
     <name>xrowformgenerator/mail</name>
     <message>
-      <location filename="xrowformgeneratortype.php" line="850"/>
-      <location line="0"/>
-      <source>Nr.:</source>
+      <location filename="xrowformgeneratortype.php" line="850"/> <location line="0"/>
+      <source>No.:</source>
       <translation>Nr.:</translation>
       
     </message>
     <message>
       <location filename="xrowformgeneratortype.php" line="851"/>
-      <source>Datum</source>
+      <source>Date</source>
       <translation>Datum</translation>
       
     </message>
     <message>
-      <location filename="xrowformgeneratortype.php" line="910"/>
-      <location line="0"/>
-      <source>Ja</source>
+      <location filename="xrowformgeneratortype.php" line="910"/> <location line="0"/>
+      <source>Yes</source>
       <translation>Ja</translation>
       
     </message>
     <message>
-      <location filename="xrowformgeneratortype.php" line="914"/>
-      <location line="0"/>
-      <source>Nee</source>
+      <location filename="xrowformgeneratortype.php" line="914"/> <location line="0"/>
+      <source>No</source>
       <translation>Nee</translation>
       
     </message>
     <message>
-      <source>Formulier met succes verstuurd</source>
+      <source>Form sent successfully</source>
       <translation>Formulier met succes verstuurd</translation>
       
     </message>
     <message>
-      <source>Bedankt! U hebt dit formulier met succes verzonden.</source>
+      <source>Thank You! You have successfully submitted the form.</source>
       <translation>Bedankt! U hebt dit formulier met succes verzonden.</translation>
       
     </message>
     <message>
-      <source>Uw gegevens</source>
+      <source>Your data</source>
       <translation>Uw gegevens</translation>
       
     </message>
     <message>
-      <source>vereist</source>
+      <source>required</source>
       <translation>vereist</translation>
       
     </message>
