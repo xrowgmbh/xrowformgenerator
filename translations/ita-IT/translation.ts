@@ -402,7 +402,7 @@
   </context><context>
     <name>xrowformgenerator/mail</name>
     <message>
-      <location filename="xrowformgeneratortype.php" line="850"/> <location line="0"/>
+      <location filename="xrowformgeneratortype.php" line="850"/> 
       <source>No.:</source>
       <translation>N.:</translation>
       
@@ -414,13 +414,13 @@
       
     </message>
     <message>
-      <location filename="xrowformgeneratortype.php" line="910"/> <location line="0"/>
+      <location filename="xrowformgeneratortype.php" line="910"/> 
       <source>Yes</source>
       <translation>Si</translation>
       
     </message>
     <message>
-      <location filename="xrowformgeneratortype.php" line="914"/> <location line="0"/>
+      <location filename="xrowformgeneratortype.php" line="914"/> 
       <source>No</source>
       <translation>No</translation>
       
