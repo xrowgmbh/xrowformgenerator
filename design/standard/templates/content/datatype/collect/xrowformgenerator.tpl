@@ -31,7 +31,7 @@
                     <div class="form-checkbox-padding">{cond( is_set( $item.desc ), $item.desc, '')}</div>
                 {/case}
                 {case match="text"}
-                    <label for="text"=>{$item.name|wash}{if $item.req}<a title={"Input required"|i18n( 'xrowformgenerator/kernel/classes/datatypes' )}> ({"required"|i18n( 'xrowformgenerator/mail' )})</a>{/if}</label>
+                    <label for="text">{$item.name|wash}{if $item.req}<a title={"Input required"|i18n( 'xrowformgenerator/kernel/classes/datatypes' )}> ({"required"|i18n( 'xrowformgenerator/mail' )})</a>{/if}</label>
                     <textarea cols="70" rows="10" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}">{$item.def|wash}</textarea>
                     <span>{cond( is_set( $item.desc ), $item.desc, '')}</span>
                 {/case}

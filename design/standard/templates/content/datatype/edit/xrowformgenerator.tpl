@@ -6,7 +6,7 @@
 
 {if ezini( 'ExtensionSettings', 'ActiveExtensions', 'site.ini' )|contains( 'xrowcaptcha' )}
     <label>
-        <input type="checkbox" name="XrowFormCaptcha{$id}" value="1" disabled="true" checked="checked"/> {"Form is using a captcha"|i18n( 'xrowformgenerator/edit' )} (*Fuer alle Formulare wird automatisch ein Captcha verwendet.)
+        <input type="checkbox" name="XrowFormCaptcha{$id}" value="1" disabled="true" checked="checked"/> {"Form is using a captcha"|i18n( 'xrowformgenerator/edit' )} (* {"Captcha is automatically applied to all forms."|i18n( 'xrowformgenerator/edit' )} )
     </label>
 {else}
     <label>

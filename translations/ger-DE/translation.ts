@@ -84,6 +84,10 @@
         <translation>Captcha zur Eingabesicherung verwenden.</translation>
     </message>
     <message>
+        <source>Captcha is automatically applied to all forms.</source>
+        <translation>Für alle Formulare wird automatisch ein Captcha verwendet.</translation>
+    </message>
+    <message>
         <source>No captcha for input.</source>
         <translation>Kein Captcha zur Eingabensicherung verwenden.</translation>
     </message>
@@ -96,8 +100,7 @@
         <translation>Bitte füllen Sie das Formular aus. Felder, die mit einem Sternchen (*) markiert sind, müssen ausgefüllt werden.</translation>
     </message>
     <message>
-        <source>One ore more errors at the input occured. Please correct the input of the fields which are marked red.</source>
-        <translation>Einer oder mehrere Fehler sind bei der Eingabe passiert. Bitte korrigieren Sie die Eingabe der Felder, die rot markiert sind.</translation>
+        <source>One ore more errors at the input occured. Please correct the input of the fields which are marked red.</source>        <translation>Einer oder mehrere Fehler sind bei der Eingabe passiert. Bitte korrigieren Sie die Eingabe der Felder, die rot markiert sind.</translation>
     </message>
     <message>
         <source>Form is using a captcha</source>
