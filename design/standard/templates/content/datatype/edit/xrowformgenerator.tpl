@@ -4,9 +4,15 @@
 {def $content=$attribute.content
      $id=$attribute.id}
 
-<label>
-    <input type="checkbox" name="XrowFormCaptcha{$id}" value="1"{if $content.use_captcha} checked="checked"{/if} /> {"Form is using a captcha"|i18n( 'xrowformgenerator/edit' )}
-</label>
+{if ezini( 'ExtensionSettings', 'ActiveExtensions', 'site.ini' )|contains( 'xrowcaptcha' )}
+    <label>
+        <input type="checkbox" name="XrowFormCaptcha{$id}" value="1" disabled="true" checked="checked"/> {"Form is using a captcha"|i18n( 'xrowformgenerator/edit' )} (*Fuer alle Formulare wird automatisch ein Captcha verwendet.)
+    </label>
+{else}
+    <label>
+        <input type="checkbox" name="XrowFormCaptcha{$id}" value="1" {if $content.use_captcha} checked="checked"{/if} /> {"Form is using a captcha"|i18n( 'xrowformgenerator/edit' )}
+    </label>
+{/if}
 
 <label>
     <input type="checkbox" name="XrowFormAmount{$id}" value="1"{if and( is_set( $content.show_amount ), $content.show_amount )} checked="checked"{/if} /> {"Show the amount of forms in the mail"|i18n( 'xrowformgenerator/edit' )}
