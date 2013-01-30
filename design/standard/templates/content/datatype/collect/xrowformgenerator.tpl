@@ -176,7 +176,7 @@
     </ol>
 {/if}
 
-
+<div class="xrow-captcha"></div>
 {if $content.use_captcha}
     {set-block scope=global variable=cache_ttl}0{/set-block}
     <p>{"Please insert the signs of the image below"|i18n("design/base")}:</p>
