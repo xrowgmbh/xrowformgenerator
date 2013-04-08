@@ -150,7 +150,8 @@ div.element label.xrow-image-options .img{
 }
 
 .class-article .attribute-header h1{
-	font-size:16px;
+	/*font-size:16px;*/
+    font-size:1.333em;
 	color:#005798;
 	margin:8px 0 8px 0;
 }
@@ -177,7 +178,8 @@ float:left;
 #page label.black_label
 {
     color: #404040;
-    font-size: 12px;
+    /*font-size: 12px;*/
+	font-size:1em;
     line-height: 15px;
     font-weight: normal;
     padding-left: 20px;
@@ -190,7 +192,8 @@ float:left;
 
 .class-xrowformgenerator .attribute-header h1{
     
-    font-size:16px;
+    /*font-size:16px;*/
+    font-size:1.333em;
     color:#005798;
     margin:0px 0 8px 0;
     
@@ -201,7 +204,8 @@ float:left;
     padding:0 5px;
 }
 .border-mc p{
-    font-size:12px;
+    /*font-size:12px;*/
+    font-size:1em;
     line-height:15px;
     color:#404040;
     
@@ -237,7 +241,8 @@ float:left;
 }
 
 #page #main_content .thankyou_page .anzeige_table caption{
-    font-size:16px;
+    /*font-size:16px;*/
+    font-size:1.333px;
     font-weight:bold;
     color:#404040;
     text-align:left;
