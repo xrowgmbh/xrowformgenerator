@@ -181,7 +181,7 @@
                 <div class="block">
                     <div class="element xrow-trash-width"><img class="xrow-form-element-trash-button" src={"trash-icon-16x16.gif"|ezimage} alt="{"Delete form element."|i18n( 'xrowformgenerator/edit' )}"  title="{"Delete form element."|i18n( 'xrowformgenerator/edit' )}" width="16" height="16" /></div>
                     <div class="element xrow-form-element-width">
-                        <input type="hidden" name="x1XrowFormElementArray{$id}[]" value="yyyxrowindexyyy" />
+                        <input type="hidden" name="x1XrowFormElementArray{$id}[yyyxrowindexyyy]" value="yyyxrowindexyyy" />
                         <input type="hidden" name="x1XrowFormElementType{$id}[yyyxrowindexyyy]" value="text" />
                         <div class="block">
                             <label>{"Name"|i18n( 'xrowformgenerator/edit' )}:</label>
@@ -212,7 +212,7 @@
                 <div class="block">
                     <div class="element xrow-trash-width"><img class="xrow-form-element-trash-button" src={"trash-icon-16x16.gif"|ezimage} alt="{"Delete form element."|i18n( 'xrowformgenerator/edit' )}"  title="{"Delete form element."|i18n( 'xrowformgenerator/edit' )}" width="16" height="16" /></div>
                     <div class="element xrow-form-element-width">
-                        <input type="hidden" name="x1XrowFormElementArray{$id}[]" value="yyyxrowindexyyy" />
+                        <input type="hidden" name="x1XrowFormElementArray{$id}[yyyxrowindexyyy]" value="yyyxrowindexyyy" />
                         <input type="hidden" name="x1XrowFormElementType{$id}[yyyxrowindexyyy]" value="number" />
                         <div class="block">
                             <label>{"Name"|i18n( 'xrowformgenerator/edit' )}:</label>
@@ -246,7 +246,7 @@
                 <div class="block">
                     <div class="element xrow-trash-width"><img class="xrow-form-element-trash-button" src={"trash-icon-16x16.gif"|ezimage} alt="{"Delete form element."|i18n( 'xrowformgenerator/edit' )}"  title="{"Delete form element."|i18n( 'xrowformgenerator/edit' )}" width="16" height="16" /></div>
                     <div class="element xrow-form-element-width">
-                        <input type="hidden" name="x1XrowFormElementArray{$id}[]" value="yyyxrowindexyyy" />
+                        <input type="hidden" name="x1XrowFormElementArray{$id}[yyyxrowindexyyy]" value="yyyxrowindexyyy" />
                         <input type="hidden" name="x1XrowFormElementType{$id}[yyyxrowindexyyy]" value="checkbox" />
                         <div class="block">
                             <label>{"Name"|i18n( 'xrowformgenerator/edit' )}:</label>
@@ -277,7 +277,7 @@
                 <div class="block">
                     <div class="element xrow-trash-width"><img class="xrow-form-element-trash-button" src={"trash-icon-16x16.gif"|ezimage} alt="{"Delete form element."|i18n( 'xrowformgenerator/edit' )}"  title="{"Delete form element."|i18n( 'xrowformgenerator/edit' )}" width="16" height="16" /></div>
                     <div class="element xrow-form-element-width">
-                        <input type="hidden" name="x1XrowFormElementArray{$id}[]" value="yyyxrowindexyyy" />
+                        <input type="hidden" name="x1XrowFormElementArray{$id}[yyyxrowindexyyy]" value="yyyxrowindexyyy" />
                         <input type="hidden" name="x1XrowFormElementType{$id}[yyyxrowindexyyy]" value="email" />
                         <div class="block">
                             <label>{"Name"|i18n( 'xrowformgenerator/edit' )}:</label>
@@ -310,7 +310,7 @@
                 <div class="block">
                     <div class="element xrow-trash-width"><img class="xrow-form-element-trash-button" src={"trash-icon-16x16.gif"|ezimage} alt="{"Delete form element."|i18n( 'xrowformgenerator/edit' )}"  title="{"Delete form element."|i18n( 'xrowformgenerator/edit' )}" width="16" height="16" /></div>
                     <div class="element xrow-form-element-width">
-                        <input type="hidden" name="x1XrowFormElementArray{$id}[]" value="yyyxrowindexyyy" />
+                        <input type="hidden" name="x1XrowFormElementArray{$id}[yyyxrowindexyyy]" value="yyyxrowindexyyy" />
                         <input type="hidden" name="x1XrowFormElementType{$id}[yyyxrowindexyyy]" value="options" />
                         <div class="block">
                             <label>{"Name"|i18n( 'xrowformgenerator/edit' )}:</label>
@@ -351,7 +351,7 @@
                 <div class="block">
                     <div class="element xrow-trash-width"><img class="xrow-form-element-trash-button" src={"trash-icon-16x16.gif"|ezimage} alt="{"Delete form element."|i18n( 'xrowformgenerator/edit' )}"  title="{"Delete form element."|i18n( 'xrowformgenerator/edit' )}" width="16" height="16" /></div>
                     <div class="element xrow-form-element-width">
-                        <input type="hidden" name="x1XrowFormElementArray{$id}[]" value="yyyxrowindexyyy" />
+                        <input type="hidden" name="x1XrowFormElementArray{$id}[yyyxrowindexyyy]" value="yyyxrowindexyyy" />
                         <input type="hidden" name="x1XrowFormElementType{$id}[yyyxrowindexyyy]" value="upload" />
                         <div class="block">
                             <label>{"Name"|i18n( 'xrowformgenerator/edit' )}:</label>
@@ -378,7 +378,7 @@
                 <div class="block">
                     <div class="element xrow-trash-width"><img class="xrow-form-element-trash-button" src={"trash-icon-16x16.gif"|ezimage} alt="{"Delete form element."|i18n( 'xrowformgenerator/edit' )}"  title="{"Delete form element."|i18n( 'xrowformgenerator/edit' )}" width="16" height="16" /></div>
                     <div class="element xrow-form-element-width">
-                        <input type="hidden" name="x1XrowFormElementArray{$id}[]" value="yyyxrowindexyyy" />
+                        <input type="hidden" name="x1XrowFormElementArray{$id}[yyyxrowindexyyy]" value="yyyxrowindexyyy" />
                         <input type="hidden" name="x1XrowFormElementType{$id}[yyyxrowindexyyy]" value="imageoptions" />
                         <div class="block">
                             <label>{"Name"|i18n( 'xrowformgenerator/edit' )}:</label>
