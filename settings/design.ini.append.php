@@ -4,9 +4,10 @@
 DesignExtensions[]=xrowformgenerator
 
 # gwf: loaded by jscore
-#[JavaScriptSettings]
+[JavaScriptSettings]
 #JavaScriptList[]=yahoo-dom-event/yahoo-dom-event.js
 #JavaScriptList[]=xrowformgenerator.js
+#JavaScriptList[]=common.js
 
 [StylesheetSettings]
 CSSFileList[]=xrowformgenerator.css

@@ -131,233 +131,78 @@ div.element label.xrow-image-options img
 }
 
 div.element label.xrow-image-options .img{
-
     width:120px;
     height:90px;
     text-align:center;
     }
 
-/* new Design for Hannover.de*/
-.attribute-form{
-    padding:0 5px;
-}
-.class-article{
-    width:400px;
-}
-
-.class-article .attribute-header{
-	border-bottom:1px solid #ccc;
-}
-
-.class-article .attribute-header h1{
-	/*font-size:16px;*/
-    font-size:1.333em;
-	color:#005798;
-	margin:8px 0 8px 0;
-}
-
-.class-article .attribute-image{
-	display:none;
-}
-
-.class-article label{
-	color:#005798;
-}
-
-
-div.block div.xrow-image-options{
-float:left;
-}
-
-.class-xrowform div.attribute-thankyou_page p{
- 	display:none;
- }
-
-.content-action{margin-bottom:20px;}
-
-#page label.black_label
-{
-    color: #404040;
-    /*font-size: 12px;*/
-	font-size:1em;
-    line-height: 15px;
-    font-weight: normal;
-    padding-left: 20px;
-    margin-top: -20px;
-}
-
-.class-xrowformgenerator .attribute-header{
-    border-bottom:1px solid #ccc;
-}
-
-.class-xrowformgenerator .attribute-header h1{
-    
-    /*font-size:16px;*/
-    font-size:1.333em;
-    color:#005798;
-    margin:0px 0 8px 0;
-    
-}
-
-.border-mc{
-    width:400px;
-    padding:0 5px;
-}
-.border-mc p{
-    /*font-size:12px;*/
-    font-size:1em;
-    line-height:15px;
-    color:#404040;
-    
-    }
-
-#xrow-form-bes{
-    width:99%;
-    background: linear-gradient(bottom, #FEFEFE 50%, #D7D7D7 100%); 
-    background: -webkit-gradient(linear, 0 100%, 0 0%, color-stop(0.07, #FFFFFF), color-stop(0.8, #EEEEEE));
-    background: -o-linear-gradient(bottom, #FEFEFE 50%, #D7D7D7 100%); 
-    background: -moz-linear-gradient(bottom, #FEFEFE 50%, #D7D7D7 100%);
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#D7D7D7', endColorstr='#fefefe')";
-}
-
-.desc_eingabe_bild{
-    float:left;
-    margin-bottom:12px;
-}
-
-.module_result_column{
-    width:400px;
-   
-}
-
-.thankyou_page{
-   float:left;
-    width:400px;
-}
-
-.thankyou_page .anzeige_table
-{
-    background:#eee;   
-}
-
-#page #main_content .thankyou_page .anzeige_table caption{
-    /*font-size:16px;*/
-    font-size:1.333px;
-    font-weight:bold;
-    color:#404040;
-    text-align:left;
-    line-height: 20px;
-    padding:8px 0px 8px 10px;
-    border-bottom: 1px solid #CCCCCC;
-    background-image: url("/extension/hannover/design/hannover/images/small_grey_corner.png"),-moz-linear-gradient(center bottom , #F9F9F9 7%, #EEEEEE 80%);
-    background-position: right top;
-    background-repeat: no-repeat;
-    background-color:#f9f9f9;
-    height:32px;
-}
-
-table tr:first-child th td{
-    border-top: thin none;
-}
-
-tabel tr:last-child th td{
-    border-bottom:thin none;
-}
-
-table tr th {
-    border-bottom: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    border-top:1px solid #fff;
-    width: 30%;
-}
- 
-table tr td {
-    border-bottom: 1px solid #CCCCCC;
-    border-left: 1px solid #FFFFFF;
-    border-top:1px solid #fff;
-    width:70%;
-}
-
-.xrow-form-full span{
-    width:400px;
-    height:auto;
-}
-
-.xrow-form-full span input {
-    margin-left:0;
-}
-
-.xrow-form-full label input{
-   margin-left:0;
-   vertical-align:middle;
-}
-
-.block{margin-bottom:0;}
-.row-form-eingabefeld-bild-optionen .block{
-    display:block;
-}
-
-.xrow-form.full .row-form-eingabefeld-bild-optionen .block div.xrow-image-opt-ele .xrow-image-options input{
-    line-height:90px;
-}
-
-
-.border-mc p.formsmall{
-    width:400px;
-    height:auto;
-    display:block;
-    float:left;
-}
-/* removed to fix design in edit mode
-.defaultbutton{
-    display:block;
-    float:left;
-    margin-bottom:15px;
-    
-}
-*/
-
-span.option_bes{
-    display:block;
-    width:400px;
-    margin-top:5px;
-}
-
-.xrow-form-full a{color:#005798;}
-
-/*nur fuer Bild Optionen*/
-
-div.element label.xrow-image-options .che{
-   float:left;
-   padding-top:35px;
-   padding-bottom:35px;
-   margin-right:5px;
-}
-
+div.element label.xrow-image-options .bes,
+div.element label.xrow-image-options .che,
 div.element label.xrow-image-options .img{
-   float:left;
-   margin-right:10px;
+	float:left;
+}
+    
+/*new Design*/
+
+ol.xrow-form-xrowform{
+   list-style-type:none;
 }
 
-div.element label.xrow-image-options .bes{
-   float:left;
-   width:240px;
-   margin-top:5px;
+ol.xrow-form-xrowform li,
+.xrow-form-full li,
+.xrow-form-full ol{
+   list-style-type:none;
+}
+
+ol.xrow-form-xrowform .radio_button {
+    float:left;
+    margin-right:5px;
+    margin-top:3px;
 
 }
 
-.border-mc{float:left;}
-
-
-#noScriptPrompt{
-  float:left;
-  color:red;
-  margin-top:-30px;
-  margin-bottom:20px;
-  display:block;
+ol.xrow-form-xrowform .options_label label,
+ol.xrow-form-xrowform .options_checkbox label
+{
+    clear:right;
+    margin-right:10px;
+    font-weight:normal;
 }
 
-.xrow-form li a{
-    display:inline-block;
-    margin-left:3px;
-    }
+ol.xrow-form-xrowform .input_desc,
+ol.xrow-form-xrowform .option_bes,
+ol.xrow-form-xrowform .desc_eingabe_bild{
+    color: #AAAAAA;
+    font-size: 80%;
+    line-height: 135%;
+    margin-bottom: 5px;
+    margin-top: 5px;   
+}
+
+ol.xrow-form-xrowform abbr{
+    border-bottom:none;
+}
+
+ol.xrow-form-xrowform textarea{
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #999999;
+    color: #999999;
+    padding:0;
+}
+
+.xrow-form-full ol, 
+.xrow-form-full ul , 
+.xrow-form-full li{
+    margin:0;
+}
+
+.xrow-form-full input.box {
+    padding:5px;
+}
+
+
+.xrow-form-full input[type="checkbox"], 
+.xrow-form-full input[type="radio"]{
+	float:left;
+    margin-right:6px;
+}

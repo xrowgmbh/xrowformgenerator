@@ -68,6 +68,11 @@ class xrowFormGeneratorType extends eZDataType
     {
         return is_array($value) ? array_map('xrowFormGeneratorType::strip', $value) : strip_tags($value);
 	}
+
+        function strip_a_tag($value)
+    {
+        return is_array($value) ? array_map('xrowFormGeneratorType::strip_a_tag', $value) : strip_tags($value,"<a>");
+    }
     /*
      * Fetches the input of the form generator config
      */
@@ -76,8 +81,8 @@ class xrowFormGeneratorType extends eZDataType
         $id = $attribute->attribute( "id" );
         $data_array['use_captcha'] = false;
         $data_array['show_anzeige'] = false;
+        $data_array['button_text'] = "";
         $tplKey = "XrowFormElementArray" . $id;
-
         if ( $http->hasPostVariable( $tplKey ) )
         {
             $formElementArray = self::strip( $http->postVariable( $tplKey ) );
@@ -88,6 +93,7 @@ class xrowFormGeneratorType extends eZDataType
                                   'XrowFormReceiver' => 'receiver',
                                   'XrowFormSubject' => 'subject',
                                   'XrowFormSender' => 'sender',
+            		              'XrowFormButton' => 'button_text',
                                   'XrowFormAnzeige'=> 'show_anzeige');
             foreach( $tplKeyArray as $tplKeyIndex => $tplKeyItem )
             {
@@ -104,6 +110,7 @@ class xrowFormGeneratorType extends eZDataType
                                "XrowFormElementDesc" . $id => "desc",
                                "XrowFormElementReq" . $id => "req",
                                "XrowFormElementVal" . $id => "val",
+                               "XrowFormElementUnique" . $id => "unique",
                                "XrowFormElementOptionType" . $id => "option_type",
                                "XrowFormElementOptionArray" . $id => "option",
                                "XrowFormElementOption" . $id => "option_name",
@@ -117,7 +124,11 @@ class xrowFormGeneratorType extends eZDataType
                 $$varName = array();
                 if ( $http->hasPostVariable( $tplFormKey ) )
                 {
-                    $$varName = self::strip($http->postVariable( $tplFormKey ));
+                    if($dataKey != "desc"){
+                        $$varName = self::strip($http->postVariable( $tplFormKey ));
+                    }else{
+                        $$varName = self::strip_a_tag($http->postVariable( $tplFormKey ));
+                    }
                 }
             }
 
@@ -130,7 +141,7 @@ class xrowFormGeneratorType extends eZDataType
                     $type = $typeArray[$key];
                     $data['type'] = $type;
                     $data['name'] = $data['desc'] = $data['def'] = null;
-                    $data['req'] = $data['val'] = false;
+                    $data['req'] = $data['val'] = $data['unique'] = false;
 
                     if ( isset( $nameArray[$key] ) )
                     {
@@ -168,6 +179,10 @@ class xrowFormGeneratorType extends eZDataType
                     if ( isset( $valArray[$key] ) )
                     {
                         $data['val'] = true;
+                    }
+                    if ( isset( $valArray[$key] ) )
+                    {
+                        $data['unique'] = true;
                     }
 
                     if ( $type == 'options' or $type == 'imageoptions' )
@@ -271,7 +286,7 @@ class xrowFormGeneratorType extends eZDataType
         #eZDebug::writeDebug( $templateResult, 'mail' );
 
         $subject = $tpl->variable( 'subject' );
-        $receiverString = $tpl->variable( 'email_receiver' );
+        $receiverString = $tpl->variable( 'email_receiver_xrow' );
         $ccReceivers = $tpl->variable( 'email_cc_receivers' );
         $bccReceivers = $tpl->variable( 'email_bcc_receivers' );
         $sender = $tpl->variable( 'email_sender' );
@@ -293,7 +308,7 @@ class xrowFormGeneratorType extends eZDataType
         {
             $receiverArray = array( $ini->variable( "InformationCollectionSettings", "EmailReceiver" ) );
         }
-
+        
         foreach ( $receiverArray as $receiver )
         {
             $mail->addTo( new ezcMailAddress( $receiver ) );
@@ -359,6 +374,7 @@ class xrowFormGeneratorType extends eZDataType
     function objectAttributeContent( $contentObjectAttribute )
     {
         $id = $contentObjectAttribute->attribute( 'id' );
+        $contentobject_id = $contentObjectAttribute->attribute( 'contentobject_id' );
 
         $cacheKey = 'col';
         if ( $contentObjectAttribute instanceof eZContentObjectAttribute )
@@ -492,6 +508,15 @@ class xrowFormGeneratorType extends eZDataType
                                         $content['has_error'] = true;
                                         $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "E-mail address is not valid." );
                                     }
+                                }
+                                if($item['unique'] == true) 
+                                {
+                                    if ( !self::email_unique( $data, $contentobject_id ) )
+                                    {
+                                        $content['form_elements'][$key]['error'] = true;
+                                        $content['has_error'] = true;
+                                        $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Your email was already submitted to us. You can't use the form twice." );
+                                    }                             
                                 }
                                 $content['form_elements'][$key]['def'] = $data;
                             }break;
@@ -668,7 +693,7 @@ class xrowFormGeneratorType extends eZDataType
         }
 
         // Checking the captcha code
-        if ( $httpInput and $content['use_captcha'] )
+      /*  if ( $httpInput and $content['use_captcha'] )
         {
             $dataType = new eZHumanCAPTCHAType();
             $spamTest = $dataType->validateObjectAttributeHTTPInput( $http, 'ContentObjectAttribute', $contentObjectAttribute );
@@ -678,7 +703,7 @@ class xrowFormGeneratorType extends eZDataType
                 $content['has_error'] = true;
                 $content['error_array'][] = ezpI18n::tr( 'kernel/classes/datatypes', "Spam protection. The signs of the captcha code didn't match. Please enter the correct code of the image at the bottom." );
             }
-        }
+        }*/
 
         #eZDebug::writeDebug( $content, 'form config content' );
         $GLOBALS['XrowFormCache'][$id][$cacheKey] = $content;
@@ -1018,6 +1043,38 @@ class xrowFormGeneratorType extends eZDataType
         return preg_match( '/^' . self::REGEXP . '$/', $address );
     }
 
+    static function email_unique( $address, $contentobject_id )
+    {
+        // gets DB instance			
+        $db = eZDB::instance();
+
+        $sql = "
+           SELECT ezinfocollection_attribute.data_text, count( ezinfocollection_attribute.id ) as count 
+           FROM 
+              ezinfocollection_attribute
+           WHERE 
+              ezinfocollection_attribute.data_text LIKE '%" . $address . "%'
+           AND contentobject_id = " . $contentobject_id;
+
+        // executes query
+        $resArray = $db->arrayQuery( $sql );
+        if( count( $resArray ) > 0 )
+        {
+            foreach( $resArray as $resItem )
+            {
+                $resItemArray = unserialize( $resItem["data_text"] );
+                foreach( $resItemArray as $resItemArrayItem )
+                {
+                    if( $resItemArrayItem == $address )
+                    { 
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    
     public $escape = true;
     public $encloseChar = '"';
     public $separationChar = ";";

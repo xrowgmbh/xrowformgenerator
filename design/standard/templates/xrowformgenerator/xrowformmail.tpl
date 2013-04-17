@@ -1,12 +1,12 @@
-{set-block scope=root variable=subject}{if $content.show_amount}#{$content.no}: {/if}{$content.subject}{/set-block}
-{set-block scope=root variable=email_receiver}{$content.receiver}{/set-block}
+{set-block scope=root variable=subject}{if and( is_set( $content.show_amount ), $content.show_amount )}#{$content.no}: {/if}{$content.subject}{/set-block}
+{set-block scope=root variable=email_receiver_xrow}{$content.receiver}{/set-block}
 {set-block scope=root variable=email_sender}{$content.sender}{/set-block}
 {if and( is_set( $object.data_map.mail_header ), $object.data_map.mail_header.has_content )}
 
 {$object.data_map.mail_header.content}
 {/if}
 
-{if $content.show_amount}{"No.:"|i18n( 'xrowformgenerator/mail' )} {$content.no}
+{if and( is_set( $content.show_amount ), $content.show_amount )}{"No.:"|i18n( 'xrowformgenerator/mail' )} {$content.no}
 
 -------------------------------------------------------------------------------
 

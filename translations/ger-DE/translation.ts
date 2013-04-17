@@ -49,6 +49,10 @@
         <translation>Eingabe erforderlich.</translation>
     </message>
     <message>
+        <source>Your email was already submitted to us. You can't use the form twice.</source>
+        <translation>Ihre E-Mailaddresse wurde schon mal an uns übersandt. Sie können das Formular kein zweites Mal benutzen.</translation>
+    </message>
+    <message>
         <source>E-mail address is not valid.</source>
         <translation>Die E-Mail Adresse ist nicht gültig.</translation>
     </message>
@@ -79,6 +83,14 @@
 </context>
 <context>
     <name>xrowformgenerator/edit</name>
+    <message>
+        <source>Changing default text on button</source>
+        <translation>Button Text (Standardwert: "Formular absenden") - Ändert den Text des Submit-Buttons</translation>
+    </message>
+    <message>
+        <source>Unique</source>
+        <translation>Eindeutig</translation>
+    </message>
     <message>
         <source>Using captcha for input.</source>
         <translation>Captcha zur Eingabesicherung verwenden.</translation>
@@ -181,6 +193,7 @@
     <message>
         <source>Email input field</source>
         <translation>Eingabefeld E-Mail</translation>
+
     </message>
     <message>
         <source>Options input field</source>

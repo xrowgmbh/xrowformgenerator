@@ -37,6 +37,11 @@
     <input type="text" class="box" name="XrowFormSender{$id}" value="{$content.sender}" />
 </div>
 
+<div class="block ezcca-edit-datatype-ezstring ezcca-edit-button">
+    <label>{"Changing default text on button"|i18n( 'xrowformgenerator/edit' )}</label>
+    <input type="text" class="box" name="XrowFormButton{$id}" value="{$content.button_text}" />
+</div>
+
 {* options list tpl *}
 <div class="hidden">
     <div id="xrow-options-tpl-{$id}">
@@ -294,8 +299,10 @@
                         <div class="block inline">
                             <label><input class="xrow-form-element-required" name="x1XrowFormElementReq{$id}[yyyxrowindexyyy]" value="yyyxrowreqyyy" title="{"Use this checkbox if the input of this form field is required."|i18n( 'xrowformgenerator/edit' )}" type="checkbox" />{"Required"|i18n( 'xrowformgenerator/edit' )}
                             </label>
-                            <label><input class="xrow-form-element-validation" name="x1XrowFormElementVal{$id}[yyyxrowindexyyy]" value="yyyxrowvalyyy" title="{"Use this checkbox if the input of this form field should be validated."|i18n( 'xrowformgenerator/edit' )}" type="checkbox" />{"Input requires validation"|i18n( 'xrowformgenerator/edit' )}
+                            <label><input class="xrow-form-element-unique" name="x1XrowFormElementUnique{$id}[yyyxrowindexyyy]" value="yyyxrowuniqueyyy" title="{"Unique"|i18n( 'xrowformgenerator/edit' )}" type="checkbox" />{"Unique"|i18n( 'xrowformgenerator/edit' )}
                             </label>
+                            <label><input class="xrow-form-element-validation" name="x1XrowFormElementVal{$id}[yyyxrowindexyyy]" value="yyyxrowvalyyy" title="{"Use this checkbox if the input of this form field should be validated."|i18n( 'xrowformgenerator/edit' )}" type="checkbox" />{"Input requires validation"|i18n( 'xrowformgenerator/edit' )}
+							</label>
                         </div>
                     </div>
                     <div class="element xrow-move-width"><img class="xrow-element-button-up" src={"button-move_up.gif"|ezimage} alt="{"Move up"|i18n( 'xrowformgenerator/edit' )}"  title="{"Move up"|i18n( 'xrowformgenerator/edit' )}" width="16" height="16" />&nbsp;<img class="xrow-element-button-down" src={"button-move_down.gif"|ezimage} alt="{"Move down"|i18n( 'xrowformgenerator/edit' )}" width="16" height="16" title="{"Move down"|i18n( 'xrowformgenerator/edit' )}" /></div>
