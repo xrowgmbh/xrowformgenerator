@@ -206,9 +206,9 @@
                             {/literal}
                         </script>
                         {recaptcha_get_html().recaptcha}
-                        {if and(recaptcha_get_html().answer|not(),not(recaptcha_get_html().answer|is_null()))}
+                        {*if and(recaptcha_get_html().answer|not(),not(recaptcha_get_html().answer|is_null()))}
                             <p class='recaptcha_warning' style='color:red;'>{"Spam protection. The signs of the captcha code didn't match. Please enter the correct code of the image at the bottom."|i18n( 'kernel/classes/datatypes' )}</p>
-                        {/if}
+                        {/if*}
                     {/if}
                 {elseif eq(ezini("Settings","Captcha","xrowformgenerator.ini"),'humancaptcha')}
                     {if $content.use_captcha}

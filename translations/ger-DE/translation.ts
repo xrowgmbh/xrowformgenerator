@@ -49,6 +49,10 @@
         <translation>Eingabe erforderlich.</translation>
     </message>
     <message>
+        <source>The reCAPTCHA wasn't entered correctly. Please try again.</source>
+        <translation>Der Sicherheitscode wurde nicht richtig eingegeben, bitte versuchen Sie es erneut.</translation>
+    </message>
+    <message>
         <source>Your email was already submitted to us. You can't use the form twice.</source>
         <translation>Ihre E-Mailaddresse wurde schon mal an uns übersandt. Sie können das Formular kein zweites Mal benutzen.</translation>
     </message>

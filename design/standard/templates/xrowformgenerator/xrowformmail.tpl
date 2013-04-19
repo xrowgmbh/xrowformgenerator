@@ -17,7 +17,7 @@
 {concat( $item.name, ': ' )}
 {switch match=$item.type}
 {case match="checkbox"}{if $item.def}{"Yes"|i18n( 'xrowformgenerator/mail' )}{else}{"No"|i18n( 'xrowformgenerator/mail' )}{/if}{/case}
-{case match="upload"}{cond( is_set( $item.def ), "Yes"|i18n( 'xrowformgenerator/mail' ),'' )}{/case}
+{case match="upload"}{cond( is_set( $item.def ), $item.original_filename|wash(),'' )}{/case}
 {case match="options"}
 {switch match=$item.option_type}
 {case match="checkbox"}
