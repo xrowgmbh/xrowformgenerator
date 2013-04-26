@@ -69,6 +69,10 @@
         <translation>Bitte geben Sie eine Zahl ein.</translation>
     </message>
     <message>
+        <source>Please enter a valid phone number.</source>
+        <translation>Bitte geben Sie eine gültige Telefonnummer ein.</translation>
+    </message>
+    <message>
         <source>Please select at least one option.</source>
         <translation>Sie müssen mindestens eine Option auswählen.</translation>
     </message>
@@ -178,6 +182,10 @@
         <source>Number input field</source>
         <translation>Eingabefeld Zahl</translation>
     </message>
+        <message>
+        <source>Telephone number input field</source>
+        <translation>Eingabefeld Telefonnummer</translation>
+    </message>
     <message>
         <source>Use this checkbox if the input of this form field should be validated.</source>
         <translation>Verwenden Sie dieses Kontrollkästchen, wenn die Eingabe bei diesem Feld überprüft werden soll.</translation>
@@ -254,6 +262,10 @@
     <message>
         <source>number</source>
         <translation>Zahl</translation>
+    </message>
+    <message>
+        <source>telephone number</source>
+        <translation>Telefonnummer</translation>
     </message>
     <message>
         <source>checkbox</source>

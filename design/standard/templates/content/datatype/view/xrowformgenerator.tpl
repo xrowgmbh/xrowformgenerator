@@ -134,6 +134,11 @@
                         <input type="text" name="XrowFormInput[{$id}][{$key}]" value="{$item.def|wash}" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" />
                         {cond( is_set( $item.desc ), $item.desc, '')}
                     {/case}
+                    {case match="telephonenumber"}
+                        <label>{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> ({"required"|i18n( 'xrowformgenerator/mail' )})</abbr>{/if}</label>
+                        <input type="tel" name="XrowFormInput[{$id}][{$key}]" value="{$item.def|wash}" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" />
+                        {cond( is_set( $item.desc ), $item.desc, '')}
+                    {/case}
                     {case match="hidden"}
                         <input type="hidden" class="formhidden" name="XrowFormInput[{$id}][{$key}]" value="{$item.def|wash}" />
     

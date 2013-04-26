@@ -137,6 +137,10 @@
                     <label>{$item.name|wash}{if $item.req}*{/if}</label>
                     <p>{$item.def|wash}</p>
                 {/case}
+                {case match="telephonenumber"}
+                    <label>{$item.name|wash}{if $item.req}*{/if}</label>
+                    <p>{$item.def|wash}</p>
+                {/case}
                 {case match="hidden"}
                     <label>{$item.name|wash}{if $item.req}*{/if}</label>
                     <p>{$item.def|wash}</p>

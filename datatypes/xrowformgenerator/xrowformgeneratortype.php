@@ -71,7 +71,7 @@ class xrowFormGeneratorType extends eZDataType
 
         function strip_a_tag($value)
     {
-        return is_array($value) ? array_map('xrowFormGeneratorType::strip_a_tag', $value) : strip_tags($value,"<a>");
+        return is_array($value) ? array_map('xrowFormGeneratorType::strip_a_tag', $value) : strip_tags($value,"<a><br>");
     }
     /*
      * Fetches the input of the form generator config
@@ -564,6 +564,39 @@ class xrowFormGeneratorType extends eZDataType
                                 }
                                 $content['form_elements'][$key]['def'] = $data;
                             }break;
+                            
+                            case "telephonenumber":
+                            	{
+                            		$data = '';
+                            		if ( isset( $inputArray[$elKey] ) )
+                            		{
+                            			$data = trim( $inputArray[$elKey] );
+                            			$data = str_replace(" ", "", $data );
+                            		}
+                            		if ( $item['req'] == true )
+                            		{
+                            			if ( $data == '' )
+                            			{
+                            				$content['form_elements'][$key]['error'] = true;
+                            				$content['has_error'] = true;
+                            				$content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
+                            			}elseif ( !self::telephone_validate( $data ) || strlen($data)>=20 )
+                                        {
+                                            $content['form_elements'][$key]['error'] = true;
+                                            $content['has_error'] = true;
+                                            $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please enter a valid phone number." );
+                                        }
+                            		}elseif ( $item['val'] == true )
+                            		 {
+                            			if ( !self::telephone_validate( $data ) || strlen($data)>=20  )
+                            			{
+                            				$content['form_elements'][$key]['error'] = true;
+                            				$content['has_error'] = true;
+                            				$content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please enter a valid phone number." );
+                            			}
+                            		 }
+                            		$content['form_elements'][$key]['def'] = $data;
+                            	}break;
 
                             case "number":
                             {
@@ -1082,6 +1115,11 @@ class xrowFormGeneratorType extends eZDataType
     static function validate( $address )
     {
         return preg_match( '/^' . self::REGEXP . '$/', $address );
+    }
+    
+    static function telephone_validate( $address )
+    {
+    	return preg_match( '/^([+]{0,1}\d{2,3}|0+[0-9]{2,5})[ ]?([-]?((\d)|[ ]){1,12})+$/', $address );
     }
 
     static function email_unique( $address, $contentobject_id )

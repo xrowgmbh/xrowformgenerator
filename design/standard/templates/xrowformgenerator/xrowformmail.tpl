@@ -65,6 +65,7 @@
 {/switch}
 {/case}
 {case match="number"}{$item.def}{/case}
+{case match="telephonenumber"}{$item.def}{/case}
 {case match="text"}{$item.def}{/case}
 
 {case}{$item.def}{/case}

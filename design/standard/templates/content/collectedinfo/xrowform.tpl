@@ -40,7 +40,7 @@
                 <td>
                     {switch match=$item.type}
                         {case match="checkbox"}{if $item.def}{"Yes"|i18n( 'xrowformgenerator/mail' )}{else}{"No"|i18n( 'xrowformgenerator/mail' )}{/if}{/case}
-                        {case match="upload"}{cond( is_set( $item.def ), "Yes"|i18n( 'xrowformgenerator/mail' ),'' )}{/case}
+                        {case match="upload"}{cond( is_set( $item.def ), $item.name,'' )}{/case}
                         {case match="options"}
                             {switch match=$item.option_type}
                                 {case match="checkbox"}
@@ -80,6 +80,7 @@
                           {/switch}   
                        {/case}/*Bild Options*/
                        {case match="number"}{$item.def}{/case}
+                       {case match="telephonenumber"}{$item.def}{/case}
                        {case match="text"}{$item.def}{/case}
                        {case}{$item.def}{/case}
                   {/switch}

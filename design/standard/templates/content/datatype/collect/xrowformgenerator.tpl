@@ -2,7 +2,6 @@
 
 {def $content=$attribute.content
      $id=$attribute.id}
-
 <div class="xrow-form-full">
     {if $content.form_elements|count|eq(0)}
         <p>{"No form fields defined."|i18n( 'xrowformgenerator/edit' )}</p>
@@ -37,8 +36,7 @@
                         {case match="upload"}
                             <label for="upload">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
                             <input type="file" class="file_input_div"  name="XrowFormInputFile_{$id}_{$key}" value="" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" /><br/>
-                            <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
-                            
+                            <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>   
                         {/case}
                         {case match="options"}
                             <label for="options" class="options">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
@@ -149,7 +147,12 @@
                         {/case}
                         {case match="number"}
                             <label for="number">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            <input type="text" name="XrowFormInput[{$id}][{$key}]" value="{$item.def|wash}" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" /><br/>
+                            <input type="number" name="XrowFormInput[{$id}][{$key}]" value="{$item.def|wash}" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" /><br/>
+                            <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
+                        {/case}
+                        {case match="telephonenumber"}
+                            <label for="telephonenumber">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
+                            <input type="tel" name="XrowFormInput[{$id}][{$key}]" value="{$item.def|wash}" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" /><br/>
                             <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
                         {/case}
                         {case match="hidden"}
@@ -163,6 +166,11 @@
                         {case match="desc"}
                             <p class="xrow-form-desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
         
+                        {/case}
+                        {case match="email"}
+                            <label for="description">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
+                            <input type="email" name="XrowFormInput[{$id}][{$key}]" value="{$item.def|wash}" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" />
+                            <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
                         {/case}
                         {case}
                             <label for="description">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>

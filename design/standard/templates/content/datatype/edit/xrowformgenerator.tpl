@@ -244,6 +244,40 @@
                 <div class="break"></div>
             </fieldset>
         </li>
+{* telephone number *}
+        <li class="xrow-form-element xrow-form-element-telephonenumber" id="xrow-form-element-telephonenumber-{$id}">
+            <fieldset>
+                <legend>{"Telephone number input field"|i18n( 'xrowformgenerator/edit' )}</legend>
+                <div class="block">
+                    <div class="element xrow-trash-width"><img class="xrow-form-element-trash-button" src={"trash-icon-16x16.gif"|ezimage} alt="{"Delete form element."|i18n( 'xrowformgenerator/edit' )}"  title="{"Delete form element."|i18n( 'xrowformgenerator/edit' )}" width="16" height="16" /></div>
+                    <div class="element xrow-form-element-width">
+                        <input type="hidden" name="x1XrowFormElementArray{$id}[yyyxrowindexyyy]" value="yyyxrowindexyyy" />
+                        <input type="hidden" name="x1XrowFormElementType{$id}[yyyxrowindexyyy]" value="telephonenumber" />
+                        <div class="block">
+                            <label>{"Name"|i18n( 'xrowformgenerator/edit' )}:</label>
+                            <input class="box" type="text" name="x1XrowFormElementName{$id}[yyyxrowindexyyy]" value="yyyxrownameyyy" />
+                        </div>
+                        <div class="block">
+                            <label>{"Default value"|i18n( 'xrowformgenerator/edit' )}:</label>
+                            <input class="box" type="text" name="x1XrowFormElementDefault{$id}[yyyxrowindexyyy]" value="yyyxrowdefyyy" />
+                        </div>
+                        <div class="block">
+                            <label>{"Description"|i18n( 'xrowformgenerator/edit' )}:</label>
+                            <textarea class="box" rows="2" cols="70" name="x1XrowFormElementDesc{$id}[yyyxrowindexyyy]">yyyxrowdescyyy</textarea>
+                        </div>
+
+                        <div class="block inline">
+                            <label><input class="xrow-form-element-required" name="x1XrowFormElementReq{$id}[yyyxrowindexyyy]" value="yyyxrowreqyyy" title="{"Use this checkbox if the input of this form field is required."|i18n( 'xrowformgenerator/edit' )}" type="checkbox" />{"Required"|i18n( 'xrowformgenerator/edit' )}
+                            </label>
+                            <label><input class="xrow-form-element-validation" name="x1XrowFormElementVal{$id}[yyyxrowindexyyy]" value="yyyxrowvalyyy" title="{"Use this checkbox if the input of this form field should be validated."|i18n( 'xrowformgenerator/edit' )}" type="checkbox" />{"Input requires validation"|i18n( 'xrowformgenerator/edit' )}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="element xrow-move-width"><img class="xrow-element-button-up" src={"button-move_up.gif"|ezimage} alt="{"Move up"|i18n( 'xrowformgenerator/edit' )}"  title="{"Move up"|i18n( 'xrowformgenerator/edit' )}" width="16" height="16" />&nbsp;<img class="xrow-element-button-down" src={"button-move_down.gif"|ezimage} alt="{"Move down"|i18n( 'xrowformgenerator/edit' )}" width="16" height="16" title="{"Move down"|i18n( 'xrowformgenerator/edit' )}" /></div>
+                </div>
+                <div class="break"></div>
+            </fieldset>
+        </li>
 {* checkbox *}
         <li class="xrow-form-element xrow-form-element-checkbox"  id="xrow-form-element-checkbox-{$id}">
             <fieldset>
@@ -451,6 +485,7 @@
             <option value="string">{"string"|i18n( 'xrowformgenerator/edit' )}</option>
             <option value="text">{"text"|i18n( 'xrowformgenerator/edit' )}</option>
             <option value="number">{"number"|i18n( 'xrowformgenerator/edit' )}</option>
+            <option value="telephonenumber">{"telephone number"|i18n( 'xrowformgenerator/edit' )}</option>
             <option value="checkbox">{"checkbox"|i18n( 'xrowformgenerator/edit' )}</option>
             <option value="options">{"options"|i18n( 'xrowformgenerator/edit' )}</option>
             <option value="imageoptions">{"options with image"|i18n( 'xrowformgenerator/edit' )}</option>
