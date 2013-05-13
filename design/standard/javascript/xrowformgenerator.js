@@ -240,6 +240,7 @@ function xrow_add_form_default( attr_value_id, ol_con_id, attribute_id, index, o
         var pattern_desc = /yyyxrowdescyyy/g;
         var pattern_req = /yyyxrowreqyyy/g;
         var pattern_val = /yyyxrowvalyyy/g;
+        var pattern_uniqe = /yyyxrowuniqueyyy/g;
         var pattern_xrow = /x1Xrow/g;
         var pattern_def = /yyyxrowdefyyy/g;
 
@@ -289,6 +290,14 @@ function xrow_add_form_default( attr_value_id, ol_con_id, attribute_id, index, o
         if ( val_array[0] != undefined && opt && opt.val != undefined && opt.val)
         {
             val_array[0].checked = true;
+        }
+		
+		 // set unique checkbox
+        var unique_array = YAHOO.util.Dom.getElementsByClassName( 'xrow-form-element-unique', 'input', new_li );
+
+        if ( unique_array[0] != undefined && opt && opt.unique != undefined && opt.unique)
+        {
+            unique_array[0].checked = true;
         }
 
         // add move event
@@ -345,7 +354,7 @@ function xrow_add_option( opt_tpl_id, ol_id, opt, index )
 
         var name = '';
         if ( opt.name != undefined )
-            name = opt.name;
+            name = addslashes(opt.name);
         temphtml = temphtml.replace( pattern_name, name );
 
         var myimage = 0;
@@ -458,6 +467,13 @@ function xrow_add_form_options( attr_value_id, ol_con_id, attribute_id, index, o
             val_array[0].checked = true;
         }
 
+        var unique_array = YAHOO.util.Dom.getElementsByClassName( 'xrow-form-element-unique', 'input', new_li );
+
+        if ( unique_array[0] != undefined && opt && opt.unique != undefined && opt.unique)
+        {
+            unique_array[0].checked = true;
+        }
+
         // set option type
         var sel_array = YAHOO.util.Dom.getElementsByClassName( 'xrow-form-element-option-type', 'select', new_li );
         if ( sel_array[0] != undefined && opt.option_type != undefined && opt.option_type )
@@ -525,4 +541,15 @@ function xrow_confirm( msg, id )
         var formular = document.getElementById( id );
         return formular.submit();
     }
+}
+
+function addslashes (str) {
+  if (str.length == 0) return "";
+  str = str.replace(/</g,"&lt;");
+  str = str.replace(/&/g,"&amp;");
+  str = str.replace(/\"/g,"&quot;");
+  str = str.replace(/\'/g,"&#39;");
+  str = str.replace(/>/g,"&gt;");
+  str = str.replace(/ /g,"&nbsp;");
+  return str;
 }

@@ -52,8 +52,6 @@ class xrowFormGeneratorType extends eZDataType
         return eZInputValidator::STATE_ACCEPTED;
     }
 
-    /*!
-    */
     function validateCollectionAttributeHTTPInput( $http, $base, $objectAttribute )
     {
         $content = $objectAttribute->content();
@@ -64,15 +62,17 @@ class xrowFormGeneratorType extends eZDataType
         }
         return eZInputValidator::STATE_INVALID;
     }
+
     function strip($value)
     {
         return is_array($value) ? array_map('xrowFormGeneratorType::strip', $value) : strip_tags($value);
     }
 
-        function strip_a_tag($value)
+    function strip_a_tag($value)
     {
         return is_array($value) ? array_map('xrowFormGeneratorType::strip_a_tag', $value) : strip_tags($value,"<a><br>");
     }
+
     /*
      * Fetches the input of the form generator config
      */
@@ -180,7 +180,7 @@ class xrowFormGeneratorType extends eZDataType
                     {
                         $data['val'] = true;
                     }
-                    if ( isset( $valArray[$key] ) )
+                    if ( isset( $uniqueArray[$key] ) )
                     {
                         $data['unique'] = true;
                     }
@@ -288,16 +288,10 @@ class xrowFormGeneratorType extends eZDataType
         $ccReceivers = $tpl->variable( 'email_cc_receivers' );
         $bccReceivers = $tpl->variable( 'email_bcc_receivers' );
         $sender = $tpl->variable( 'email_sender' );
-        
-        ezcMailTools::setLineBreak( "\n" );
-        $mail = new ezcMailComposer();
-        $mail->charset = 'utf-8';
-
         if ( !self::validate( $sender ) )
         {
             $sender = $ini->variable( "MailSettings", "EmailSender" );
         }
-        $mail->from = new ezcMailAddress( $sender, '', 'utf-8' );
         if( $receiverString != '' )
         {
             if( strpos( $receiverString, ';' ) !== false )
@@ -313,6 +307,12 @@ class xrowFormGeneratorType extends eZDataType
                 $receiverArray = array( $ini->variable( "InformationCollectionSettings", "EmailReceiver" ) );
             }
         }
+        $this->sendMailWithEzMail( $templateResult, $receiverArray, $sender, $tpl );
+        return true;
+        ezcMailTools::setLineBreak( "\n" );
+        $mail = new ezcMailComposer();
+        $mail->charset = 'utf-8';
+        $mail->from = new ezcMailAddress( $sender, '', 'utf-8' );
         foreach ( $receiverArray as $receiver )
         {
             $mail->addTo( new ezcMailAddress( $receiver, '', 'utf-8' ) );
@@ -373,6 +373,29 @@ class xrowFormGeneratorType extends eZDataType
         catch ( ezcMailTransportException $e )
         {
             eZDebug::writeError( $e->getMessage(), 'xrowFormGeneratorType::xrowSendFormMail' );
+        }
+    }
+
+    public function sendMailWithEzMail( $templateResult, $receiverArray, $sender, $tpl )
+    {
+        $mail = new eZMail();
+        $mail->setSender( $sender );
+        $mail->setBody( $templateResult  );
+        $mail->setSubject( $tpl->variable( 'subject' ) );
+        foreach ( $receiverArray as $receiver )
+        {
+            $mail->setReceiver( $receiver );
+            if ( $transport != 'file' )
+            {
+                try
+                {
+                    eZMailTransport::send( $mail );
+                }
+                catch( Exception $e )
+                {
+                    eZDebug::writeError( $e->getMessage(), __METHOD__ );
+                }
+            }
         }
     }
 
@@ -525,7 +548,7 @@ class xrowFormGeneratorType extends eZDataType
                                             }       
                                         }
                                      }    
-                                }elseif ( $item['val'] == true )
+                                }elseif ( $item['val'] == true && $data != '')
                                 {
                                     if ( !self::validate( $data ) )
                                     {
@@ -541,6 +564,14 @@ class xrowFormGeneratorType extends eZDataType
                                             $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Your email was already submitted to us. You can't use the form twice." );
                                         }                             
                                     }
+                                }elseif($item['unique'] == true && $data != '')
+                                {
+                                    if ( !self::email_unique( $data, $contentobject_id ) )
+                                        {
+                                            $content['form_elements'][$key]['error'] = true;
+                                            $content['has_error'] = true;
+                                            $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Your email was already submitted to us. You can't use the form twice." );
+                                        }   
                                 }
                                 
                                 $content['form_elements'][$key]['def'] = $data;
@@ -566,37 +597,37 @@ class xrowFormGeneratorType extends eZDataType
                             }break;
                             
                             case "telephonenumber":
-                            	{
-                            		$data = '';
-                            		if ( isset( $inputArray[$elKey] ) )
-                            		{
-                            			$data = trim( $inputArray[$elKey] );
-                            			$data = str_replace(" ", "", $data );
-                            		}
-                            		if ( $item['req'] == true )
-                            		{
-                            			if ( $data == '' )
-                            			{
-                            				$content['form_elements'][$key]['error'] = true;
-                            				$content['has_error'] = true;
-                            				$content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
-                            			}elseif ( !self::telephone_validate( $data ) || strlen($data)>=20 )
-                                        {
-                                            $content['form_elements'][$key]['error'] = true;
-                                            $content['has_error'] = true;
-                                            $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please enter a valid phone number." );
-                                        }
-                            		}elseif ( $item['val'] == true )
-                            		 {
-                            			if ( !self::telephone_validate( $data ) || strlen($data)>=20  )
-                            			{
-                            				$content['form_elements'][$key]['error'] = true;
-                            				$content['has_error'] = true;
-                            				$content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please enter a valid phone number." );
-                            			}
-                            		 }
-                            		$content['form_elements'][$key]['def'] = $data;
-                            	}break;
+                            {
+                                $data = '';
+                                if ( isset( $inputArray[$elKey] ) )
+                                {
+                                    $data = trim( $inputArray[$elKey] );
+                                    $data = str_replace(" ", "", $data );
+                                }
+                                if ( $item['req'] == true )
+                                {
+                                    if ( $data == '' )
+                                    {
+                                        $content['form_elements'][$key]['error'] = true;
+                                        $content['has_error'] = true;
+                                        $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
+                                    }elseif ( !self::telephone_validate( $data ) || strlen($data)>=20 )
+                                    {
+                                        $content['form_elements'][$key]['error'] = true;
+                                        $content['has_error'] = true;
+                                        $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please enter a valid phone number." );
+                                    }
+                                }elseif ( $item['val'] == true && $data != '' )
+                                 {
+                                    if ( !self::telephone_validate( $data ) || strlen($data)>=20  )
+                                    {
+                                        $content['form_elements'][$key]['error'] = true;
+                                        $content['has_error'] = true;
+                                        $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please enter a valid phone number." );
+                                    }
+                                 }
+                                $content['form_elements'][$key]['def'] = $data;
+                            }break;
 
                             case "number":
                             {
@@ -615,7 +646,7 @@ class xrowFormGeneratorType extends eZDataType
                                         $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
                                     }
                                 }
-                                if ( $item['val'] == true )
+                                if ( $item['val'] == true && $data != '')
                                 {
                                     $dataTest = $locale->internalNumber( $data );
                                     $floatValidator = new eZFloatValidator();
@@ -1119,7 +1150,7 @@ class xrowFormGeneratorType extends eZDataType
     
     static function telephone_validate( $address )
     {
-    	return preg_match( '/^([+]{0,1}\d{2,3}|0+[0-9]{2,5})[ ]?([-]?((\d)|[ ]){1,12})+$/', $address );
+        return preg_match( '/^([+]{0,1}\d{2,3}|0+[0-9]{2,5})[ ]?([-]?((\d)|[ ]){1,12})+$/', $address );
     }
 
     static function email_unique( $address, $contentobject_id )
@@ -1142,11 +1173,14 @@ class xrowFormGeneratorType extends eZDataType
             foreach( $resArray as $resItem )
             {
                 $resItemArray = unserialize( $resItem["data_text"] );
-                foreach( $resItemArray as $resItemArrayItem )
+                if( is_array( $resItemArray ) && count( $resItemArray ) > 0 )
                 {
-                    if( $resItemArrayItem == $address )
-                    { 
-                        return false;
+                    foreach( $resItemArray as $resItemArrayItem )
+                    {
+                        if( $resItemArrayItem == $address )
+                        { 
+                            return false;
+                        }
                     }
                 }
             }
