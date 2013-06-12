@@ -107,6 +107,9 @@ class xrowFormGeneratorType extends eZDataType
             $keyArray = array( "XrowFormElementType" . $id => "type",
                                "XrowFormElementName" . $id => "name",
                                "XrowFormElementDefault" . $id => "def",
+                               "XrowFormElementMin" . $id => "min",
+                               "XrowFormElementMax" . $id => "max",
+                               "XrowFormElementStep" . $id => "step",
                                "XrowFormElementDesc" . $id => "desc",
                                "XrowFormElementReq" . $id => "req",
                                "XrowFormElementVal" . $id => "val",
@@ -140,7 +143,7 @@ class xrowFormGeneratorType extends eZDataType
                 {
                     $type = $typeArray[$key];
                     $data['type'] = $type;
-                    $data['name'] = $data['desc'] = $data['def'] = null;
+                    $data['name'] = $data['desc'] = $data['def'] = $data['min']= $data['max'] = $data['step'] = null;
                     $data['req'] = $data['val'] = $data['unique'] = false;
 
                     if ( isset( $nameArray[$key] ) )
@@ -166,7 +169,22 @@ class xrowFormGeneratorType extends eZDataType
                             $data['def'] = $defArray[$key];
                         }
                     }
-
+                    
+                    if ( isset( $minArray[$key] ) )
+                    {
+                        $data['min'] = $minArray[$key];
+                    }
+                    
+                    if ( isset( $maxArray[$key] ) )
+                    {
+                        $data['max'] = $maxArray[$key];
+                    }
+                    
+                    if ( isset( $stepArray[$key] ) )
+                    {
+                        $data['step'] = $stepArray[$key];
+                    }
+                    
                     if ( isset( $descArray[$key] ) )
                     {
                         $data['desc'] = $descArray[$key];

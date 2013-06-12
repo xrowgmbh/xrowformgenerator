@@ -194,7 +194,7 @@
                         </div>
                         <div class="block">
                             <label>{"Default value"|i18n( 'xrowformgenerator/edit' )}:</label>
-                            <textarea class="box" rows="3" cols="70" name="x1XrowFormElementDefault{$id}[yyyxrowindexyyy]"></textarea>
+                            <textarea class="box" rows="3" cols="70" name="x1XrowFormElementDefault{$id}[yyyxrowindexyyy]">yyyxrowdefyyy</textarea>
                         </div>
                         <div class="block">
                             <label>{"Description"|i18n( 'xrowformgenerator/edit' )}:</label>
@@ -226,6 +226,14 @@
                         <div class="block">
                             <label>{"Default value"|i18n( 'xrowformgenerator/edit' )}:</label>
                             <input class="box" type="text" name="x1XrowFormElementDefault{$id}[yyyxrowindexyyy]" value="yyyxrowdefyyy" />
+                        </div>
+                        <div class="block">
+                            <label>{"Min"|i18n( 'xrowformgenerator/edit' )}:</label>
+                            <input class="box" type="text" name="x1XrowFormElementMin{$id}[yyyxrowindexyyy]" value="yyyxrowminyyy" />
+                            <label>{"Max"|i18n( 'xrowformgenerator/edit' )}:</label>
+                            <input class="box" type="text" name="x1XrowFormElementMax{$id}[yyyxrowindexyyy]" value="yyyxrowmaxyyy" />
+                            <label>{"Step"|i18n( 'xrowformgenerator/edit' )}:</label>
+                            <input class="box" type="text" name="x1XrowFormElementStep{$id}[yyyxrowindexyyy]" value="yyyxrowstepyyy" />
                         </div>
                         <div class="block">
                             <label>{"Description"|i18n( 'xrowformgenerator/edit' )}:</label>

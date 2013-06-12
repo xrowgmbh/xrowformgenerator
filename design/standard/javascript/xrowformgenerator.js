@@ -243,6 +243,9 @@ function xrow_add_form_default( attr_value_id, ol_con_id, attribute_id, index, o
         var pattern_uniqe = /yyyxrowuniqueyyy/g;
         var pattern_xrow = /x1Xrow/g;
         var pattern_def = /yyyxrowdefyyy/g;
+        var pattern_min = /yyyxrowminyyy/g;
+        var pattern_max = /yyyxrowmaxyyy/g;
+        var pattern_step = /yyyxrowstepyyy/g;
 
         var temphtml = ieInnerHTML( li_tpl );
         temphtml = temphtml.replace( pattern_index, index );
@@ -270,6 +273,27 @@ function xrow_add_form_default( attr_value_id, ol_con_id, attribute_id, index, o
             }
         }
         temphtml = temphtml.replace( pattern_def, def );
+        
+        var min='';
+        if ( opt.min != undefined )
+        {
+        	min = opt.min;
+        }
+        temphtml = temphtml.replace( pattern_min, min );
+       
+        var max='';
+        if ( opt.max != undefined )
+        {
+        	max = opt.max;
+        }
+        temphtml = temphtml.replace( pattern_max, max );
+        
+        var step='';
+        if ( opt.step != undefined )
+        {
+        	step = opt.step;
+        }
+        temphtml = temphtml.replace( pattern_step, step );
 
         var desc = '';
         if ( opt.desc != undefined )

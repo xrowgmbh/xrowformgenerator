@@ -143,6 +143,18 @@
         <translation>Standardwert</translation>
     </message>
     <message>
+        <source>Min</source>
+        <translation>Minimalwert</translation>
+    </message>
+        <message>
+        <source>Max</source>
+        <translation>Maximalwert</translation>
+    </message>
+        <message>
+        <source>Step</source>
+        <translation>Schrittwert</translation>
+    </message>
+    <message>
         <source>Move up</source>
         <translation>Nach oben</translation>
     </message>
