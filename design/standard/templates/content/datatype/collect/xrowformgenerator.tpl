@@ -30,7 +30,7 @@
                         {/case}
                         {case match="text"}
                             <label for="text:{$id}:{$key}">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            <textarea cols="70" rows="10" id="text:{$id}:{$key}" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" placeholder="{$item.def|wash}"></textarea>
+                            <textarea cols="70" rows="10" id="text:{$id}:{$key}" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true"  {if not($content.has_error)}placeholder="{$item.def|wash}">{else}>{$item.def|wash}{/if}</textarea>
                             <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
                         {/case}
                         {case match="upload"}
@@ -100,7 +100,7 @@
                                         {if $tempimg}
                                         {foreach $tempimg.data_map as $ditem}
                                             {if and( $ditem.data_type_string|eq( 'ezimage' ), $ditem.has_content )}
-                                            {attribute_view_gui attribute=$ditem image_class="gallery_90"}
+                                            {attribute_view_gui attribute=$ditem image_class="evo_80x60"}
                                             {break}
                                             {/if}
                                         {/foreach}
@@ -147,16 +147,16 @@
                         {/case}
                         {case match="number"}
                             <label for="number:{$id}:{$key}">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            <input id="number:{$id}:{$key}" type="number" name="XrowFormInput[{$id}][{$key}]" value="" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" min="{$item.min}" max="{$item.max}" step="{$item.step}" placeholder="{$item.def|wash}" /><br/>
+                            <input id="number:{$id}:{$key}" type="number" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" min="{$item.min}" max="{$item.max}" step="{$item.step}" {if not($content.has_error)} placeholder="{$item.def|wash}" {else} value="{$item.def|wash}" {/if} /><br/>
                             <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
                         {/case}
                         {case match="telephonenumber"}
                             <label for="telephonenumber:{$id}:{$key}">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            <input id="telephonenumber:{$id}:{$key}" type="tel" name="XrowFormInput[{$id}][{$key}]" value="" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" placeholder="{$item.def|wash}" /><br/>
+                            <input id="telephonenumber:{$id}:{$key}" type="tel" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" {if not($content.has_error)} placeholder="{$item.def|wash}" {else} value="{$item.def|wash}" {/if} /><br/>
                             <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
                         {/case}
                         {case match="hidden"}
-                            <input type="hidden" class="formhidden" name="XrowFormInput[{$id}][{$key}]" value="" placeholder="{$item.def|wash}" />
+                            <input type="hidden" class="formhidden" name="XrowFormInput[{$id}][{$key}]" {if not($content.has_error)} placeholder="{$item.def|wash}" {else} value="{$item.def|wash}" {/if} />
         
                         {/case}
                         {case match="spacer"}
@@ -169,12 +169,12 @@
                         {/case}
                         {case match="email"}
                             <label for="email:{$id}:{$key}">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            <input id="email:{$id}:{$key}" type="email" name="XrowFormInput[{$id}][{$key}]" value="" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" placeholder="{$item.def|wash}" />
+                            <input id="email:{$id}:{$key}" type="email" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" {if not($content.has_error)} placeholder="{$item.def|wash}" {else} value="{$item.def|wash}" {/if} />
                             <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
                         {/case}
                         {case}
                             <label for="description:{$id}:{$key}">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            <input id="description:{$id}:{$key}" type="text" name="XrowFormInput[{$id}][{$key}]" value="" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" placeholder="{$item.def|wash}"/>
+                            <input id="description:{$id}:{$key}" type="text" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" {if not($content.has_error)} placeholder="{$item.def|wash}" {else} value="{$item.def|wash}" {/if} />
                             <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
                         {/case}
                     {/switch}
