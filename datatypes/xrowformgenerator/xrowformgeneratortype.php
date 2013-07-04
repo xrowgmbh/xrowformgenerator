@@ -383,7 +383,51 @@ class xrowFormGeneratorType extends eZDataType
             }
         }
         $mail->build();
-        $transport = new ezcMailMtaTransport();
+       
+       // $transport = new ezcMailMtaTransport();
+
+        /*Patch for SMTP-Mailversand--start*/
+        $mailsettings = array();
+        $mailsettings["transport"] = $ini->variable( "MailSettings", "Transport" );
+        $mailsettings["server"] = $ini->variable( "MailSettings", "TransportServer" );
+        $mailsettings["port"] = $ini->variable( "MailSettings", "TransportPort" );
+        $mailsettings["user"] = $ini->variable( "MailSettings", "TransportUser" );
+        $mailsettings["password"] = $ini->variable( "MailSettings", "TransportPassword" );
+        $mailsettings["connectionType"] = $ini->variable( 'MailSettings', 'TransportConnectionType' );
+        
+        if( trim($mailsettings["port"]) == "" )
+        {
+            $mailsettings["port"] = null;
+        }
+        if ( $mailsettings["transport"] == "SMTP" )
+        {
+            $options = new ezcMailSmtpTransportOptions();
+            if( trim($mailsettings["password"]) === "" )
+            {
+                $transport = new ezcMailSmtpTransport( $mailsettings["server"], "", "", $mailsettings["port"], $options );
+            }
+            else
+           {
+                $options->preferredAuthMethod = ezcMailSmtpTransport::AUTH_AUTO;
+                $transport = new ezcMailSmtpTransport( $mailsettings["server"], $mailsettings["user"], $mailsettings["password"], $mailsettings["port"], $options );
+            }
+        }
+        else if ($mailsettings[transport] == "sendmail")
+        {
+            $transport = new ezcMailMtaTransport();
+        }
+        else if ($mailsettings[transport] == "file")
+        {
+            return null;
+        }
+        else
+       {
+            eZDebug::writeError( "Wrong Transport in MailSettings in", 'xrowFormGeneratorType::xrowSendFormMail' );
+            return null;
+        }
+        
+        /*Patch End*/
+
         try
         {
             $transport->send( $mail );
