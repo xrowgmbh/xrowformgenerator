@@ -344,7 +344,7 @@
                             <label><input class="xrow-form-element-unique" name="x1XrowFormElementUnique{$id}[yyyxrowindexyyy]" value="yyyxrowuniqueyyy" title="{"Unique"|i18n( 'xrowformgenerator/edit' )}" type="checkbox" />{"Unique"|i18n( 'xrowformgenerator/edit' )}
                             </label>
                             <label><input class="xrow-form-element-validation" name="x1XrowFormElementVal{$id}[yyyxrowindexyyy]" value="yyyxrowvalyyy" title="{"Use this checkbox if the input of this form field should be validated."|i18n( 'xrowformgenerator/edit' )}" type="checkbox" />{"Input requires validation"|i18n( 'xrowformgenerator/edit' )}
-							</label>
+                            </label>
                         </div>
                     </div>
                     <div class="element xrow-move-width"><img class="xrow-element-button-up" src={"button-move_up.gif"|ezimage} alt="{"Move up"|i18n( 'xrowformgenerator/edit' )}"  title="{"Move up"|i18n( 'xrowformgenerator/edit' )}" width="16" height="16" />&nbsp;<img class="xrow-element-button-down" src={"button-move_down.gif"|ezimage} alt="{"Move down"|i18n( 'xrowformgenerator/edit' )}" width="16" height="16" title="{"Move down"|i18n( 'xrowformgenerator/edit' )}" /></div>

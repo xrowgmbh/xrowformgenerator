@@ -25,7 +25,7 @@
                     
                     {switch match=$item.type}
                         {case match="checkbox"}
-                            <label for="checkbox:{$id}:{$key}"><input id="checkbox:{$id}:{$key}" type="checkbox" name="XrowFormInput[{$id}][{$key}]" value="1" {if $item.def}checked="checked" {/if}/> &nbsp;{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
+                            <label for="checkbox:{$id}:{$key}"><input id="checkbox:{$id}:{$key}" type="checkbox" name="XrowFormInput[{$id}][{$key}]" value="1" autocomplete="off" {if $item.def}checked="checked" {/if}/> &nbsp;{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
                             <div class="form-checkbox-padding">{cond( is_set( $item.desc ), $item.desc, '')}</div>
                         {/case}
                         {case match="text"}
@@ -46,7 +46,7 @@
                                     {foreach $item.option_array as $opt_key => $opt_item}
                                         <li>
                                             <span class="radio_button">
-                                               <input id="options_chekbox:{$id}:{$key}:{$opt_key}" class="xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" type="checkbox" aria-required="true" name="XrowFormInput[{$id}][{$key}][{$opt_key}]" id="XrowFormInput[{$id}][{$key}][{$opt_key}]" value="{$opt_item.name|wash}" {if $opt_item.def}checked="checked" {/if} />
+                                               <input id="options_chekbox:{$id}:{$key}:{$opt_key}" class="xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" type="checkbox" autocomplete="off" aria-required="true" name="XrowFormInput[{$id}][{$key}][{$opt_key}]" id="XrowFormInput[{$id}][{$key}][{$opt_key}]" value="{$opt_item.name|wash}" {if $opt_item.def}checked="checked" {/if} />
                                             </span>
                                             <span class="radio_label">
                                                <label class="black_label" for="options_chekbox:{$id}:{$key}:{$opt_key}">{$opt_item.name|wash}</label>
@@ -60,7 +60,7 @@
                                     {foreach $item.option_array as $opt_key => $opt_item}
                                     <li>
                                         <span class="radio_button">
-                                            <input id="options_radio:{$id}:{$key}:{$opt_key}" class="xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" type="radio" aria-required="true" name="XrowFormInput[{$id}][{$key}]" id="XrowFormInput{$id}{$key}{$opt_key}" value="{$opt_item.name|wash}" {if $opt_item.def}checked="checked" {/if} />
+                                            <input id="options_radio:{$id}:{$key}:{$opt_key}" class="xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" type="radio" autocomplete="off" aria-required="true" name="XrowFormInput[{$id}][{$key}]" id="XrowFormInput{$id}{$key}{$opt_key}" value="{$opt_item.name|wash}" {if $opt_item.def}checked="checked" {/if} />
                                         </span>
                                         <span class="options_label">
                                             <label class="black_label" for="options_radio:{$id}:{$key}:{$opt_key}">{$opt_item.name|wash}</label>
@@ -71,6 +71,7 @@
                                 {/case}
                                 {case match="select-one"}
                                     <select class="xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" name="XrowFormInput[{$id}][{$key}][]">
+                                        <option value="0"></option>
                                     {foreach $item.option_array as $opt_key => $opt_item}
                                         <option value="{$opt_item.name|wash}"{if $opt_item.def} selected="selected"{/if} title="{$opt_item.name|wash}">{$opt_item.name|wash}</option>
                                     {/foreach}
@@ -83,7 +84,6 @@
                                     {/foreach}
                                     </select>
                                 {/case}
-                                {case /}
                             {/switch}
                            <p class="option_bes">{cond( is_set( $item.desc ), $item.desc, '')}</p>
                         {/case}
@@ -95,7 +95,7 @@
                                     {foreach $item.option_array as $opt_key => $opt_item}
                                     <div class="element xrow-image-opt-ele">
                                         <label for="imageoptions_checkbox:{$id}:{$key}:{$opt_key}" class="xrow-image-options">
-                                        <div class="che"> <input id="imageoptions_checkbox:{$id}:{$key}:{$opt_key}" class="xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" type="checkbox" name="XrowFormInput[{$id}][{$key}][{$opt_key}]" value="{$opt_item.name|wash}" {if $opt_item.def}checked="checked" {/if} /></div>
+                                        <div class="che"> <input id="imageoptions_checkbox:{$id}:{$key}:{$opt_key}" class="xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" type="checkbox" autocomplete="off" name="XrowFormInput[{$id}][{$key}][{$opt_key}]" value="{$opt_item.name|wash}" {if $opt_item.def}checked="checked" {/if} /></div>
                                         <div class="img">{def $tempimg=fetch( 'content', 'node', hash( 'node_id', $opt_item.image ) )}
                                         {if $tempimg}
                                         {foreach $tempimg.data_map as $ditem}
@@ -118,7 +118,7 @@
                                         <div class="element">
                                             <label for="imageoptions_radio:{$id}:{$key}:{$opt_key}" class="xrow-image-options">
                                             
-                                            <div class="che"><input id="imageoptions_radio:{$id}:{$key}:{$opt_key}" class="xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" type="radio" name="XrowFormInput[{$id}][{$key}]" value="{$opt_item.name|wash}" {if $opt_item.def}checked="checked" {/if} /></div>
+                                            <div class="che"><input id="imageoptions_radio:{$id}:{$key}:{$opt_key}" class="xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" type="radio" autocomplete="off" name="XrowFormInput[{$id}][{$key}]" value="{$opt_item.name|wash}" {if $opt_item.def}checked="checked" {/if} /></div>
                                              <div class="img">{def $tempimg=fetch( 'content', 'node', hash( 'node_id', $opt_item.image ) )}
                                             {if $tempimg}
                                             {foreach $tempimg.data_map as $ditem}
@@ -136,8 +136,6 @@
                                         {delimiter modulo=3}<div class="break"></div>{/delimiter}
                                     {/foreach}
                                 {/case}
-        
-                                {case /}
                             {/switch}
                             </div>
                             <div class="break"></div>
@@ -147,34 +145,40 @@
                         {/case}
                         {case match="number"}
                             <label for="number:{$id}:{$key}">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            <input id="number:{$id}:{$key}" type="number" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" min="{$item.min}" max="{$item.max}" step="{$item.step}" {if not($content.has_error)} placeholder="{$item.def|wash}" {else} value="{$item.def|wash}" {/if} /><br/>
+                            <input id="number:{$id}:{$key}" type="number" autocomplete="off" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" min="{$item.min}" max="{$item.max}" step="{$item.step}"{if not($content.has_error)} placeholder="{$item.def|wash}"{else} value="{$item.def|wash}"{/if}{* pattern="[-+]?[0-9]*[.,]?[0-9]+"*} /><br/>
                             <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
                         {/case}
                         {case match="telephonenumber"}
-                            <label for="telephonenumber:{$id}:{$key}">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            <input id="telephonenumber:{$id}:{$key}" type="tel" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" {if not($content.has_error)} placeholder="{$item.def|wash}" {else} value="{$item.def|wash}" {/if} /><br/>
+                            <label for="telephonenumber:{$id}:{$key}:number">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
+                            {def $countryCodeIsSet = false()}
+                            {if ezini_hasvariable( "Settings", "CountryCodes", "xrowformgenerator.ini" )}
+                                {set $countryCodeIsSet = true()}
+                            <select id="telephonenumber:{$id}:{$key}:country" name="XrowFormInput[{$id}][{$key}][country]" class="xrow-form-options xrow-form-{$item.type}-left {cond( $item.class|ne(''), concat( ' ', $item.class, '-left' ), '')}">
+                                {foreach ezini( "Settings", "CountryCodes", "xrowformgenerator.ini" ) as $countryCode}
+                                <option value="{$countryCode}"{if and( is_set( $item.def_error.country ), $item.def_error.country|eq( $countryCode ) )} selected="selected"{/if}>{$countryCode}</option>
+                                {/foreach}
+                            </select>
+                            {/if}
+                            <input{if not( $content.has_error )} placeholder="{$item.def|wash}"{else} value="{if is_set( $item.def_error.number )}{$item.def_error.number|wash}{else}{$item.def|wash}{/if}"{/if} id="telephonenumber:{$id}:{$key}{if $countryCodeIsSet}:number{/if}" type="tel" autocomplete="off" name="XrowFormInput[{$id}][{$key}]{if $countryCodeIsSet}[number]{/if}" class="box xrow-form-{$item.type}{if $countryCodeIsSet}-right{/if}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true"{* pattern="^\+([1-9]){ldelim}1,4{rdelim}?[ |]?[1-9]{ldelim}1{rdelim}?(?:[0-9][ |]?){ldelim}4,14{rdelim}[0-9]$"*} /><br/>
                             <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
                         {/case}
                         {case match="hidden"}
-                            <input type="hidden" class="formhidden" name="XrowFormInput[{$id}][{$key}]" {if not($content.has_error)} placeholder="{$item.def|wash}" {else} value="{$item.def|wash}" {/if} />
-        
+                            <input type="hidden" class="formhidden" name="XrowFormInput[{$id}][{$key}]" {if not( $content.has_error )} placeholder="{$item.def|wash}" {else} value="{$item.def|wash}" {/if} />
                         {/case}
                         {case match="spacer"}
                             <div class="xrow-form-spacer"></div>
-        
                         {/case}
                         {case match="desc"}
                             <p class="xrow-form-desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
-        
                         {/case}
                         {case match="email"}
                             <label for="email:{$id}:{$key}">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            <input id="email:{$id}:{$key}" type="email" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" {if not($content.has_error)} placeholder="{$item.def|wash}" {else} value="{$item.def|wash}" {/if} />
+                            <input id="email:{$id}:{$key}" type="email" autocomplete="off" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" {if not($content.has_error)} placeholder="{$item.def|wash}" {else} value="{$item.def|wash}" {/if} />
                             <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
                         {/case}
                         {case}
                             <label for="description:{$id}:{$key}">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            <input id="description:{$id}:{$key}" type="text" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" {if not($content.has_error)} placeholder="{$item.def|wash}" {else} value="{$item.def|wash}" {/if} />
+                            <input id="description:{$id}:{$key}" type="text" autocomplete="off" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" {if not($content.has_error)} placeholder="{$item.def|wash}" {else} value="{$item.def|wash}" {/if} />
                             <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
                         {/case}
                     {/switch}
@@ -225,7 +229,7 @@
                         <div class="block_spam">
                             <img src={ezhumancaptcha_image()|ezroot()} alt="eZHumanCAPTCHACode" />
                             {default attribute_base=ContentObjectAttribute}
-                            <input id="ezcoa-{if ne( $attribute_base, 'ContentObjectAttribute' )}{$attribute_base}-{/if}{$attribute.contentclassattribute_id}_{$attribute.contentclass_attribute_identifier}" class="box ezcc-{$attribute.object.content_class.identifier} ezcca-{$attribute.object.content_class.identifier}_{$attribute.contentclass_attribute_identifier} text" type="text" size="10" name="{$attribute_base}_data_text_{$attribute.id}" value="" />
+                            <input id="ezcoa-{if ne( $attribute_base, 'ContentObjectAttribute' )}{$attribute_base}-{/if}{$attribute.contentclassattribute_id}_{$attribute.contentclass_attribute_identifier}" class="box ezcc-{$attribute.object.content_class.identifier} ezcca-{$attribute.object.content_class.identifier}_{$attribute.contentclass_attribute_identifier} text" type="text" autocomplete="off" size="10" name="{$attribute_base}_data_text_{$attribute.id}" value="" />
                             {/default}
                         </div>
                     {/if}
