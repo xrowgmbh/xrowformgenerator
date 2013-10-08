@@ -4,7 +4,7 @@
 #Source=node/view/full.tpl
 #MatchFile=full/xrowform.tpl
 #Subdir=templates
-#Match[class_identifier]=new_form
+#Match[class_identifier]=xrowform
 
 #[line_xrowform]
 #Source=node/view/line.tpl
