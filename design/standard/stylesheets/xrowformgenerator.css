@@ -139,7 +139,7 @@ div.element label.xrow-image-options .img{
 div.element label.xrow-image-options .bes,
 div.element label.xrow-image-options .che,
 div.element label.xrow-image-options .img{
-	float:left;
+    float:left;
 }
     
 /*new Design*/
@@ -203,6 +203,13 @@ ol.xrow-form-xrowform textarea{
 
 .xrow-form-full input[type="checkbox"], 
 .xrow-form-full input[type="radio"]{
-	float:left;
+    float:left;
     margin-right:6px;
+}
+
+.xrow-option-trash-button,
+.xrow-option-button-down,
+.xrow-option-button-up
+{
+    cursor: pointer;
 }

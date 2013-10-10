@@ -1,11 +1,7 @@
 {def $collection = cond( $collection_id, fetch( content, collected_info_collection, hash( collection_id, $collection_id ) ),
                           fetch( content, collected_info_collection, hash( contentobject_id, $node.contentobject_id ) ) )}
-{run-once}
-{ezcss_require( array( 'xrowformgenerator.css' ) )}
-{/run-once}
+
 {set-block scope=global variable=title}{'Form %formname'|i18n( 'design/ezwebin/collectedinfo/form', , hash( '%formname', $node.name|wash() ) )}{/set-block}
-
-
 
 <div class="thankyou_page">
 

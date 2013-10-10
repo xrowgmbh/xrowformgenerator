@@ -1,5 +1,3 @@
-{ezcss_require( array( 'xrowformgenerator.css' ) )}
-
 {def $content=$attribute.content
      $id=$attribute.id}
 
@@ -178,5 +176,5 @@
     {/if}
 {/if}
 {undef}
-
+</form>
 </div>

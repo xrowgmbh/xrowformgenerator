@@ -1,10 +1,9 @@
 {ezscript_require( array( 'yahoo-dom-event/yahoo-dom-event.js', 'xrowformgenerator.js' ) )}
-{ezcss_require( array( 'xrowformgenerator.css' ) )}
 
 {def $content=$attribute.content
      $id=$attribute.id}
 
-{if ezini( 'ExtensionSettings', 'ActiveExtensions', 'site.ini' )|contains( 'xrowcaptcha' )}
+{if and( ezini( 'Settings', 'ShowCaptchaAlways', 'xrowformgenerator.ini' )|eq("true"), ezini( 'ExtensionSettings', 'ActiveExtensions', 'site.ini' )|contains( 'xrowcaptcha' ) ))}
     <label>
         <input type="checkbox" name="XrowFormCaptcha{$id}" value="1" disabled="true" checked="checked"/> {"Form is using a captcha"|i18n( 'xrowformgenerator/edit' )} (* {"Captcha is automatically applied to all forms."|i18n( 'xrowformgenerator/edit' )} )
     </label>

@@ -10,6 +10,7 @@ DesignExtensions[]=xrowformgenerator
 #JavaScriptList[]=common.js
 
 [StylesheetSettings]
-CSSFileList[]=xrowformgenerator.css
+FrontendCSSFileList[]=xrowformgenerator.css
+BackendCSSFileList[]=xrowformgenerator.css
 
 */ ?>
