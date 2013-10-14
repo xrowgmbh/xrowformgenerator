@@ -1,3 +1,8 @@
+$(document).ready(function(){
+    $("#nosubmit").show();
+    $("#noScriptPrompt").hide();
+});
+
 function xrow_option_button_up()
 {
     var li = YAHOO.util.Dom.getAncestorByTagName( this, 'li' );

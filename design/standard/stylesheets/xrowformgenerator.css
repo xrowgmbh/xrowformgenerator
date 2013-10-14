@@ -130,15 +130,15 @@ div.element label.xrow-image-options img
     margin-bottom:5px;
 }
 
-div.element label.xrow-image-options .img{
+div.element label.xrow-image-options img{
     width:120px;
     height:90px;
     text-align:center;
-    }
+}
 
 div.element label.xrow-image-options .bes,
 div.element label.xrow-image-options .che,
-div.element label.xrow-image-options .img{
+div.element label.xrow-image-options img{
     float:left;
 }
     
@@ -212,4 +212,14 @@ ol.xrow-form-xrowform textarea{
 .xrow-option-button-up
 {
     cursor: pointer;
+}
+
+.recaptcha_warning
+{
+    color: red;
+}
+
+#nosubmit
+{
+    display: none;
 }
