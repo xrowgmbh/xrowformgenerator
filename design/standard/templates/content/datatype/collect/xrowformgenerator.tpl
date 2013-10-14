@@ -134,7 +134,7 @@
                             {/case}
                             {case match="number"}
                                 <label for="number:{$id}:{$key}">{$item.name|wash()}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                                <input id="number:{$id}:{$key}" type="number" autocomplete="off" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" min="{$item.min}" max="{$item.max}" step="{$item.step}"{if not($content.has_error)} placeholder="{$item.def|wash()}"{else} value="{$item.def|wash()}"{/if}{* pattern="[-+]?[0-9]*[.,]?[0-9]+"*} />
+                                <input id="number:{$id}:{$key}" type="number" autocomplete="off" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{if $item.class|ne('')} {$item.class}{/if}" aria-required="true" min="{$item.min}" max="{$item.max}" step="{$item.step}" value="{$item.def|wash()}"{* pattern="[-+]?[0-9]*[.,]?[0-9]+"*} />
                                 {if is_set( $item.desc )}<p class="input_desc">{$item.desc}</p>{/if}
                             {/case}
                             {case match="telephonenumber"}

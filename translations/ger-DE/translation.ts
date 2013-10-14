@@ -88,6 +88,10 @@
         <source>Spam protection. The signs of the captcha code didn&apos;t match. Please enter the correct code of the image at the bottom.</source>
         <translation>Spam Schutz: Die Zeichen, die Sie eingegeben haben, stimmen nicht mit denen im Bild überein. Bitte geben Sie den korrekten Code am Formularende ein.</translation>
     </message>
+     <message>
+        <source>Please respect the number range.</source>
+        <translation>Bitte beachten Sie den Zahlenbereich.</translation>
+    </message>
 </context>
 <context>
     <name>xrowformgenerator/edit</name>

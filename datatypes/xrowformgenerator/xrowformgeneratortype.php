@@ -690,6 +690,14 @@ class xrowFormGeneratorType extends eZDataType
                                         $content['has_error'] = true;
                                         $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please enter a valid number." );
                                     }
+                                    
+                                    //validate ranges
+                                    if ($data < $item["min"] OR $data > $item["max"] )
+                                    {
+                                    	$content['form_elements'][$key]['error'] = true;
+                                        $content['has_error'] = true;
+                                        $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please respect the number range." );
+                                    }
                                 }
                                 $content['form_elements'][$key]['def'] = $data;
                             }break;
