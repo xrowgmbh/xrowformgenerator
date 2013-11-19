@@ -27,7 +27,7 @@
             {attribute_view_gui attribute=$node.data_map.form}
         {/if}
 
-         {if and( is_set( $node.data_map.body_bottom ), $node.data_map.body_bottom.has_content )}
+        {if and( is_set( $node.data_map.body_bottom ), $node.data_map.body_bottom.has_content )}
             <div class="attribute-long">
                 {attribute_view_gui attribute=$node.data_map.body_bottom}
             </div>
