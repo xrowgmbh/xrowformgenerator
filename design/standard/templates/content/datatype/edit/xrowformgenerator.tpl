@@ -1,4 +1,4 @@
-{ezscript_require( array( 'yahoo-dom-event/yahoo-dom-event.js', 'xrowformgenerator.js' ) )}
+{ezscript_require( array( 'yahoo-dom-event/yahoo-dom-event.js', 'xrowformgenerator_backend.js' ) )}
 
 {def $content=$attribute.content
      $id=$attribute.id}
