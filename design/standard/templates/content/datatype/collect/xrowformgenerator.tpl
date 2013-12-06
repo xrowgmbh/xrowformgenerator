@@ -165,6 +165,18 @@
                                 <input id="email:{$id}:{$key}" type="email" autocomplete="off" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" {if not($content.has_error)} placeholder="{$item.def|wash()}" {else} value="{$item.def|wash()}" {/if} />
                                 {if is_set( $item.desc )}<p class="input_desc">{$item.desc}</p>{/if}
                             {/case}
+                            {case match="country"}
+                                <label for="country:{$id}:{$key}">{$item.name|wash()}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
+                                {def $countries=fetch( 'content', 'country_list' )}
+                                <input id="country:{$id}:{$key}" type="hidden" autocomplete="off" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" value="" />
+                                <select id="select_{$id}_{$key}" class="field_half" onchange="$('input[name=\'XrowFormInput[{$id}][{$key}]\']').val($('#select_{$id}_{$key} option:selected').text());">
+                                    <option value=""></option>
+                                    {foreach $countries as $country_list_item}
+                                        <option value="{$country_list_item.Alpha3}">{$country_list_item.Name}</option>
+                                    {/foreach}
+                                </select>
+                                {if is_set( $item.desc )}<p class="input_desc">{$item.desc}</p>{/if}
+                            {/case}
                             {case}
                                 <label for="description:{$id}:{$key}">{$item.name|wash()}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
                                 <input id="description:{$id}:{$key}" type="text" autocomplete="off" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" {if not($content.has_error)} placeholder="{$item.def|wash()}" {else} value="{$item.def|wash()}" {/if} />

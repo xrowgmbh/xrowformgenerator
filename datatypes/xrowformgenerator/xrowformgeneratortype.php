@@ -502,6 +502,7 @@ class xrowFormGeneratorType extends eZDataType
                         {
                             case "text":
                             case "string":
+                            case "country":
                             {
                                 $data = '';
                                 if ( isset( $inputArray[$elKey] ) )
