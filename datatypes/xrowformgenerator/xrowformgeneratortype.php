@@ -317,6 +317,8 @@ class xrowFormGeneratorType extends eZDataType
                 $sender = $ini->variable( "MailSettings", "AdminEmail" );
             }
         }
+
+        $receiverArray = array();
         if( $receiverString != '' )
         {
             if( strpos( $receiverString, ';' ) !== false )
@@ -393,14 +395,66 @@ class xrowFormGeneratorType extends eZDataType
             }
         }
         $mail->build();
-        $transport = new ezcMailMtaTransport();
-        try
+
+        $mailsettings = array();
+        $mailsettings["transport"] = $ini->variable( "MailSettings", "Transport" );
+        $mailsettings["server"] = $ini->variable( "MailSettings", "TransportServer" );
+        $mailsettings["port"] = $ini->variable( "MailSettings", "TransportPort" );
+        $mailsettings["user"] = $ini->variable( "MailSettings", "TransportUser" );
+        $mailsettings["password"] = $ini->variable( "MailSettings", "TransportPassword" );
+        $mailsettings["connectionType"] = $ini->variable( 'MailSettings', 'TransportConnectionType' );
+        
+        if( trim($mailsettings["port"]) == "" )
         {
-            $transport->send( $mail );
+            $mailsettings["port"] = null;
         }
-        catch ( ezcMailTransportException $e )
+        if ( strtolower($mailsettings["transport"]) == "smtp" )
         {
-            eZDebug::writeError( $e->getMessage(), 'xrowFormGeneratorType::xrowSendFormMail' );
+            $options = new ezcMailSmtpTransportOptions();
+            if( trim($mailsettings["password"]) === "" )
+            {
+                $transport = new ezcMailSmtpTransport( $mailsettings["server"], "", "", $mailsettings["port"], $options );
+            }
+            else
+           {
+                $options->preferredAuthMethod = ezcMailSmtpTransport::AUTH_AUTO;
+                $transport = new ezcMailSmtpTransport( $mailsettings["server"], $mailsettings["user"], $mailsettings["password"], $mailsettings["port"], $options );
+            }
+        }
+        else if ( strtolower($mailsettings["transport"]) == "sendmail" )
+        {
+            $transport = new ezcMailMtaTransport();
+        }
+        else if ( strtolower($mailsettings["transport"]) == "file" )
+        {
+            //do own mail creation because ezc mail provides no file sending
+            $mail = new eZMail();
+            $mail->setSender( $sender );
+            foreach ( $receiverArray as $receiver )
+            {
+                $mail->addReceiver( $receiver );
+            }
+            $mail->setSubject( $subject );
+            $mail->setBody( $templateResult );
+            eZFileTransport::send( $mail );
+        }
+        else
+        {
+            eZDebug::writeError( "Wrong Transport in MailSettings in", 'xrowFormGeneratorType::xrowSendFormMail' );
+            return null;
+        }
+
+        //ezcmail sending
+        if ( strtolower($mailsettings["transport"]) != "file" )
+        {
+            try
+            {
+                $transport->send( $mail );
+            }
+            catch ( ezcMailTransportException $e )
+            {
+                eZDebug::writeError( $e->getMessage(), 'xrowFormGeneratorType::xrowSendFormMail' );
+            }
         }
     }
 
