@@ -574,6 +574,5 @@ function addslashes (str) {
   str = str.replace(/\"/g,"&quot;");
   str = str.replace(/\'/g,"&#39;");
   str = str.replace(/>/g,"&gt;");
-  str = str.replace(/ /g,"&nbsp;");
   return str;
 }
