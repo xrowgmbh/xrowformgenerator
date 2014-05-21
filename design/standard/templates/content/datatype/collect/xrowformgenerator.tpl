@@ -47,7 +47,7 @@
                                                    <input id="XrowFormInput[{$id}][{$key}][{$opt_key}]" class="xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" type="checkbox" autocomplete="off" aria-required="true" name="XrowFormInput[{$id}][{$key}][{$opt_key}]" value="{$opt_item.name|wash()}" {if $opt_item.def}checked="checked" {/if}/>
                                                 </span>
                                                 <span class="radio_label">
-                                                   <label class="black_label" for="options_chekbox:{$id}:{$key}:{$opt_key}">{$opt_item.name|wash()}</label>
+                                                   <label class="black_label" for="XrowFormInput[{$id}][{$key}][{$opt_key}]">{$opt_item.name|wash()}</label>
                                                 </span>
                                             </li>
                                         {/foreach}
