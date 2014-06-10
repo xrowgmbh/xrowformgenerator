@@ -94,7 +94,8 @@
                                         <div class="element xrow-image-opt-ele">
                                             <label for="imageoptions_checkbox:{$id}:{$key}:{$opt_key}" class="xrow-image-options">
                                             <input id="imageoptions_checkbox:{$id}:{$key}:{$opt_key}" class="xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" type="checkbox" autocomplete="off" name="XrowFormInput[{$id}][{$key}][{$opt_key}]" value="{$opt_item.name|wash()}" {if $opt_item.def}checked="checked"{/if} />
-                                            {if fetch( 'content', 'node', hash( 'node_id', $opt_item.image ) )}
+                                            {def $tempimg=fetch( 'content', 'node', hash( 'node_id', $opt_item.image ) )}
+                                            {if $tempimg}
                                                 {foreach $tempimg.data_map as $ditem}
                                                     {if and( $ditem.data_type_string|eq( 'ezimage' ), $ditem.has_content )}
                                                         {attribute_view_gui attribute=$ditem image_class="small"}
@@ -102,6 +103,7 @@
                                                     {/if}
                                                 {/foreach}
                                             {/if}
+                                            {undef $tempimg}
                                            <span class="bes">{$opt_item.name|wash()}</span>
                                          </label>
                                         </div>
@@ -113,7 +115,8 @@
                                             <div class="element">
                                                 <label for="imageoptions_radio:{$id}:{$key}:{$opt_key}" class="xrow-image-options">
                                                     <input id="imageoptions_radio:{$id}:{$key}:{$opt_key}" class="xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" type="radio" autocomplete="off" name="XrowFormInput[{$id}][{$key}]" value="{$opt_item.name|wash()}" {if $opt_item.def}checked="checked" {/if} />
-                                                    {if fetch( 'content', 'node', hash( 'node_id', $opt_item.image ) )}
+                                                    {def $tempimg=fetch( 'content', 'node', hash( 'node_id', $opt_item.image ) )}
+                                                    {if $tempimg}
                                                         {foreach $tempimg.data_map as $ditem}
                                                             {if and( $ditem.data_type_string|eq( 'ezimage' ), $ditem.has_content )}
                                                                 {attribute_view_gui attribute=$ditem image_class="small"}
@@ -121,6 +124,7 @@
                                                             {/if}
                                                         {/foreach}
                                                     {/if}
+                                                    {undef $tempimg}
                                                     <span class="bes">{$opt_item.name|wash()}</span>
                                                 </label>
                                             </div>
