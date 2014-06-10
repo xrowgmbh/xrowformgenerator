@@ -85,7 +85,7 @@
                                     {if $tempimg}
                                     {foreach $tempimg.data_map as $ditem}
                                         {if and( $ditem.data_type_string|eq( 'ezimage' ), $ditem.has_content )}
-                                        {attribute_view_gui attribute=$ditem image_class="small_2"}<br />
+                                        {attribute_view_gui attribute=$ditem image_class="small"}<br />
                                         {break}
                                         {/if}
                                     {/foreach}
@@ -105,7 +105,7 @@
                                         {if $tempimg}
                                         {foreach $tempimg.data_map as $ditem}
                                             {if and( $ditem.data_type_string|eq( 'ezimage' ), $ditem.has_content )}
-                                            {attribute_view_gui attribute=$ditem image_class="small_2"}<br />
+                                            {attribute_view_gui attribute=$ditem image_class="small"}<br />
                                             {break}
                                             {/if}
                                         {/foreach}
