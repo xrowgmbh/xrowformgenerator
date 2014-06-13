@@ -30,7 +30,7 @@
         <caption>{'Your data'|i18n('xrowformgenerator/mail')}</caption>
             <tbody>
             {foreach $collection.data_map.form.content.form_elements as $key => $item}
-            {if and($item.type|ne( 'spacer' ),$item.type|ne( 'desc' ))}
+            {if not(array('spacer','desc','hidden')|contains($item.type))}
             <tr>
                 <th>{cond( and($item.type|ne( 'spacer' ),$item.type|ne( 'desc' )), concat( $item.name, ': ' ), '' )}</th>
                 <td>
