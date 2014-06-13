@@ -13,7 +13,7 @@
 {/if}
 {if $content.form_elements|count|gt(0)}
 {foreach $content.form_elements as $key => $item}
-{if and($item.type|ne( 'spacer' ),$item.type|ne( 'desc' ))}
+{if not(array('spacer','desc','hidden')|contains($item.type))}
 {concat( $item.name, ': ' )}
 {switch match=$item.type}
 {case match="checkbox"}{if $item.def}{"Yes"|i18n( 'xrowformgenerator/mail' )}{else}{"No"|i18n( 'xrowformgenerator/mail' )}{/if}{/case}
