@@ -124,11 +124,16 @@
         <translation>Bitte füllen Sie das Formular aus. Felder, die mit einem Sternchen (*) markiert sind, müssen ausgefüllt werden.</translation>
     </message>
     <message>
-        <source>One ore more errors at the input occured. Please correct the input of the fields which are marked red.</source>        <translation>Einer oder mehrere Fehler sind bei der Eingabe passiert. Bitte korrigieren Sie die Eingabe der Felder, die rot markiert sind.</translation>
+        <source>One ore more errors at the input occured. Please correct the input of the fields which are marked red.</source>
+        <translation>Einer oder mehrere Fehler sind bei der Eingabe passiert. Bitte korrigieren Sie die Eingabe der Felder, die rot markiert sind.</translation>
     </message>
     <message>
         <source>Form is using a captcha</source>
         <translation>Das Formular verwendet Captcha</translation>
+    </message>
+    <message>
+        <source>Display data after submit</source>
+        <translation>Anzeigen der eingegebenen Daten nach dem Versand</translation>
     </message>
     <message>
         <source>Delete option</source>
@@ -150,11 +155,11 @@
         <source>Min</source>
         <translation>Minimalwert</translation>
     </message>
-        <message>
+    <message>
         <source>Max</source>
         <translation>Maximalwert</translation>
     </message>
-        <message>
+    <message>
         <source>Step</source>
         <translation>Schrittwert</translation>
     </message>
@@ -198,7 +203,7 @@
         <source>Number input field</source>
         <translation>Eingabefeld Zahl</translation>
     </message>
-        <message>
+    <message>
         <source>Telephone number input field</source>
         <translation>Eingabefeld Telefonnummer</translation>
     </message>
@@ -221,7 +226,6 @@
     <message>
         <source>Email input field</source>
         <translation>Eingabefeld E-Mail</translation>
-
     </message>
     <message>
         <source>Options input field</source>
@@ -350,6 +354,14 @@
     <message>
         <source>description</source>
         <translation>Beschreibung</translation>
+    </message>
+    <message>
+        <source>Select a campaign</source>
+        <translation>Wählen Sie eine Kampagne aus</translation>
+    </message>
+    <message>
+        <source>CRM fields</source>
+        <translation>Felder aus Ihrem CRM</translation>
     </message>
 </context>
 <context>

@@ -1,6 +1,10 @@
-{def $content=$attribute.content
-     $id=$attribute.id}
-
+{def $content = $attribute.content
+     $id = $attribute.id
+     $crmIsEnabled = false()}
+{if and( ezini_hasvariable( 'Settings', 'UseCRM', 'xrowformgenerator.ini' ), ezini( 'Settings', 'UseCRM', 'xrowformgenerator.ini' )|eq( 'enabled' ) )}
+    {set $crmIsEnabled = true()}
+{/if}
+{ezcss_require( array( 'xrowformgenerator.css' ) )}
 <div class="xrow-form-full">
 <form action="/content/action" enctype="multipart/form-data" method="post">
 {if $content.form_elements|count|eq(0)}
@@ -36,11 +40,9 @@
                         <label>{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> ({"required"|i18n( 'xrowformgenerator/mail' )})</abbr>{/if}</label>
                         <input type="file" name="XrowFormInputFile_{$id}_{$key}" value="" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" />
                         {cond( is_set( $item.desc ), $item.desc, '')}
-    
                     {/case}
                     {case match="options"}
                         <label>{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> ({"required"|i18n( 'xrowformgenerator/mail' )})</abbr>{/if}</label>
-    
                         {switch match=$item.option_type}
                             {case match="checkbox"}
                                 {foreach $item.option_array as $opt_key => $opt_item}
@@ -67,11 +69,8 @@
                                 {/foreach}
                                 </select>
                             {/case}
-                            {case /}
                         {/switch}
-    
                         {cond( is_set( $item.desc ), $item.desc, '')}
-    
                     {/case}
                     {case match="imageoptions"}
                         <label>{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> ({"required"|i18n( 'xrowformgenerator/mail' )})</abbr>{/if}</label>
@@ -85,14 +84,13 @@
                                     {if $tempimg}
                                     {foreach $tempimg.data_map as $ditem}
                                         {if and( $ditem.data_type_string|eq( 'ezimage' ), $ditem.has_content )}
-                                        {attribute_view_gui attribute=$ditem image_class="small"}<br />
+                                        {attribute_view_gui attribute=$ditem image_class="small_2"}<br />
                                         {break}
                                         {/if}
                                     {/foreach}
                                     {/if}
                                     {undef $tempimg}
                                     <input class="xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" type="checkbox" name="XrowFormInput[{$id}][{$key}][{$opt_key}]" value="{$opt_item.name|wash}" {if $opt_item.def}checked="checked" {/if} /> &nbsp;{$opt_item.name|wash}</label>
-    
                                 </div>
                                 {delimiter modulo=3}<div class="break"></div>{/delimiter}
                                 {/foreach}
@@ -105,7 +103,7 @@
                                         {if $tempimg}
                                         {foreach $tempimg.data_map as $ditem}
                                             {if and( $ditem.data_type_string|eq( 'ezimage' ), $ditem.has_content )}
-                                            {attribute_view_gui attribute=$ditem image_class="small"}<br />
+                                            {attribute_view_gui attribute=$ditem image_class="small_2"}<br />
                                             {break}
                                             {/if}
                                         {/foreach}
@@ -118,14 +116,10 @@
                                     {delimiter modulo=3}<div class="break"></div>{/delimiter}
                                 {/foreach}
                             {/case}
-    
-                            {case /}
                         {/switch}
                         </div>
                         <div class="break"></div>
-    
                         {cond( is_set( $item.desc ), $item.desc, '')}
-    
                     {/case}
                     {case match="number"}
                         <label>{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> ({"required"|i18n( 'xrowformgenerator/mail' )})</abbr>{/if}</label>
@@ -139,20 +133,21 @@
                     {/case}
                     {case match="hidden"}
                         <input type="hidden" class="formhidden" name="XrowFormInput[{$id}][{$key}]" value="{$item.def|wash}" />
-    
                     {/case}
                     {case match="spacer"}
                         <hr class="xrow-form-spacer" />
-    
                     {/case}
                     {case match="desc"}
                         <div class="xrow-form-desc">{cond( is_set( $item.desc ), $item.desc, '')}</div>
-    
                     {/case}
                     {case}
-                        <label>{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> ({"required"|i18n( 'xrowformgenerator/mail' )})</abbr>{/if}</label>
-                        <input type="text" name="XrowFormInput[{$id}][{$key}]" value="{$item.def|wash}" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" />
-                        {cond( is_set( $item.desc ), $item.desc, '')}
+                        {if and( $item.type|contains( 'crmfield:' ), $crmIsEnabled )}
+                            {include uri='design:content/datatype/view/xrowformcrmfielditem.tpl'}
+                        {else}
+                            <label>{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> ({"required"|i18n( 'xrowformgenerator/mail' )})</abbr>{/if}</label>
+                            <input type="text" name="XrowFormInput[{$id}][{$key}]" value="{$item.def|wash}" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" />
+                            {cond( is_set( $item.desc ), $item.desc, '')}
+                        {/if}
                     {/case}
                 {/switch}
                 {* we need to do this because some idiot defined nice styles for all input fields ... *}
@@ -176,5 +171,5 @@
     {/if}
 {/if}
 {undef}
-</form>
+
 </div>

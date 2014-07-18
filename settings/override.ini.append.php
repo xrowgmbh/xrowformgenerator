@@ -12,10 +12,10 @@
 #Subdir=templates
 #Match[class_identifier]=xrowform
 
-#[collected_info_xrowform]
-#Source=content/collectedinfo/form.tpl
-#MatchFile=collectedinfo/xrowform.tpl
-#Subdir=templates
-#Match[class_identifier]=xrowform
+[collected_info_xrowform]
+Source=content/collectedinfo/form.tpl
+MatchFile=collectedinfo/xrowform.tpl
+Subdir=templates
+Match[class_identifier]=xrowform
 
 */ ?>
