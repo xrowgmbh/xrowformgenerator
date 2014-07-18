@@ -1,10 +1,7 @@
-{run-once}
-{ezcss_require( array( 'xrowformgenerator.css' ) )}
-{/run-once}
 {* xrowform - line view *}
 
 <div class="content-view-line">
-    <div class="class-article float-break">
+    <div class="class-xrowform float-break">
 
     <h2><a href={$node.url_alias|ezurl}>{$node.data_map.name.content|wash}</a></h2>
 

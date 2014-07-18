@@ -1,5 +1,3 @@
-{def $crmIsEnabled = false()}
-{if and( ezini_hasvariable( 'Settings', 'UseCRM', 'xrowformgenerator.ini' ), ezini( 'Settings', 'UseCRM', 'xrowformgenerator.ini' )|eq( 'enabled' ) )}{set $crmIsEnabled = true()}{/if}
 {set-block scope=root variable=subject}{if and( is_set( $content.show_amount ), $content.show_amount )}#{$content.no}: {/if}{$content.subject}{/set-block}
 {set-block scope=root variable=email_receiver_xrow}{$content.receiver}{/set-block}
 {set-block scope=root variable=email_sender}{$content.sender}{/set-block}
@@ -15,10 +13,7 @@
 {/if}
 {if $content.form_elements|count|gt(0)}
 {foreach $content.form_elements as $key => $item}
-{if and( $item.type|contains( 'crmfield:' ), $crmIsEnabled )}
-{include uri='design:xrowformgenerator/xrowformmailcrmfielditem.tpl'}
-{else}
-{if and($item.type|ne( 'spacer' ),$item.type|ne( 'desc' ))}
+{if not(array('spacer','desc','hidden')|contains($item.type))}
 {concat( $item.name, ': ' )}
 {switch match=$item.type}
 {case match="checkbox"}{if $item.def}{"Yes"|i18n( 'xrowformgenerator/mail' )}{else}{"No"|i18n( 'xrowformgenerator/mail' )}{/if}{/case}
@@ -78,7 +73,6 @@
 
 -------------------------------------------------------------------------------
 
-{/if}
 {/if}
 {/foreach}
 {/if}

@@ -1,12 +1,6 @@
 {def $collection = cond( $collection_id, fetch( content, collected_info_collection, hash( collection_id, $collection_id ) ),
-                                         fetch( content, collected_info_collection, hash( contentobject_id, $node.contentobject_id ) ) )
-     $crmIsEnabled = false()}
-{if and( ezini_hasvariable( 'Settings', 'UseCRM', 'xrowformgenerator.ini' ), ezini( 'Settings', 'UseCRM', 'xrowformgenerator.ini' )|eq( 'enabled' ) )}
-    {set $crmIsEnabled = true()}
-{/if}
-{run-once}
-{ezcss_require( array( 'xrowformgenerator.css' ) )}
-{/run-once}
+                          fetch( content, collected_info_collection, hash( contentobject_id, $node.contentobject_id ) ) )}
+
 {set-block scope=global variable=title}{'Form %formname'|i18n( 'design/ezwebin/collectedinfo/form', , hash( '%formname', $node.name|wash() ) )}{/set-block}
 
 <div class="thankyou_page">
@@ -34,13 +28,10 @@
 {if $collection.data_map.form.content.form_elements|count|gt(0)}
     <table class="anzeige_table" cellspacing="0" cellpadding="2">
         <caption>{'Your data'|i18n('xrowformgenerator/mail')}</caption>
-        <tbody>
-        {foreach $collection.data_map.form.content.form_elements as $key => $item}
-        {if and( $item.type|ne( 'spacer' ), $item.type|ne( 'desc' ) )}
+            <tbody>
+            {foreach $collection.data_map.form.content.form_elements as $key => $item}
+            {if not(array('spacer','desc','hidden')|contains($item.type))}
             <tr>
-            {if and( $item.type|contains( 'crmfield:' ), $crmIsEnabled )}
-                {include uri='design:content/datatype/collectedinfo/xrowformcrmfielditem.tpl'}
-            {else}
                 <th>{cond( and($item.type|ne( 'spacer' ),$item.type|ne( 'desc' )), concat( $item.name, ': ' ), '' )}</th>
                 <td>
                     {switch match=$item.type}
@@ -88,13 +79,12 @@
                        {case match="text"}{$item.def}{/case}
                        {case}{$item.def}{/case}
                   {/switch}
-                </td>
-            {/if}
-            </tr>
-        {/if}
-        {/foreach}
-        </tbody>
-    </table>
+      </td>
+      </tr>
+      {/if}
+   {/foreach}
+   </tbody>
+  </table>
 {/if}
 </div>
 {/if}

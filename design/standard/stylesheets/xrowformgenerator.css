@@ -1,17 +1,6 @@
-.xrow-form-error,
-.content-view-full .attribute-header,
-.content-view-full .attribute-long{
-    padding:0 5px;
-}
-
 .xrow-form-error input,.xrow-form-error textarea,.xrow-form-error select
 {
     border: 2px solid #e1071d;
-}
-
-.xrow-form-full input[type="radio"].xrow-form-imageoptions,
-.xrow-form-full input[type="checkbox"].xrow-form-imageoptions{
-    margin-top:-15px;
 }
 
 .xrow-form-error ul li{
@@ -49,6 +38,17 @@ ol.xrow-form-container li.xrow-form-element
     margin-left: 2em;
     padding-left: 2em;
 }
+
+.xrow-trash-width
+{
+    width: 16px;
+}
+
+.xrow-move-width
+{
+    width: 36px;
+}
+
 .xrow-form-element-width
 {
     width: 85%;
@@ -78,8 +78,7 @@ ol.xrow-form-container li.xrow-form-element
 {
     clear: both;
     margin:0px 0px 5px 0;
-    width: 96.5%;
-    max-width:100% !important;
+    width:100%;
 }
 
  @media screen and (-webkit-min-device-pixel-ratio:0){ 
@@ -121,9 +120,8 @@ div.block label.xrow-image-options
 
 div.element label.xrow-image-options
 {
-    width:auto;
-    max-width:550px;
-    height:70px;
+    width:400px;
+    height:90px;
 }
 
 div.element label.xrow-image-options img
@@ -132,17 +130,18 @@ div.element label.xrow-image-options img
     margin-bottom:5px;
 }
 
-div.element label.xrow-image-options .img{
-    width:80px;
-    height:60px;
+div.element label.xrow-image-options img{
+    width:120px;
+    height:90px;
     text-align:center;
-    margin-right: 8px;
-    }
-  
-div.element label.xrow-image-options .bes{
-    word-wrap:break-word;
-    word-break:break-all;
 }
+
+div.element label.xrow-image-options .bes,
+div.element label.xrow-image-options .che,
+div.element label.xrow-image-options img{
+    float:left;
+}
+    
 /*new Design*/
 
 ol.xrow-form-xrowform{
@@ -158,7 +157,7 @@ ol.xrow-form-xrowform li,
 ol.xrow-form-xrowform .radio_button {
     float:left;
     margin-right:5px;
-    margin-top:4px;
+    margin-top:3px;
 
 }
 
@@ -198,20 +197,29 @@ ol.xrow-form-xrowform textarea{
 }
 
 .xrow-form-full input.box {
-    padding:2px;
+    padding:5px;
 }
+
 
 .xrow-form-full input[type="checkbox"], 
 .xrow-form-full input[type="radio"]{
     float:left;
     margin-right:6px;
-    margin-top: 4px;
 }
-.xrow-form-full select.xrow-form-options.xrow-form-telephonenumber-left {
-    width: 10%;
-    float: left;
-    margin-right: 10px; 
+
+.xrow-option-trash-button,
+.xrow-option-button-down,
+.xrow-option-button-up
+{
+    cursor: pointer;
 }
-.xrow-form-full input.box.xrow-form-telephonenumber-right {
-    width: 86%;
+
+.recaptcha_warning
+{
+    color: red;
+}
+
+#nosubmit
+{
+    display: none;
 }
