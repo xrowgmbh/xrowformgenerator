@@ -1,0 +1,19 @@
+{
+    "name": "xrow/xrowformgenerator-ls",
+    "description": "Form generator for eZ Publish. Will allow editors to create custom forms.",
+    "type": "ezpublish-legacy-extension",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "xrow GmbH",
+            "homepage": "http://www.xrow.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "ezsystems/ezpublish-legacy-installer": "*"
+    },
+    "extra": {
+        "ezpublish-legacy-extension-name": "xrowformgenerator"
+    }
+}
