@@ -1246,7 +1246,23 @@ class xrowFormGeneratorType extends eZDataType
     */
     static function validate( $address )
     {
-        return preg_match( '/^' . self::REGEXP . '$/', $address );
+        $mxhosts=array();
+        if(preg_match( '/^' . self::REGEXP . '$/', $address ))
+        {
+            list($alias, $domain) = split("@", $address);
+            if (checkdnsrr($domain, "MX")) 
+            {
+                if(getmxrr($domain, $mxhosts)){
+                    return true;
+                }else{
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }else{
+            return false;
+        }
     }
 
     static function email_unique( $address, $contentobject_id )
