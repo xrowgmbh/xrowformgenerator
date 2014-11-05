@@ -40,7 +40,6 @@ class xrowFormGeneratorType extends eZDataType
         {
             $dataText = $originalContentObjectAttribute->attribute( "data_text" );
             $contentObjectAttribute->setAttribute( "data_text", $dataText );
-
         }
     }
 
@@ -87,14 +86,14 @@ class xrowFormGeneratorType extends eZDataType
         {
             $formElementArray = self::strip( $http->postVariable( $tplKey ) );
             $data = array();
-            
             $tplKeyArray = array( 'XrowFormCaptcha' => 'use_captcha',
                                   'XrowFormAmount' => 'show_amount',
                                   'XrowFormReceiver' => 'receiver',
                                   'XrowFormSubject' => 'subject',
                                   'XrowFormSender' => 'sender',
                                   'XrowFormButton' => 'button_text',
-                                  'XrowFormAnzeige'=> 'show_anzeige');
+                                  'XrowFormAnzeige' => 'show_anzeige',
+                                  'XrowCampaignID' => 'campaign_id');
             foreach( $tplKeyArray as $tplKeyIndex => $tplKeyItem )
             {
                 if ( $http->hasPostVariable( $tplKeyIndex . $id ) )
@@ -107,6 +106,8 @@ class xrowFormGeneratorType extends eZDataType
             $keyArray = array( "XrowFormElementType" . $id => "type",
                                "XrowFormElementName" . $id => "name",
                                "XrowFormElementDefault" . $id => "def",
+                               "XrowFormElementCRM" . $id => "crm",
+                               "XrowFormElementCRMClass" . $id => "crmclass",
                                "XrowFormElementMin" . $id => "min",
                                "XrowFormElementMax" . $id => "max",
                                "XrowFormElementStep" . $id => "step",
@@ -127,9 +128,12 @@ class xrowFormGeneratorType extends eZDataType
                 $$varName = array();
                 if ( $http->hasPostVariable( $tplFormKey ) )
                 {
-                    if($dataKey != "desc"){
+                    if( $dataKey != "desc" )
+                    {
                         $$varName = self::strip($http->postVariable( $tplFormKey ));
-                    }else{
+                    }
+                    else
+                    {
                         $$varName = self::strip_a_tag($http->postVariable( $tplFormKey ));
                     }
                 }
@@ -145,12 +149,42 @@ class xrowFormGeneratorType extends eZDataType
                     $data['type'] = $type;
                     $data['name'] = $data['desc'] = $data['def'] = $data['min']= $data['max'] = $data['step'] = null;
                     $data['req'] = $data['val'] = $data['unique'] = false;
-
                     if ( isset( $nameArray[$key] ) )
                     {
                         $data['name'] = $nameArray[$key];
                     }
-
+                    if ( isset( $crmclassArray[$key] ) )
+                    {
+                        $data['crmclass'] = $crmclassArray[$key];
+                    }
+                    if ( isset( $minArray[$key] ) )
+                    {
+                        $data['min'] = $minArray[$key];
+                    }
+                    if ( isset( $maxArray[$key] ) )
+                    {
+                        $data['max'] = $maxArray[$key];
+                    }
+                    if ( isset( $stepArray[$key] ) )
+                    {
+                        $data['step'] = $stepArray[$key];
+                    }
+                    if ( isset( $descArray[$key] ) )
+                    {
+                        $data['desc'] = $descArray[$key];
+                    }
+                    if ( isset( $reqArray[$key] ) )
+                    {
+                        $data['req'] = true;
+                    }
+                    if ( isset( $valArray[$key] ) )
+                    {
+                        $data['val'] = true;
+                    }
+                    if ( isset( $uniqueArray[$key] ) )
+                    {
+                        $data['unique'] = true;
+                    }
                     if ( $type == 'checkbox' )
                     {
                         if ( isset( $defArray[$key] ) )
@@ -169,40 +203,25 @@ class xrowFormGeneratorType extends eZDataType
                             $data['def'] = $defArray[$key];
                         }
                     }
-                    
-                    if ( isset( $minArray[$key] ) )
+                    // check if this field is one from crm
+                    $ini = eZINI::instance( 'xrowformgenerator.ini' );
+                    if( strpos( $type, 'crmfield' ) !== false && $ini->hasVariable( 'Settings', 'UseCRM' ) && $ini->variable( 'Settings', 'UseCRM' ) == 'enabled' )
                     {
-                        $data['min'] = $minArray[$key];
+                        $pluginOptions = new ezpExtensionOptions( array( 'iniFile' => 'xrowformgenerator.ini',
+                                                                         'iniSection' => 'PluginSettings',
+                                                                         'iniVariable' => 'FormCRMPlugin' ) );
+                        $pluginHandler = eZExtension::getHandlerClass( $pluginOptions );
+                        if( !( $pluginHandler instanceof xrowFormCRM ) )
+                        {
+                            eZDebug::writeError( 'PluginHandler does not exist: ', __METHOD__ );
+                        }
+                        $crm = false;
+                        if ( isset( $crmArray[$key] ) )
+                            $crm = $crmArray[$key];
+                        if ( isset( $option_typeArray[$key] ) && $option_typeArray[$key] != '' )
+                            $data['option_type'] = $option_typeArray[$key];
+                        $data = $pluginHandler->setAttributeDataForCRMField( $data, $http, $id, $crm );
                     }
-                    
-                    if ( isset( $maxArray[$key] ) )
-                    {
-                        $data['max'] = $maxArray[$key];
-                    }
-                    
-                    if ( isset( $stepArray[$key] ) )
-                    {
-                        $data['step'] = $stepArray[$key];
-                    }
-                    
-                    if ( isset( $descArray[$key] ) )
-                    {
-                        $data['desc'] = $descArray[$key];
-                    }
-
-                    if ( isset( $reqArray[$key] ) )
-                    {
-                        $data['req'] = true;
-                    }
-                    if ( isset( $valArray[$key] ) )
-                    {
-                        $data['val'] = true;
-                    }
-                    if ( isset( $uniqueArray[$key] ) )
-                    {
-                        $data['unique'] = true;
-                    }
-
                     if ( $type == 'options' or $type == 'imageoptions' )
                     {
                         if ( isset( $optionArray[$key] ) )
@@ -280,9 +299,19 @@ class xrowFormGeneratorType extends eZDataType
             $dataText = serialize( $content );
             $collectionAttribute->setAttribute( 'data_text', $dataText );
 
-            // Sending the mail
-            $this->xrowSendFormMail( $collection, $collectionAttribute, $objectAttribute, $content );
-            return true;
+            // start an event
+            try
+            {
+                ezpEvent::getInstance()->notify( 'formgenerator/export', array( $collection, $objectAttribute ) );
+                ezpEvent::getInstance()->notify( 'formgeneratorxml/exportxml', array( $objectAttribute, $collectionAttribute ) );
+                // Sending the mail
+                $this->xrowSendFormMail( $collection, $collectionAttribute, $objectAttribute, $content );
+                return true;
+            }
+            catch( Exception $e )
+            {
+                eZDebug::writeError( $e->getMessage(), 'xrowFormGeneratorType::fetchCollectionAttributeHTTPInput' );
+            }
         }
         return false;
     }
@@ -339,6 +368,7 @@ class xrowFormGeneratorType extends eZDataType
         $mail = new ezcMailComposer();
         $mail->charset = 'utf-8';
         $mail->from = new ezcMailAddress( $sender, '', $mail->charset );
+        $mail->returnPath = $mail->from;
         foreach ( $receiverArray as $receiver )
         {
             $mail->addTo( new ezcMailAddress( $receiver, '', $mail->charset ) );
@@ -503,10 +533,42 @@ class xrowFormGeneratorType extends eZDataType
             {
                 $httpInput = true;
                 $content['has_http_input'] = true;
-                $inputAllArray = self::strip( $http->postVariable( 'XrowFormInput' ) );
-                $inputArray = $inputAllArray[$id];
-                $inputAllTypeArray = self::strip( $http->postVariable( 'XrowFormInputType' ) );
-                $inputTypeArray = $inputAllTypeArray[$id];
+                $inputAllArray = array();
+                $inputArray = array();
+                $inputAllTypeArray = array();
+                $inputTypeArray = array();
+                if( $http->hasPostVariable( 'XrowFormInput' ) )
+                {
+                    $inputAllArray = self::strip( $http->postVariable( 'XrowFormInput' ) );
+                    if( isset( $inputAllArray[$id] ) )
+                    {
+                        $inputArray = $inputAllArray[$id];
+                    }
+                }
+                if( $http->hasPostVariable( 'XrowFormInputType' ) )
+                {
+                    $inputAllTypeArray = self::strip( $http->postVariable( 'XrowFormInputType' ) );
+                    if( isset( $inputAllTypeArray[$id] ) )
+                    {
+                        $inputTypeArray = $inputAllTypeArray[$id];
+                    }
+                }
+                if ( $http->hasPostVariable( 'XrowFormInputCRM' ) )
+                {
+                    $inputAllCRMArray = self::strip( $http->postVariable( 'XrowFormInputCRM' ) );
+                    if( isset( $inputAllCRMArray[$id] ) )
+                    {
+                        $inputCRMArray = $inputAllCRMArray[$id];
+                    }
+                }
+                if ( $http->hasPostVariable( 'XrowFormInputTypeCRM' ) )
+                {
+                    $inputAllCRMFieldsArray = self::strip( $http->postVariable( 'XrowFormInputTypeCRM' ) );
+                    if( isset( $inputAllCRMFieldsArray[$id] ) )
+                    {
+                        $inputCRMFieldsArray = $inputAllCRMFieldsArray[$id];
+                    }
+                }
             }
         }
 
@@ -520,7 +582,6 @@ class xrowFormGeneratorType extends eZDataType
             $content['json'] = json_encode( array() );
             $usedIDArray = array();
             $locale = eZLocale::instance();
-            #eZDebug::writeDebug( $content, 'form content' );
             foreach ( $content['form_elements'] as $key => $item )
             {
                 $content['form_elements'][$key]['error'] = false;
@@ -549,302 +610,321 @@ class xrowFormGeneratorType extends eZDataType
                 // the http input overrides the default values
                 if ( $httpInput )
                 {
-                    $elKey = $inputKeyArray[$key];
-                    if ( $item['type'] == $inputTypeArray[$elKey] )
+                    if( isset( $inputKeyArray[$key] ) )
                     {
-                        switch ( $item['type'] )
+                        $elKey = $inputKeyArray[$key];
+                        // check if this field is a from crm
+                        $ini = eZINI::instance( 'xrowformgenerator.ini' );
+                        if( strpos( $item['type'], 'crmfield' ) !== false && $ini->hasVariable( 'Settings', 'UseCRM' ) && $ini->variable( 'Settings', 'UseCRM' ) == 'enabled' )
                         {
-                            case "text":
-                            case "string":
-                            case "country":
+                            $pluginOptions = new ezpExtensionOptions( array( 'iniFile' => 'xrowformgenerator.ini',
+                                                                             'iniSection' => 'PluginSettings',
+                                                                             'iniVariable' => 'FormCRMPlugin' ) );
+                            $pluginHandler = eZExtension::getHandlerClass( $pluginOptions );
+                            if( !( $pluginHandler instanceof xrowFormCRM ) )
                             {
-                                $data = '';
-                                if ( isset( $inputArray[$elKey] ) )
-                                {
-                                    $data = $inputArray[$elKey];
-                                }
-                                if ( $item['req'] == true )
-                                {
-                                    if ( trim( $data ) == '' )
-                                    {
-                                        $content['form_elements'][$key]['error'] = true;
-                                        $content['has_error'] = true;
-                                        $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
-                                    }
-                                }
-                                $content['form_elements'][$key]['def'] = $data;
-                            }break;
-
-                            case "email":
+                                eZDebug::writeError( 'PluginHandler does not exist: ', __METHOD__ );
+                            }
+                            if( isset( $inputCRMArray ) && isset( $inputCRMArray[$elKey] ) )
                             {
-                                $data = '';
-                                if ( isset( $inputArray[$elKey] ) )
+                                $inputContentCollection = $inputCRMArray[$elKey];
+                                $content = $pluginHandler->setAttributeDataForCollectCRMField( $content, $key, $item, $inputContentCollection, $contentobject_id, $trans );
+                            }
+                            elseif( isset( $inputCRMFieldsArray ) && isset( $inputCRMFieldsArray[$elKey] ) ) // if it is a checkbox
+                            {
+                                $inputContentCollection = $inputCRMFieldsArray[$elKey];
+                                $content = $pluginHandler->setAttributeDataForCollectCRMField( $content, $key, $item, $inputContentCollection, $contentobject_id, $trans );
+                            }
+                        }
+                        if ( $item['type'] == $inputTypeArray[$elKey] )
+                        {
+                            switch ( $item['type'] )
+                            {
+                                case "text":
+                                case "string":
+                                case "country":
                                 {
-                                    $data = trim( $inputArray[$elKey] );
-                                }
-
-                                if ( $item['req'] == true )
-                                {
-                                    if ( $data == '' )
+                                    $data = '';
+                                    if ( isset( $inputArray[$elKey] ) )
                                     {
-                                        $content['form_elements'][$key]['error'] = true;
-                                        $content['has_error'] = true;
-                                        $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
+                                        $data = $inputArray[$elKey];
                                     }
-                                    elseif( $item['val'] == true )
+                                    if ( $item['req'] == true )
+                                    {
+                                        if ( trim( $data ) == '' )
+                                        {
+                                            $content['form_elements'][$key]['error'] = true;
+                                            $content['has_error'] = true;
+                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
+                                        }
+                                    }
+                                    $content['form_elements'][$key]['def'] = $data;
+                                }break;
+
+                                case "email":
+                                {
+                                    $data = '';
+                                    if ( isset( $inputArray[$elKey] ) )
+                                    {
+                                        $data = trim( $inputArray[$elKey] );
+                                    }
+
+                                    if ( $item['req'] == true )
+                                    {
+                                        if ( $data == '' )
+                                        {
+                                            $content['form_elements'][$key]['error'] = true;
+                                            $content['has_error'] = true;
+                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
+                                        }
+                                        elseif( $item['val'] == true )
+                                        {
+                                            if ( !self::validate( $data ) )
+                                            {
+                                                $content['form_elements'][$key]['error'] = true;
+                                                $content['has_error'] = true;
+                                                $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "E-mail address is not valid." );
+                                            }
+                                            elseif( $item['unique'] == true )
+                                            {
+                                                if ( !self::email_unique( $data, $contentobject_id ) )
+                                                {
+                                                    $content['form_elements'][$key]['error'] = true;
+                                                    $content['has_error'] = true;
+                                                    $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Your email was already submitted to us. You can't use the form twice." );
+                                                }       
+                                            }
+                                        }    
+                                    }
+                                    elseif ( $item['val'] == true && $data != '' )
                                     {
                                         if ( !self::validate( $data ) )
                                         {
                                             $content['form_elements'][$key]['error'] = true;
                                             $content['has_error'] = true;
-                                            $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "E-mail address is not valid." );
+                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "E-mail address is not valid." );
                                         }
-                                        elseif( $item['unique'] == true )
+                                        elseif( $item['unique'] == true ) 
                                         {
                                             if ( !self::email_unique( $data, $contentobject_id ) )
                                             {
                                                 $content['form_elements'][$key]['error'] = true;
                                                 $content['has_error'] = true;
-                                                $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Your email was already submitted to us. You can't use the form twice." );
+                                                $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Your email was already submitted to us. You can't use the form twice." );
                                             }
                                         }
                                     }
-                                }
-                                elseif ( $item['val'] == true && $data != '' )
-                                {
-                                    if ( !self::validate( $data ) )
-                                    {
-                                        $content['form_elements'][$key]['error'] = true;
-                                        $content['has_error'] = true;
-                                        $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "E-mail address is not valid." );
-                                    }
-                                    elseif( $item['unique'] == true ) 
+                                    elseif( $item['unique'] == true && $data != '' )
                                     {
                                         if ( !self::email_unique( $data, $contentobject_id ) )
                                         {
                                             $content['form_elements'][$key]['error'] = true;
                                             $content['has_error'] = true;
-                                            $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Your email was already submitted to us. You can't use the form twice." );
+                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Your email was already submitted to us. You can't use the form twice." );
                                         }
                                     }
-                                }
-                                elseif( $item['unique'] == true && $data != '' )
-                                {
-                                    if ( !self::email_unique( $data, $contentobject_id ) )
-                                    {
-                                        $content['form_elements'][$key]['error'] = true;
-                                        $content['has_error'] = true;
-                                        $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Your email was already submitted to us. You can't use the form twice." );
-                                    }   
-                                }
 
-                                $content['form_elements'][$key]['def'] = $data;
-                            }break;
+                                    $content['form_elements'][$key]['def'] = $data;
+                                }break;
 
-                            case "checkbox":
-                            {
-                                $data = false;
-                                if ( isset( $inputArray[$elKey] ) )
+                                case "checkbox":
                                 {
-                                    $data = true;
-                                }
-                                if ( $item['req'] == true )
-                                {
-                                    if ( !$data )
+                                    $data = false;
+                                    if ( isset( $inputArray[$elKey] ) )
                                     {
-                                        $content['form_elements'][$key]['error'] = true;
-                                        $content['has_error'] = true;
-                                        $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "You need to select this checkbox." );
-                                    }
-                                }
-                                $content['form_elements'][$key]['def'] = $data;
-                            }break;
-
-                            case "telephonenumber":
-                            {
-                                $data = '';
-                                $number = '';
-                                $checkTelephone = false;
-                                if ( isset( $inputArray[$elKey] ) )
-                                {
-                                    if( is_string( $inputArray[$elKey] ) )
-                                    {
-                                        $data = trim( $inputArray[$elKey] );
-                                    }
-                                    elseif( is_array( $inputArray[$elKey] ) )
-                                    {
-                                        $countyCode = $inputArray[$elKey]['country'];
-                                        if( isset( $inputArray[$elKey]['number'] ) )
-                                        {
-                                            $number = trim( $inputArray[$elKey]['number'] );
-                                            if( $number != '' )
-                                            {
-                                                if( strpos( $number, '0', 0 ) === 0 )
-                                                {
-                                                    $number = substr( $number, 1 );
-                                                }
-                                                $data = $inputArray[$elKey]['country'] . ' ' . $number;
-                                            }
-                                        }
-                                    }
-                                }
-                                if ( $item['req'] == true )
-                                {
-                                    if ( $data == '' )
-                                    {
-                                        $content['form_elements'][$key]['error'] = true;
-                                        $content['has_error'] = true;
-                                        $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
-                                    }
-                                    else
-                                    {
-                                        $checkTelephone = true;
-                                    }
-                                }
-                                if( $checkTelephone )
-                                {
-                                    if( !self::telephone_validate( $data ) || strlen( $data ) >= 25 )
-                                    {
-                                        $content['form_elements'][$key]['error'] = true;
-                                        $content['has_error'] = true;
-                                        $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please enter a valid phone number." );
-                                    }
-                                }
-                                $content['form_elements'][$key]['def'] = $data;
-                                if( $countyCode && $number != '' )
-                                {
-                                    $content['form_elements'][$key]['def_error'] = array( 'country' => $countyCode, 'number' => $number );
-                                }
-                            }break;
-
-                            case "number":
-                            {
-                                $data = '';
-                                if ( isset( $inputArray[$elKey] ) )
-                                {
-                                    $data = trim( $inputArray[$elKey] );
-                                    $data = str_replace(" ", "", $data );
-                                }
-                                if ( $item['req'] == true )
-                                {
-                                    if ( $data == '' )
-                                    {
-                                        $content['form_elements'][$key]['error'] = true;
-                                        $content['has_error'] = true;
-                                        $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
-                                    }
-                                }
-                                if ( $item['val'] == true && $data != '')
-                                {
-                                    $dataTest = $locale->internalNumber( $data );
-                                    $floatValidator = new eZFloatValidator();
-                                    $state = $floatValidator->validate( $dataTest );
-                                    if ( $state !== 1 )
-                                    {
-                                        $content['form_elements'][$key]['error'] = true;
-                                        $content['has_error'] = true;
-                                        $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please enter a valid number." );
-                                    }
-                                    
-                                    //validate ranges
-                                    if ($data < $item["min"] OR $data > $item["max"] )
-                                    {
-                                    	$content['form_elements'][$key]['error'] = true;
-                                        $content['has_error'] = true;
-                                        $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please respect the number range." );
-                                    }
-                                }
-                                $content['form_elements'][$key]['def'] = $data;
-                            }break;
-
-                            case "options":
-                            case "imageoptions":
-                            {
-                                if ( isset( $inputArray[$elKey] ) )
-                                {
-                                    $dataArray = $inputArray[$elKey];
-                                    if ( !is_array( $dataArray ) )
-                                    {
-                                        $dataArray = array( $dataArray );
-                                    }
-                                    $optSelected = false;
-                                    foreach ( $item['option_array'] as $optKey => $optItem )
-                                    {
-                                        $content['form_elements'][$key]['option_array'][$optKey]['def'] = false;
-                                        if ( in_array( $optItem['name'], $dataArray ) )
-                                        {
-                                            $content['form_elements'][$key]['option_array'][$optKey]['def'] = true;
-                                            $optSelected = true;
-                                        }
+                                        $data = true;
                                     }
                                     if ( $item['req'] == true )
                                     {
-                                        if ( !$optSelected )
+                                        if ( !$data )
                                         {
                                             $content['form_elements'][$key]['error'] = true;
                                             $content['has_error'] = true;
-                                            $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please select at least one option." );
+                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "You need to select this checkbox." );
                                         }
                                     }
-                                }
-                                else
+                                    $content['form_elements'][$key]['def'] = $data;
+                                }break;
+
+                                case "telephonenumber":
                                 {
+                                    $data = '';
+                                    $number = '';
+                                    $checkTelephone = false;
+                                    if ( isset( $inputArray[$elKey] ) )
+                                    {
+                                        if( is_string( $inputArray[$elKey] ) )
+                                        {
+                                            $data = trim( $inputArray[$elKey] );
+                                        }
+                                        elseif( is_array( $inputArray[$elKey] ) )
+                                        {
+                                            $countyCode = $inputArray[$elKey]['country'];
+                                            if( isset( $inputArray[$elKey]['number'] ) )
+                                            {
+                                                $number = trim( $inputArray[$elKey]['number'] );
+                                                if( $number != '' )
+                                                {
+                                                    if( strpos( $number, '0', 0 ) === 0 )
+                                                    {
+                                                        $number = substr( $number, 1 );
+                                                    }
+                                                    $data = $inputArray[$elKey]['country'] . ' ' . $number;
+                                                }
+                                            }
+                                        }
+                                    }
                                     if ( $item['req'] == true )
                                     {
-                                        $content['form_elements'][$key]['error'] = true;
-                                        $content['has_error'] = true;
-                                        $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please select at least one option." );
+                                        if ( $data == '' )
+                                        {
+                                            $content['form_elements'][$key]['error'] = true;
+                                            $content['has_error'] = true;
+                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
+                                        }
+                                        else
+                                        {
+                                            $checkTelephone = true;
+                                        }
                                     }
-                                }
+                                    if( $checkTelephone )
+                                    {
+                                        if( !self::telephone_validate( $data ) || strlen( $data ) >= 25 )
+                                        {
+                                            $content['form_elements'][$key]['error'] = true;
+                                            $content['has_error'] = true;
+                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please enter a valid phone number." );
+                                        }
+                                    }
+                                    $content['form_elements'][$key]['def'] = $data;
+                                    if( $countyCode && $number != '' )
+                                    {
+                                        $content['form_elements'][$key]['def_error'] = array( 'country' => $countyCode, 'number' => $number );
+                                    }
+                                }break;
 
-                            }break;
-                            case "upload":
-                            {
-                                $test = new eZBinaryFileType();
-                                $test->checkFileUploads();
-                                $fileKey = "XrowFormInputFile_" . $id . '_' . $key;
-                                $maxSize = 1024 * 1024 * 50;
-                                $checkUpload = eZHTTPFile::canFetch( $fileKey, $maxSize );
-                                if ( $checkUpload >= 0 )
+                                case "number":
                                 {
-                                    $binaryFile = eZHTTPFile::fetch( $fileKey );
+                                    $data = '';
+                                    if ( isset( $inputArray[$elKey] ) )
+                                    {
+                                        $data = trim( $inputArray[$elKey] );
+                                        $data = str_replace(" ", "", $data );
+                                    }
+                                    if ( $item['req'] == true )
+                                    {
+                                        if ( $data == '' )
+                                        {
+                                            $content['form_elements'][$key]['error'] = true;
+                                            $content['has_error'] = true;
+                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
+                                        }
+                                    }
+                                    if ( $item['val'] == true && $data != '')
+                                    {
+                                        $dataTest = $locale->internalNumber( $data );
+                                        $floatValidator = new eZFloatValidator();
+                                        $state = $floatValidator->validate( $dataTest );
+                                        if ( $state !== 1 )
+                                        {
+                                            $content['form_elements'][$key]['error'] = true;
+                                            $content['has_error'] = true;
+                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please enter a valid number." );
+                                        }
+                                    }
+                                    $content['form_elements'][$key]['def'] = $data;
+                                }break;
 
-                                    if ( $binaryFile instanceof eZHTTPFile )
-                                    {
-                                        $content['form_elements'][$key]['def'] = $fileKey;
-                                        $content['form_elements'][$key]['original_filename'] = $binaryFile->attribute( 'original_filename' );
-                                    }
-                                }
-                                else
+                                case "options":
+                                case "imageoptions":
                                 {
-                                    if ( $item['req'] == true AND $checkUpload == eZHTTPFile::UPLOADEDFILE_DOES_NOT_EXIST )
+                                    if ( isset( $inputArray[$elKey] ) )
                                     {
-                                       $content['form_elements'][$key]['error'] = true;
-                                       $content['has_error'] = true;
-                                       $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please add a valid file for upload." );
-                                    }
-                                    else if ( $checkUpload == eZHTTPFile::UPLOADEDFILE_EXCEEDS_PHP_LIMIT or
-                                              $checkUpload == eZHTTPFile::UPLOADEDFILE_EXCEEDS_MAX_SIZE )
-                                    {
-                                        $content['form_elements'][$key]['error'] = true;
-                                        $content['has_error'] = true;
-                                        $content['error_array'][] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "The uploaded file is too big. Please select a smaller one." );
+                                        $dataArray = $inputArray[$elKey];
+                                        if ( !is_array( $dataArray ) )
+                                        {
+                                            $dataArray = array( $dataArray );
+                                        }
+                                        
+                                        $optSelected = false;
+                                        foreach ( $item['option_array'] as $optKey => $optItem )
+                                        {
+                                            $content['form_elements'][$key]['option_array'][$optKey]['def'] = false;
+                                            if ( in_array( $optItem['name'], $dataArray ) )
+                                            {
+                                                $content['form_elements'][$key]['option_array'][$optKey]['def'] = true;
+                                                $optSelected = true;
+                                            }
+                                        }
+                                        if ( $item['req'] == true )
+                                        {
+                                            if ( !$optSelected )
+                                            {
+                                                $content['form_elements'][$key]['error'] = true;
+                                                $content['has_error'] = true;
+                                                $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please select at least one option." );
+                                            }
+                                        }
                                     }
                                     else
                                     {
-                                        eZDebug::writeError( 'Unknown file upload error', __METHOD__ );
+                                        if ( $item['req'] == true )
+                                        {
+                                            $content['form_elements'][$key]['error'] = true;
+                                            $content['has_error'] = true;
+                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please select at least one option." );
+                                        }
                                     }
-                                }
-                            }break;
-                            default:
-                            {
-                                #no validation needed
-                            }break;
+
+                                }break;
+                                case "upload":
+                                {
+                                    $test = new eZBinaryFileType();
+                                    $test->checkFileUploads();
+                                    $fileKey = "XrowFormInputFile_" . $id . '_' . $key;
+                                    $maxSize = 1024 * 1024 * 50;
+                                    $checkUpload = eZHTTPFile::canFetch( $fileKey, $maxSize );
+                                    if ( $checkUpload >= 0 )
+                                    {
+                                        $binaryFile = eZHTTPFile::fetch( $fileKey );
+
+                                        if ( $binaryFile instanceof eZHTTPFile )
+                                        {
+                                            $content['form_elements'][$key]['def'] = $fileKey;
+                                            $content['form_elements'][$key]['original_filename'] = $binaryFile->attribute( 'original_filename' );
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if ( $item['req'] == true AND $checkUpload == eZHTTPFile::UPLOADEDFILE_DOES_NOT_EXIST )
+                                        {
+                                           $content['form_elements'][$key]['error'] = true;
+                                           $content['has_error'] = true;
+                                           $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please add a valid file for upload." );
+                                        }
+                                        else if ( $checkUpload == eZHTTPFile::UPLOADEDFILE_EXCEEDS_PHP_LIMIT or
+                                                  $checkUpload == eZHTTPFile::UPLOADEDFILE_EXCEEDS_MAX_SIZE )
+                                        {
+                                            $content['form_elements'][$key]['error'] = true;
+                                            $content['has_error'] = true;
+                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "The uploaded file is too big. Please select a smaller one." );
+                                        }
+                                        else
+                                        {
+                                            eZDebug::writeError( 'Unknown file upload error', __METHOD__ );
+                                        }
+                                    }
+                                }break;
+                                default:
+                                {
+                                    #no validation needed
+                                }break;
+                            }
                         }
-                    }
-                    else
-                    {
-                        eZDebug::writeError( 'xrowForm input error: Wrong type of element.', __METHOD__ );
+                        else
+                        {
+                            eZDebug::writeError( 'xrowForm input error: Wrong type of element.', __METHOD__ );
+                        }
                     }
                 } /* if $http_input */
 
@@ -876,7 +956,7 @@ class xrowFormGeneratorType extends eZDataType
                 if( $spamTest == eZInputValidator::STATE_INVALID )
                 {
                     $content['has_error'] = true;
-                    $content['error_array'][] = ezpI18n::tr( 'kernel/classes/datatypes', "The reCAPTCHA wasn't entered correctly. Please try again." );
+                    $content['error_array']['recaptcha'] = ezpI18n::tr( 'kernel/classes/datatypes', "The reCAPTCHA wasn't entered correctly. Please try again." );
                 }
             }
         }
@@ -890,13 +970,11 @@ class xrowFormGeneratorType extends eZDataType
                 if ( $spamTest !== eZInputValidator::STATE_ACCEPTED )
                 {
                     $content['has_error'] = true;
-                    $content['error_array'][] = ezpI18n::tr( 'kernel/classes/datatypes', "Spam protection. The signs of the captcha code didn't match. Please enter the correct code of the image at the bottom." );
+                    $content['error_array']['humancaptcha'] = ezpI18n::tr( 'kernel/classes/datatypes', "Spam protection. The signs of the captcha code didn't match. Please enter the correct code of the image at the bottom." );
                 }
             }
         }
-        #eZDebug::writeDebug( $content, 'form config content' );
         $GLOBALS['XrowFormCache'][$id][$cacheKey] = $content;
-        
         return $content;
     }
 
@@ -1099,7 +1177,6 @@ class xrowFormGeneratorType extends eZDataType
                     }
                     
                     $contentArray[$i]['created_xrow'] = date( "d.m.Y H:i:s", $item['created'] );
-                    
                     foreach ( $formData['form_elements'] as $aItem )
                     {
                         /**
@@ -1221,7 +1298,7 @@ class xrowFormGeneratorType extends eZDataType
         }
     }
 
-    static function telephone_validate( $number)
+    static function telephone_validate( $number )
     {
         $ini = eZINI::instance('xrowformgenerator.ini');
         if( $ini->hasVariable( "Settings", "TelephoneNumberPattern" ) && $ini->variable( "Settings", "TelephoneNumberPattern" ) != '' )
@@ -1246,7 +1323,22 @@ class xrowFormGeneratorType extends eZDataType
     */
     static function validate( $address )
     {
-        return preg_match( '/^' . self::REGEXP . '$/', $address );
+        $mxhosts = array();
+        if( preg_match( '/^' . self::REGEXP . '$/', $address ))
+        {
+            list( $alias, $domain ) = explode( "@", $address );
+            if ( checkdnsrr( $domain, "MX" ) ) 
+            {
+                if( getmxrr( $domain, $mxhosts ) )
+                    return true;
+                else
+                    return false;
+            }
+            else
+                return false;
+        }
+        else
+            return false;
     }
 
     static function email_unique( $address, $contentobject_id )

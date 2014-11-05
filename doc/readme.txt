@@ -39,6 +39,8 @@ eZ Components (for creating and sending the email with attachments)
 Required fields of the form class:
 ----------------------------------
 subject - text line - the subject of the form mail
+sender - email - the sender of the mail
+receiver - text line - the receiver of the mail, multiple receivers can be seperated with a semicolon.
 mail_header - text - the mail header
 mail_footer - text - the mail footer
 thankyou_page - xml - optional (text which should be displayed at the "thank you page")

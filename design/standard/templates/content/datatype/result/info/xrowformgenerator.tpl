@@ -1,6 +1,9 @@
-{def $content=$attribute.content
-     $id=$attribute.id}
-
+{def $content = $attribute.content
+     $id = $attribute.id
+     $crmIsEnabled = false()}
+{if and( ezini_hasvariable( 'Settings', 'UseCRM', 'xrowformgenerator.ini' ), ezini( 'Settings', 'UseCRM', 'xrowformgenerator.ini' )|eq( 'enabled' ) )}
+    {set $crmIsEnabled = true()}
+{/if}
 <div class="xrow-form-full">
 
 {if $content.use_captcha}
@@ -8,8 +11,22 @@
 {else}
     <p>{"No captcha for input."|i18n( 'xrowformgenerator/edit' )}</p>
 {/if}
-
 <p>{"No.:"|i18n( 'xrowformgenerator/mail' )} {$content.no}</p>
+
+{if $crmIsEnabled}
+    {if $content.campaign_id}
+        {def $campaigns = get_campaigns()}
+        {if $campaigns|count|gt( 0 )}
+            {foreach $campaigns as $campaignID => $campaignName}
+                {if $content.campaign_id|eq( $campaignID )}
+                    <p>{"Campaign"|i18n( 'xrowformgenerator/edit' )}: {$campaignName}</p>
+                    {break}
+                {/if}
+            {/foreach}
+        {/if}
+        {undef $campaigns}
+    {/if}
+{/if}
 
 {if $content.form_elements|count|eq(0)}
     <p>{"No form fields defined."|i18n( 'xrowformgenerator/edit' )}</p>
@@ -27,7 +44,9 @@
     <ol class="xrow-form xrow-form-{$attribute.contentobject_attribute.contentclass_attribute_identifier} xrow-form-{$id}">
     {foreach $content.form_elements as $key => $item}
         <li class="xrow-form-element xrow-form-{$item.type} xrow-form-element-{$key}{if $item.error} xrow-form-error{/if}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}">
-
+        {if and( $item.type|contains( 'crmfield:' ), $crmIsEnabled )}
+            {include uri='design:content/datatype/result/info/xrowformcrmfielditem.tpl'}
+        {else}
             {switch match=$item.type}
                 {case match="checkbox"}
                     <label><input type="checkbox" name="XrowFormInput[{$id}][{$key}]" value="1" {if $item.def}checked="checked" {/if}/> {$item.name|wash}{if $item.req}*{/if}</label>
@@ -154,10 +173,9 @@
                     <p>{$item.def|wash}</p>
                 {/case}
             {/switch}
-
+        {/if}
         </li>
     {/foreach}
     </ol>
 {/if}
-
 </div>

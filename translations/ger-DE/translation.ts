@@ -171,6 +171,10 @@
         <translation>Eingabefeld Textzeile</translation>
     </message>
     <message>
+        <source>Country select dropdown</source>
+        <translation>Auswahlliste Länder</translation>
+    </message>
+    <message>
         <source>Delete form element.</source>
         <translation>Formular Element löschen.</translation>
     </message>

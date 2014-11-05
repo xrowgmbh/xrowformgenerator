@@ -17,7 +17,13 @@
             </div>
         {/if*}
 
-        {if $node.data_map.intro.has_content}
+        {if and(is_set($node.data_map.description), $node.data_map.description.content.is_empty|not)}
+            <div class="attribute-long">
+                {attribute_view_gui attribute=$node.data_map.description}
+            </div>
+        {/if}
+
+        {if and(is_set($node.data_map.intro), $node.data_map.intro.content.is_empty|not)}
             <div class="attribute-long">
                 {attribute_view_gui attribute=$node.data_map.intro}
             </div>
@@ -27,7 +33,7 @@
             {attribute_view_gui attribute=$node.data_map.form}
         {/if}
 
-        {if and( is_set( $node.data_map.body_bottom ), $node.data_map.body_bottom.has_content )}
+         {if and( is_set( $node.data_map.body_bottom ), $node.data_map.body_bottom.content.is_empty|not )}
             <div class="attribute-long">
                 {attribute_view_gui attribute=$node.data_map.body_bottom}
             </div>

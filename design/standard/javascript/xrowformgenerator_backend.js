@@ -1,3 +1,5 @@
+var xrow_form_index = 0;
+
 function xrow_option_button_up()
 {
     var li = YAHOO.util.Dom.getAncestorByTagName( this, 'li' );
@@ -7,7 +9,7 @@ function xrow_option_button_up()
 function xrow_option_button_down()
 {
     var li = YAHOO.util.Dom.getAncestorByTagName( this, 'li' );
-    return xrow_move(  { direction: 'down', ele: li } );
+    return xrow_move( { direction: 'down', ele: li } );
 }
 
 function xrow_element_button_up()
@@ -46,7 +48,7 @@ function xrow_form_element_trash_button()
 
 function xrow_add_option_button( button, el )
 {
-    xrow_add_option( 'xrow-options-tpl-' + el.id, 'XrowOptionList_{$id}_' + el.index, {} );
+    xrow_add_option( 'xrow-options-tpl-' + el.id, 'XrowOptionList_{$id}_' + el.xrow_form_index, {} );
     return false;
 }
 
@@ -204,8 +206,7 @@ function findAttributeName( selectBoxID )
    taken from http://stackoverflow.com/questions/1231770/innerhtml-removes-attribute-quotes-in-internet-explorer */
 function ieInnerHTML(obj) {
  var zz = obj.innerHTML,
-     z =
-   zz.match(/<\/?\w+((\s+\w+(\s*=\s*(?:".*?"|'.*?'|[^\'\">\s]+))?)+\s*|\s*)\/?>/g);
+     z = zz.match(/<\/?\w+((\s+\w+(\s*=\s*(?:".*?"|'.*?'|[^\'\">\s]+))?)+\s*|\s*)\/?>/g);
   if (z){
     for (var i=0;i<z.length;i++){
       var y, zSaved = z[i];
@@ -225,7 +226,7 @@ function ieInnerHTML(obj) {
  }
 /********************************************************/
 
-function xrow_add_form_default( attr_value_id, ol_con_id, attribute_id, index, opt, attr_type )
+function xrow_add_form_default(attr_value_id, ol_con_id, attribute_id, opt, attr_type)
 {
     var li_tpl = document.getElementById( attr_value_id );
     var ol_con = document.getElementById( ol_con_id );
@@ -248,7 +249,7 @@ function xrow_add_form_default( attr_value_id, ol_con_id, attribute_id, index, o
         var pattern_step = /yyyxrowstepyyy/g;
 
         var temphtml = ieInnerHTML( li_tpl );
-        temphtml = temphtml.replace( pattern_index, index );
+        temphtml = temphtml.replace( pattern_index, xrow_form_index );
 
         temphtml = temphtml.replace( pattern_xrow, "Xrow" );
 
@@ -277,21 +278,21 @@ function xrow_add_form_default( attr_value_id, ol_con_id, attribute_id, index, o
         var min='';
         if ( opt.min != undefined )
         {
-        	min = opt.min;
+            min = opt.min;
         }
         temphtml = temphtml.replace( pattern_min, min );
        
         var max='';
         if ( opt.max != undefined )
         {
-        	max = opt.max;
+            max = opt.max;
         }
         temphtml = temphtml.replace( pattern_max, max );
         
         var step='';
         if ( opt.step != undefined )
         {
-        	step = opt.step;
+            step = opt.step;
         }
         temphtml = temphtml.replace( pattern_step, step );
 
@@ -315,32 +316,22 @@ function xrow_add_form_default( attr_value_id, ol_con_id, attribute_id, index, o
         {
             val_array[0].checked = true;
         }
-		
-		 // set unique checkbox
-        var unique_array = YAHOO.util.Dom.getElementsByClassName( 'xrow-form-element-unique', 'input', new_li );
 
+        // set unique checkbox
+        var unique_array = YAHOO.util.Dom.getElementsByClassName( 'xrow-form-element-unique', 'input', new_li );
         if ( unique_array[0] != undefined && opt && opt.unique != undefined && opt.unique)
         {
             unique_array[0].checked = true;
         }
 
-        // add move event
-        YAHOO.util.Event.addListener( YAHOO.util.Dom.getElementsByClassName( 'xrow-element-button-up', 'img', new_li ), "click", xrow_element_button_up );
-        YAHOO.util.Event.addListener( YAHOO.util.Dom.getElementsByClassName( 'xrow-element-button-down', 'img', new_li ), "click", xrow_element_button_down );
-
-        // add trash event
-        YAHOO.util.Event.addListener( YAHOO.util.Dom.getElementsByClassName( 'xrow-form-element-trash-button', 'img', new_li ), "click", xrow_form_element_trash_button );
-
-        if ( ol_con.hasChildNodes() )
-            insertAfter( new_li, ol_con.lastChild );
-        else
-            ol_con.appendChild( new_li );
-        index++;
+        setEventListenerAndAddToOL(ol_con, new_li);
+        xrow_form_index++;
+        //index++;
     }
-    return index;
+    //return index;
 }
 
-function xrow_add_option( opt_tpl_id, ol_id, opt, index )
+function xrow_add_option( opt_tpl_id, ol_id, opt, xrow_form_index )
 {
     var li_tpl = document.getElementById( opt_tpl_id );
     var ol_con = document.getElementById( ol_id );
@@ -349,7 +340,7 @@ function xrow_add_option( opt_tpl_id, ol_id, opt, index )
     if ( li_tpl && ol_con )
     {
         // calc current index
-        if ( index == undefined )
+        if ( xrow_form_index == undefined )
         {
             var index_pat = /_([0-9]+)$/;
             var index_y_array = ol_id.match( index_pat );
@@ -357,7 +348,7 @@ function xrow_add_option( opt_tpl_id, ol_id, opt, index )
         }
         else
         {
-            var index_y = index;
+            var index_y = xrow_form_index;
         }
 
         var new_li = document.createElement( "li" );
@@ -433,18 +424,18 @@ function xrow_add_option( opt_tpl_id, ol_id, opt, index )
     }
 }
 
-function xrow_add_saved_options( opt_tpl_id, ol_id, opt, index )
+function xrow_add_saved_options( opt_tpl_id, ol_id, opt )
 {
     if ( opt != undefined && opt && opt.option_array )
     {
         for( property in opt.option_array )
         {
-        	xrow_add_option( ol_id, opt_tpl_id, opt.option_array.property, index );
+            xrow_add_option( ol_id, opt_tpl_id, opt.option_array.property );
         }
     }
 }
 
-function xrow_add_form_options( attr_value_id, ol_con_id, attribute_id, index, opt, ol_id, opt_tpl_id )
+function xrow_add_form_options( attr_value_id, ol_con_id, attribute_id, opt, ol_id, opt_tpl_id )
 {
     var li_tpl = document.getElementById( attr_value_id );
     var ol_con = document.getElementById( ol_con_id );
@@ -462,7 +453,7 @@ function xrow_add_form_options( attr_value_id, ol_con_id, attribute_id, index, o
         var pattern_xrow = /x1Xrow/g;
 
         var temphtml = ieInnerHTML( li_tpl );
-        temphtml = temphtml.replace( pattern_index, index );
+        temphtml = temphtml.replace( pattern_index, xrow_form_index );
         temphtml = temphtml.replace( pattern_xrow, 'Xrow' );
 
         var name = '';
@@ -510,52 +501,85 @@ function xrow_add_form_options( attr_value_id, ol_con_id, attribute_id, index, o
                 }
             }
         }
-
-        // add move event
-        YAHOO.util.Event.addListener( YAHOO.util.Dom.getElementsByClassName( 'xrow-element-button-up', 'img', new_li ), "click", xrow_element_button_up );
-        YAHOO.util.Event.addListener( YAHOO.util.Dom.getElementsByClassName( 'xrow-element-button-down', 'img', new_li ), "click", xrow_element_button_down );
-
-        // add trash event
-        YAHOO.util.Event.addListener( YAHOO.util.Dom.getElementsByClassName( 'xrow-form-element-trash-button', 'img', new_li ), "click", xrow_form_element_trash_button );
-
-        // add option event
-        YAHOO.util.Event.addListener( YAHOO.util.Dom.getElementsByClassName( 'xrow-form-add-option-button', 'button', new_li ), "click", xrow_add_option_button, { id: attribute_id, index: index } );
-
-        if ( ol_con.hasChildNodes() )
-            insertAfter( new_li, ol_con.lastChild );
-        else
-            ol_con.appendChild( new_li );
-
+        setEventListenerAndAddToOL(ol_con, new_li, attribute_id);
         if ( opt.option_array != undefined && opt.option_array )
         {
             for( property in opt.option_array )
             {
-            	xrow_add_option( ol_id, opt_tpl_id + index, opt.option_array[property], index );
+                xrow_add_option( ol_id, opt_tpl_id + xrow_form_index, opt.option_array[property] );
             }
-
-            //xrow_add_saved_options( opt_tpl_id + index, ol_id, opt, index );
         }
-
-        index++;
+        xrow_form_index++;
     }
-    return index;
 }
 
-function xrow_add_form_element( select_id, ol_con_id, index, attribute_id, opt )
-{
-    attr_value = findAttribute( select_id );
-    attr_value_id = "xrow-form-element-" + attr_value + "-" + attribute_id;
+function setEventListenerAndAddToOL(ol_con, new_li, attribute_id) {
+    // add move event
+    YAHOO.util.Event.addListener( YAHOO.util.Dom.getElementsByClassName( 'xrow-element-button-up', 'img', new_li ), "click", xrow_element_button_up );
+    YAHOO.util.Event.addListener( YAHOO.util.Dom.getElementsByClassName( 'xrow-element-button-down', 'img', new_li ), "click", xrow_element_button_down );
 
+    // add trash event
+    YAHOO.util.Event.addListener( YAHOO.util.Dom.getElementsByClassName( 'xrow-form-element-trash-button', 'img', new_li ), "click", xrow_form_element_trash_button );
+
+    // add option event
+    if(attribute_id && xrow_form_index)
+        YAHOO.util.Event.addListener( YAHOO.util.Dom.getElementsByClassName( 'xrow-form-add-option-button', 'button', new_li ), "click", xrow_add_option_button, { id: attribute_id, xrow_form_index: xrow_form_index } );
+
+    if ( ol_con.hasChildNodes() )
+        insertAfter( new_li, ol_con.lastChild );
+    else
+        ol_con.appendChild( new_li );
+}
+
+function xrow_add_form_element(select_id, ol_con_id, attribute_id, opt)
+{
+    attr_value = findAttribute(select_id);
+    attr_value_id = "xrow-form-element-" + attr_value + "-" + attribute_id;
     if ( attr_value == 'options' || attr_value == 'imageoptions' )
     {
-        index = xrow_add_form_options( attr_value_id, ol_con_id, attribute_id, index, opt );
+        xrow_add_form_options(attr_value_id, ol_con_id, attribute_id, opt);
+    }
+    else if ((attr_value + '').indexOf('crmfield:', 0) !== -1)
+    {
+        if(typeof xrow_add_form_crm == 'function' && typeof document.getElementById('crmIsEnabled') != 'undefined')
+        {
+            xrow_add_form_crm(ol_con_id, attribute_id, opt, attr_value);
+        }
+        else
+        {
+            alert('Please add a custom function for the crm fields.');
+        }
     }
     else
     {
-        index = xrow_add_form_default( attr_value_id, ol_con_id, attribute_id, index, opt, attr_value );
+        xrow_add_form_default(attr_value_id, ol_con_id, attribute_id, opt, attr_value);
     }
+}
 
-    return index;
+function xrow_copy_form_element(attr_value, ol_con_id, attribute_id, opt)
+{
+    window.console.log('attr_value '+attr_value);
+    //attr_value = findAttribute(select_id);
+    attr_value_id = "xrow-form-element-" + attr_value + "-" + attribute_id;
+    if (attr_value == 'options' || attr_value == 'imageoptions')
+    {
+        xrow_add_form_options(attr_value_id, ol_con_id, attribute_id, opt);
+    }
+    else if ((attr_value + '').indexOf('crmfield:', 0) !== -1)
+    {
+        if(typeof xrow_add_form_crm == 'function' && typeof document.getElementById('crmIsEnabled') != 'undefined')
+        {
+            xrow_add_form_crm(ol_con_id, attribute_id, opt, attr_value);
+        }
+        else
+        {
+            alert('Please add a custom function for the crm fields.');
+        }
+    }
+    else
+    {
+        xrow_add_form_default(attr_value_id, ol_con_id, attribute_id, opt, attr_value);
+    }
 }
 
 function xrow_confirm( msg, id )
@@ -574,5 +598,6 @@ function addslashes (str) {
   str = str.replace(/\"/g,"&quot;");
   str = str.replace(/\'/g,"&#39;");
   str = str.replace(/>/g,"&gt;");
+  str = str.replace(/ /g,"&nbsp;");
   return str;
 }
