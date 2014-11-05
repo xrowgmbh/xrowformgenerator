@@ -1324,13 +1324,39 @@ class xrowFormGeneratorType extends eZDataType
     static function validate( $address )
     {
         $mxhosts = array();
-        if( preg_match( '/^' . self::REGEXP . '$/', $address ))
+        $hosts = array();
+        $disposable_ip = array();
+        $ini = eZINI::instance( 'blacklist.ini' );
+        $blacklist = $ini->variable( 'SetBlackList', 'DomainsList' );
+        while( list( $key, $domain_disposable ) = each( $blacklist ) )
+        {
+            if( getmxrr( $domain_disposable, $hosts ) )
+            {
+                foreach( $hosts as $host )
+                {
+                    $ip_temp_array = gethostbyname( $host );
+                    foreach( $ip_temp_array as $ip )
+                    {
+                        array_push( $disposable_ip, $ip );
+                    }
+                }
+            }
+        }
+
+        if( preg_match( '/^' . self::REGEXP . '$/', $address ) )
         {
             list( $alias, $domain ) = explode( "@", $address );
-            if ( checkdnsrr( $domain, "MX" ) ) 
+            if ( checkdnsrr( $domain, "MX")) 
             {
                 if( getmxrr( $domain, $mxhosts ) )
+                {
+                    foreach( $mxhosts as $host )
+                    {
+                        if( in_array( gethostbyname( $host ), $disposable_ip ) )
+                            return false;
+                    }
                     return true;
+                }
                 else
                     return false;
             }
