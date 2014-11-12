@@ -11,11 +11,11 @@
             <h1>{$node.data_map.name.content|wash()}</h1>
         </div>
 
-        {*if $node.data_map.image.has_content}
+        {if $node.data_map.image.has_content}
             <div class="attribute-image">
                 {attribute_view_gui attribute=$node.data_map.image image_class=medium}
             </div>
-        {/if*}
+        {/if}
 
         {if and(is_set($node.data_map.description), $node.data_map.description.content.is_empty|not)}
             <div class="attribute-long">

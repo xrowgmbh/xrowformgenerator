@@ -789,15 +789,16 @@ class xrowFormGeneratorType extends eZDataType
                                     }
                                     if( $checkTelephone )
                                     {
-                                        if( !self::telephone_validate( $data ) || strlen( $data ) >= 25 )
+                                        $validate = self::telephone_validate( $data );
+                                        if( !$validate['validateStatus'] || strlen( $data ) >= 25 )
                                         {
                                             $content['form_elements'][$key]['error'] = true;
                                             $content['has_error'] = true;
-                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please enter a valid phone number." );
+                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Please enter a valid phone number. Example" ) . ' ' . $validate['formatExample'] . '.' ;
                                         }
                                     }
                                     $content['form_elements'][$key]['def'] = $data;
-                                    if( $countyCode && $number != '' )
+                                    if( isset( $countyCode ) && $number != '' )
                                     {
                                         $content['form_elements'][$key]['def_error'] = array( 'country' => $countyCode, 'number' => $number );
                                     }
@@ -847,13 +848,16 @@ class xrowFormGeneratorType extends eZDataType
                                         }
                                         
                                         $optSelected = false;
-                                        foreach ( $item['option_array'] as $optKey => $optItem )
+                                        if( isset( $item['option_array'] ) )
                                         {
-                                            $content['form_elements'][$key]['option_array'][$optKey]['def'] = false;
-                                            if ( in_array( $optItem['name'], $dataArray ) )
+                                            foreach ( $item['option_array'] as $optKey => $optItem )
                                             {
-                                                $content['form_elements'][$key]['option_array'][$optKey]['def'] = true;
-                                                $optSelected = true;
+                                                $content['form_elements'][$key]['option_array'][$optKey]['def'] = false;
+                                                if ( in_array( $optItem['name'], $dataArray ) )
+                                                {
+                                                    $content['form_elements'][$key]['option_array'][$optKey]['def'] = true;
+                                                    $optSelected = true;
+                                                }
                                             }
                                         }
                                         if ( $item['req'] == true )
@@ -930,12 +934,15 @@ class xrowFormGeneratorType extends eZDataType
 
                 if ( $item['type'] == 'imageoptions' )
                 {
-                    foreach ( $item['option_array'] as $optKey => $optItem )
+                    if( isset( $item['option_array'] ) )
                     {
-                        if ( isset( $content['form_elements'][$key]['option_array'][$optKey]['image'] )
-                             AND $content['form_elements'][$key]['option_array'][$optKey]['image'] > 0 )
+                        foreach ( $item['option_array'] as $optKey => $optItem )
                         {
-                            self::getImageForOption( $content['form_elements'][$key]['option_array'][$optKey], $id );
+                            if ( isset( $content['form_elements'][$key]['option_array'][$optKey]['image'] )
+                                 AND $content['form_elements'][$key]['option_array'][$optKey]['image'] > 0 )
+                            {
+                                self::getImageForOption( $content['form_elements'][$key]['option_array'][$optKey], $id );
+                            }
                         }
                     }
                 }
@@ -1300,6 +1307,7 @@ class xrowFormGeneratorType extends eZDataType
 
     static function telephone_validate( $number )
     {
+        $formatExample = '+49 30 123456';
         $ini = eZINI::instance('xrowformgenerator.ini');
         if( $ini->hasVariable( "Settings", "TelephoneNumberPattern" ) && $ini->variable( "Settings", "TelephoneNumberPattern" ) != '' )
         {
@@ -1312,7 +1320,11 @@ class xrowFormGeneratorType extends eZDataType
                          '6[0-6]|67[0,2-9]|68[0-3,5-9]|69[0,1,2]|7|8[1,2,4,6]|80[0,8]|85[0,2,3,5,6]|870|88[0,6]|9[0-5,8]|96[0-8]|97[0-7]|99[2-6,8,9]';
             $pattern = '/^\+(' . $areaCodes . ')[ |]?[1-9]{1}(?:[0-9][ |]?){4,14}[0-9]$/';
         }
-        return preg_match( $pattern, $number );
+        if( $ini->hasVariable( "Settings", "TelephoneNumberExample" ) && $ini->variable( "Settings", "TelephoneNumberExample" ) != '' )
+        {
+            $formatExample = $ini->variable( "Settings", "TelephoneNumberExample" );
+        }
+        return array( 'formatExample' => $formatExample, 'validateStatus' => preg_match( $pattern, $number ) );
     }
 
     /*!

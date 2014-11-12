@@ -40,9 +40,10 @@
                         {case match="options"}
                             {switch match=$item.option_type}
                                 {case match="checkbox"}
-                                    {foreach $item.option_array as $opt_key => $opt_item}
-                                        {if $opt_item.def}{$opt_item.name}, {/if}
-                                    {/foreach}
+                                    {def $output = ''}
+                                    {foreach $item.option_array as $opt_key => $opt_item}{if $opt_item.def}{if $output|ne( '' ){set $output = concat( ', ', $output )}{/if}{set $output = concat( $output, $opt_item.name )}{/if}{/foreach}
+                                    {$output}
+                                    {undef $output}
                                 {/case}
                                 {case match="radio"}
                                     {foreach $item.option_array as $opt_key => $opt_item}
@@ -55,37 +56,38 @@
                                     {/foreach}
                                 {/case}
                                 {case match="select-all"}
+                                    {def $output = ''}
+                                    {foreach $item.option_array as $opt_key => $opt_item}{if $opt_item.def}{if $output|ne( '' ){set $output = concat( ', ', $output )}{/if}{set $output = concat( $output, $opt_item.name )}{/if}{/foreach}
+                                    {$output}
+                                    {undef $output}
+                                {/case}
+                            {/switch}
+                        {/case}   /*Options*/
+                        {case match="imageoptions"}
+                            {switch match=$item.option_type}
+                                {case match="checkbox"}
                                     {foreach $item.option_array as $opt_key => $opt_item}
                                         {if $opt_item.def}{$opt_item.name}, {/if}
                                     {/foreach}
-                                {/case}
-                            {/switch}
-                       {/case}   /*Options*/
-                       {case match="imageoptions"}
-                          {switch match=$item.option_type}
-                              {case match="checkbox"}
-                                  {foreach $item.option_array as $opt_key => $opt_item}
-                                       {if $opt_item.def}{$opt_item.name}, {/if}
-                                  {/foreach}
-                              {/case}  /*checkbox*/
-                              {case match="radio"}
-                                  {foreach $item.option_array as $opt_key => $opt_item}
-                                      {if $opt_item.def}{$opt_item.name}{/if}
-                                  {/foreach}
-                              {/case}  /*Radio*/
-                          {/switch}   
-                       {/case}/*Bild Options*/
-                       {case match="number"}{$item.def}{/case}
-                       {case match="telephonenumber"}{$item.def}{/case}
-                       {case match="text"}{$item.def}{/case}
-                       {case}{$item.def}{/case}
-                  {/switch}
-      </td>
-      </tr>
-      {/if}
-   {/foreach}
-   </tbody>
-  </table>
+                                {/case}  /*checkbox*/
+                                {case match="radio"}
+                                    {foreach $item.option_array as $opt_key => $opt_item}
+                                        {if $opt_item.def}{$opt_item.name}{/if}
+                                    {/foreach}
+                                {/case}  /*Radio*/
+                            {/switch}   
+                        {/case}/*Bild Options*/
+                        {case match="number"}{$item.def}{/case}
+                        {case match="telephonenumber"}{$item.def}{/case}
+                        {case match="text"}{$item.def}{/case}
+                        {case}{$item.def}{/case}
+                    {/switch}
+                </td>
+            </tr>
+        {/if}
+        {/foreach}
+        </tbody>
+    </table>
 {/if}
 </div>
 {/if}

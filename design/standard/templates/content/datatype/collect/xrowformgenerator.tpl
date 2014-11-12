@@ -28,29 +28,29 @@
                     {switch match=$item.type}
                         {case match="checkbox"}
                             <label for="checkbox:{$id}:{$key}"><input id="checkbox:{$id}:{$key}" type="checkbox" name="XrowFormInput[{$id}][{$key}]" value="1" autocomplete="off" {if $item.def}checked="checked" {/if}/> &nbsp;{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            <div class="form-checkbox-padding">{cond( is_set( $item.desc ), $item.desc, '')}</div>
+                            {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<div class="form-checkbox-padding">{$item.desc}</div>{/if}
                         {/case}
                         {case match="text"}
                             <label for="text:{$id}:{$key}">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
                             <textarea cols="70" rows="10" id="text:{$id}:{$key}" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true"  {if not($content.has_error)}placeholder="{$item.def|wash}">{else}>{$item.def|wash}{/if}</textarea>
-                            <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
+                            {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<p class="input_desc">{$item.desc}</p>{/if}
                         {/case}
                         {case match="country"}
                             <label for="country:{$id}:{$key}">{$item.name|wash()}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            {def $countries=fetch( 'content', 'country_list' )}
-                            <input id="country:{$id}:{$key}" type="hidden" autocomplete="off" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" value="" />
+                            {if is_set( $countries )|not()}{def $countries = fetch( 'content', 'country_list' )}{/if}
+                            <input id="country:{$id}:{$key}"{if and( is_set( $item.def ), $item.def|ne('') )} value="{$item.def}"{/if} type="hidden" autocomplete="off" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" value="" />
                             <select id="select_{$id}_{$key}" class="field_half" onchange="$('input[name=\'XrowFormInput[{$id}][{$key}]\']').val($('#select_{$id}_{$key} option:selected').text());">
                                 <option value=""></option>
                                 {foreach $countries as $country_list_item}
-                                <option value="{$country_list_item.Alpha3}">{$country_list_item.Name}</option>
+                                <option value="{$country_list_item.Alpha3}"{if and( is_set( $item.def ), $item.def|eq( $country_list_item.Name ) )} selected="selected"{/if} title="{$country_list_item.Name}">{$country_list_item.Name}</option>
                                 {/foreach}
                             </select>
-                            <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
+                            {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<p class="input_desc">{$item.desc}</p>{/if}
                         {/case}
                         {case match="upload"}
                             <label for="upload:{$id}:{$key}">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
                             <input id="upload:{$id}:{$key}" type="file" class="file_input_div"  name="XrowFormInputFile_{$id}_{$key}" value="" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" /><br/>
-                            <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>   
+                            {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<p class="input_desc">{$item.desc}</p>{/if}
                         {/case}
                         {case match="options"}
                             <label class="options">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
@@ -99,7 +99,7 @@
                                     </select>
                                 {/case}
                             {/switch}
-                           <p class="option_bes">{cond( is_set( $item.desc ), $item.desc, '')}</p>
+                            {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<p class="option_bes">{$item.desc}</p>{/if}
                         {/case}
                         {case match="imageoptions"}
                             <label>{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
@@ -114,7 +114,7 @@
                                             {if $tempimg}
                                             {foreach $tempimg.data_map as $ditem}
                                                 {if and( $ditem.data_type_string|eq( 'ezimage' ), $ditem.has_content )}
-                                                {attribute_view_gui attribute=$ditem image_class="evo_80x60"}
+                                                {attribute_view_gui attribute=$ditem image_class="small"}
                                                 {break}
                                                 {/if}
                                             {/foreach}
@@ -152,16 +152,16 @@
                             {/switch}
                             </div>
                             <div class="break"></div>
-                            <p class="desc_eingabe_bild">{cond( is_set( $item.desc ), $item.desc, '')}</p>
+                            {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<p class="desc_eingabe_bild">{$item.desc}</p>{/if}
                         {/case}
                         {case match="number"}
                             <label for="number:{$id}:{$key}">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
                             <input id="number:{$id}:{$key}" type="number" autocomplete="off" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" min="{$item.min}" max="{$item.max}" step="{$item.step}"{if not($content.has_error)} placeholder="{$item.def|wash}"{else} value="{$item.def|wash}"{/if}{* pattern="[-+]?[0-9]*[.,]?[0-9]+"*} /><br/>
-                            <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
+                            {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<p class="input_desc">{$item.desc}</p>{/if}
                         {/case}
                         {case match="telephonenumber"}
                             <label for="telephonenumber:{$id}:{$key}:number">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            {def $countryCodeIsSet = false()}
+                            {if is_set( $countryCodeIsSet )|not()}{def $countryCodeIsSet = false()}{/if}
                             {if ezini_hasvariable( "Settings", "CountryCodes", "xrowformgenerator.ini" )}
                                 {set $countryCodeIsSet = true()}
                             <select id="telephonenumber:{$id}:{$key}:country" name="XrowFormInput[{$id}][{$key}][country]" class="xrow-form-options xrow-form-{$item.type}-left {cond( $item.class|ne(''), concat( ' ', $item.class, '-left' ), '')}">
@@ -171,7 +171,7 @@
                             </select>
                             {/if}
                             <input{if not( $content.has_error )} placeholder="{$item.def|wash}"{else} value="{if is_set( $item.def_error.number )}{$item.def_error.number|wash}{else}{$item.def|wash}{/if}"{/if} id="telephonenumber:{$id}:{$key}{if $countryCodeIsSet}:number{/if}" type="tel" autocomplete="off" name="XrowFormInput[{$id}][{$key}]{if $countryCodeIsSet}[number]{/if}" class="box xrow-form-{$item.type}{if $countryCodeIsSet}-right{/if}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true"{* pattern="^\+([1-9]){ldelim}1,4{rdelim}?[ |]?[1-9]{ldelim}1{rdelim}?(?:[0-9][ |]?){ldelim}4,14{rdelim}[0-9]$"*} /><br/>
-                            <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
+                            {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<p class="input_desc">{$item.desc}</p>{/if}
                         {/case}
                         {case match="hidden"}
                             <input type="hidden" class="formhidden" name="XrowFormInput[{$id}][{$key}]" {if not( $content.has_error )} placeholder="{$item.def|wash}" {else} value="{$item.def|wash}" {/if} />
@@ -185,7 +185,7 @@
                         {case match="email"}
                             <label for="email:{$id}:{$key}">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
                             <input id="email:{$id}:{$key}" type="email" autocomplete="off" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" {if not($content.has_error)} placeholder="{$item.def|wash}" {else} value="{$item.def|wash}" {/if} />
-                            <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
+                            {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<p class="input_desc">{$item.desc}</p>{/if}
                         {/case}
                         {case}
                             {if and( $item.type|contains( 'crmfield:' ), $crmIsEnabled )}
@@ -193,7 +193,7 @@
                             {else}
                                 <label for="description:{$id}:{$key}">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
                                 <input id="description:{$id}:{$key}" type="text" autocomplete="off" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" {if not($content.has_error)} placeholder="{$item.def|wash}" {else} value="{$item.def|wash}" {/if} />
-                                <p class="input_desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
+                                {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<p class="input_desc">{$item.desc}</p>{/if}
                             {/if}
                         {/case}
                     {/switch}

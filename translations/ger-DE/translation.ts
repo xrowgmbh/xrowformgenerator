@@ -69,8 +69,8 @@
         <translation>Bitte geben Sie eine Zahl ein.</translation>
     </message>
     <message>
-        <source>Please enter a valid phone number.</source>
-        <translation>Bitte geben Sie eine gültige Telefonnummer ein.</translation>
+        <source>Please enter a valid phone number. Example</source>
+        <translation>Bitte geben Sie eine gültige Telefonnummer ein. Beispiel</translation>
     </message>
     <message>
         <source>Please select at least one option.</source>
@@ -169,10 +169,6 @@
     <message>
         <source>String input field</source>
         <translation>Eingabefeld Textzeile</translation>
-    </message>
-    <message>
-        <source>Country select dropdown</source>
-        <translation>Auswahlliste Länder</translation>
     </message>
     <message>
         <source>Delete form element.</source>
