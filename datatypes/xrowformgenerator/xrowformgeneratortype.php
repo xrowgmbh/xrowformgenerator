@@ -302,7 +302,7 @@ class xrowFormGeneratorType extends eZDataType
             // start an event
             try
             {
-                ezpEvent::getInstance()->notify( 'formgenerator/export', array( $collection, $objectAttribute ) );
+                ezpEvent::getInstance()->notify( 'formgenerator/export', array( $objectAttribute, $collection ) );
                 ezpEvent::getInstance()->notify( 'formgeneratorxml/exportxml', array( $objectAttribute, $collectionAttribute ) );
                 // Sending the mail
                 $this->xrowSendFormMail( $collection, $collectionAttribute, $objectAttribute, $content );
