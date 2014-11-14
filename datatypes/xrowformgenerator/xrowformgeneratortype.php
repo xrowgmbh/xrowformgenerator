@@ -332,21 +332,6 @@ class xrowFormGeneratorType extends eZDataType
 
         $subject = $tpl->variable( 'subject' );
         $receiverString = $tpl->variable( 'email_receiver_xrow' );
-        $ccReceivers = $tpl->variable( 'email_cc_receivers' );
-        $bccReceivers = $tpl->variable( 'email_bcc_receivers' );
-        $sender = $tpl->variable( 'email_sender' );
-        if ( !self::validate( $sender ) )
-        {
-            if( $ini->hasVariable( 'MailSettings', 'EmailSender' ) )
-            {
-                $sender = $ini->variable( "MailSettings", "EmailSender" );
-            }
-            else
-            {
-                $sender = $ini->variable( "MailSettings", "AdminEmail" );
-            }
-        }
-
         $receiverArray = array();
         if( $receiverString != '' )
         {
@@ -364,126 +349,144 @@ class xrowFormGeneratorType extends eZDataType
             }
         }
 
-        ezcMailTools::setLineBreak( "\n" );
-        $mail = new ezcMailComposer();
-        $mail->charset = 'utf-8';
-        $mail->from = new ezcMailAddress( $sender, '', $mail->charset );
-        $mail->returnPath = $mail->from;
-        foreach ( $receiverArray as $receiver )
+        if( is_array( $receiverArray ) )
         {
-            $mail->addTo( new ezcMailAddress( $receiver, '', $mail->charset ) );
-        }
-        //  Handle CC recipients
-        if( $ccReceivers )
-        {
-            if ( !is_array( $ccReceivers ) )
-                $ccReceivers = array( $ccReceivers );
-            if ( count( $ccReceivers ) > 0 )
+            $ccReceivers = $tpl->variable( 'email_cc_receivers' );
+            $bccReceivers = $tpl->variable( 'email_bcc_receivers' );
+            $sender = $tpl->variable( 'email_sender' );
+            if ( !self::validate( $sender ) )
             {
-                foreach ( $ccReceivers as $ccReceiver )
+                if( $ini->hasVariable( 'MailSettings', 'EmailSender' ) )
                 {
-                    if ( self::validate( $ccReceiver ) )
-                    {
-                        $mail->addCc( new ezcMailAddress( $ccReceiver, '', $mail->charset ) );
-                    }
+                    $sender = $ini->variable( "MailSettings", "EmailSender" );
+                }
+                else
+                {
+                    $sender = $ini->variable( "MailSettings", "AdminEmail" );
                 }
             }
-        }
-        // Handle BCC recipients
-        if ( $bccReceivers )
-        {
-            if ( !is_array( $bccReceivers ) )
-                $bccReceivers = array( $bccReceivers );
-            if ( count( $bccReceivers ) > 0 )
-            {
-                foreach ( $bccReceivers as $bccReceiver )
-                {
-                    if ( self::validate( $bccReceiver ) )
-                    {
-                        $mail->addBcc( new ezcMailAddress( $bccReceiver, '', $mail->charset ) );
-                    }
-                }
-            }
-        }
 
-        $mail->subject = $subject;
-        $mail->subjectCharset = $mail->charset;
-        $mail->plainText = $templateResult;
-        foreach ( $content['form_elements'] as $item )
-        {
-            if ( $item['type'] == 'upload' and isset( $item['def'] ) and $item['def'] != '' )
-            {
-                $binaryFile = eZHTTPFile::fetch( $item['def'] );
-                if ( $binaryFile instanceof eZHTTPFile )
-                {
-                    $disposition = new ezcMailContentDispositionHeader();
-                    $disposition->fileName =  $binaryFile->OriginalFilename;
-                    $disposition->fileNameCharSet = 'utf-8'; // if using non-ascii characters in the file name
-                    $disposition->disposition = 'attachment'; // default value is 'inline'
-                    $mail->addAttachment( $binaryFile->Filename, null, null, null, $disposition );
-                }
-            }
-        }
-        $mail->build();
-
-        $mailsettings = array();
-        $mailsettings["transport"] = $ini->variable( "MailSettings", "Transport" );
-        $mailsettings["server"] = $ini->variable( "MailSettings", "TransportServer" );
-        $mailsettings["port"] = $ini->variable( "MailSettings", "TransportPort" );
-        $mailsettings["user"] = $ini->variable( "MailSettings", "TransportUser" );
-        $mailsettings["password"] = $ini->variable( "MailSettings", "TransportPassword" );
-        $mailsettings["connectionType"] = $ini->variable( 'MailSettings', 'TransportConnectionType' );
-        
-        if( trim($mailsettings["port"]) == "" )
-        {
-            $mailsettings["port"] = null;
-        }
-        if ( strtolower($mailsettings["transport"]) == "smtp" )
-        {
-            $options = new ezcMailSmtpTransportOptions();
-            if( trim($mailsettings["password"]) === "" )
-            {
-                $transport = new ezcMailSmtpTransport( $mailsettings["server"], "", "", $mailsettings["port"], $options );
-            }
-            else
-           {
-                $options->preferredAuthMethod = ezcMailSmtpTransport::AUTH_AUTO;
-                $transport = new ezcMailSmtpTransport( $mailsettings["server"], $mailsettings["user"], $mailsettings["password"], $mailsettings["port"], $options );
-            }
-        }
-        else if ( strtolower($mailsettings["transport"]) == "sendmail" )
-        {
-            $transport = new ezcMailMtaTransport();
-        }
-        else if ( strtolower($mailsettings["transport"]) == "file" )
-        {
-            //do own mail creation because ezc mail provides no file sending
-            $mail = new eZMail();
-            $mail->setSender( $sender );
+            ezcMailTools::setLineBreak( "\n" );
+            $mail = new ezcMailComposer();
+            $mail->charset = 'utf-8';
+            $mail->from = new ezcMailAddress( $sender, '', $mail->charset );
+            $mail->returnPath = $mail->from;
             foreach ( $receiverArray as $receiver )
             {
-                $mail->addReceiver( $receiver );
+                $mail->addTo( new ezcMailAddress( $receiver, '', $mail->charset ) );
             }
-            $mail->setSubject( $subject );
-            $mail->setBody( $templateResult );
-            eZFileTransport::send( $mail );
-        }
-        else
-        {
-            eZDebug::writeError( "Wrong Transport in MailSettings in", 'xrowFormGeneratorType::xrowSendFormMail' );
-            return null;
-        }
+            //  Handle CC recipients
+            if( $ccReceivers )
+            {
+                if ( !is_array( $ccReceivers ) )
+                    $ccReceivers = array( $ccReceivers );
+                if ( count( $ccReceivers ) > 0 )
+                {
+                    foreach ( $ccReceivers as $ccReceiver )
+                    {
+                        if ( self::validate( $ccReceiver ) )
+                        {
+                            $mail->addCc( new ezcMailAddress( $ccReceiver, '', $mail->charset ) );
+                        }
+                    }
+                }
+            }
+            // Handle BCC recipients
+            if ( $bccReceivers )
+            {
+                if ( !is_array( $bccReceivers ) )
+                    $bccReceivers = array( $bccReceivers );
+                if ( count( $bccReceivers ) > 0 )
+                {
+                    foreach ( $bccReceivers as $bccReceiver )
+                    {
+                        if ( self::validate( $bccReceiver ) )
+                        {
+                            $mail->addBcc( new ezcMailAddress( $bccReceiver, '', $mail->charset ) );
+                        }
+                    }
+                }
+            }
 
-        //ezcmail sending
-        if ( strtolower($mailsettings["transport"]) != "file" )
-        {
-            try
+            $mail->subject = $subject;
+            $mail->subjectCharset = $mail->charset;
+            $mail->plainText = $templateResult;
+            foreach ( $content['form_elements'] as $item )
             {
-                $transport->send( $mail );
+                if ( $item['type'] == 'upload' and isset( $item['def'] ) and $item['def'] != '' )
+                {
+                    $binaryFile = eZHTTPFile::fetch( $item['def'] );
+                    if ( $binaryFile instanceof eZHTTPFile )
+                    {
+                        $disposition = new ezcMailContentDispositionHeader();
+                        $disposition->fileName =  $binaryFile->OriginalFilename;
+                        $disposition->fileNameCharSet = 'utf-8'; // if using non-ascii characters in the file name
+                        $disposition->disposition = 'attachment'; // default value is 'inline'
+                        $mail->addAttachment( $binaryFile->Filename, null, null, null, $disposition );
+                    }
+                }
             }
-            catch ( ezcMailTransportException $e )
+            $mail->build();
+
+            $mailsettings = array();
+            $mailsettings["transport"] = $ini->variable( "MailSettings", "Transport" );
+            $mailsettings["server"] = $ini->variable( "MailSettings", "TransportServer" );
+            $mailsettings["port"] = $ini->variable( "MailSettings", "TransportPort" );
+            $mailsettings["user"] = $ini->variable( "MailSettings", "TransportUser" );
+            $mailsettings["password"] = $ini->variable( "MailSettings", "TransportPassword" );
+            $mailsettings["connectionType"] = $ini->variable( 'MailSettings', 'TransportConnectionType' );
+
+            if( trim($mailsettings["port"]) == "" )
             {
-                eZDebug::writeError( $e->getMessage(), 'xrowFormGeneratorType::xrowSendFormMail' );
+                $mailsettings["port"] = null;
+            }
+            if ( strtolower($mailsettings["transport"]) == "smtp" )
+            {
+                $options = new ezcMailSmtpTransportOptions();
+                if( trim($mailsettings["password"]) === "" )
+                {
+                    $transport = new ezcMailSmtpTransport( $mailsettings["server"], "", "", $mailsettings["port"], $options );
+                }
+                else
+               {
+                    $options->preferredAuthMethod = ezcMailSmtpTransport::AUTH_AUTO;
+                    $transport = new ezcMailSmtpTransport( $mailsettings["server"], $mailsettings["user"], $mailsettings["password"], $mailsettings["port"], $options );
+                }
+            }
+            else if ( strtolower($mailsettings["transport"]) == "sendmail" )
+            {
+                $transport = new ezcMailMtaTransport();
+            }
+            else if ( strtolower($mailsettings["transport"]) == "file" )
+            {
+                //do own mail creation because ezc mail provides no file sending
+                $mail = new eZMail();
+                $mail->setSender( $sender );
+                foreach ( $receiverArray as $receiver )
+                {
+                    $mail->addReceiver( $receiver );
+                }
+                $mail->setSubject( $subject );
+                $mail->setBody( $templateResult );
+                eZFileTransport::send( $mail );
+            }
+            else
+            {
+                eZDebug::writeError( "Wrong Transport in MailSettings in", 'xrowFormGeneratorType::xrowSendFormMail' );
+                return null;
+            }
+
+            //ezcmail sending
+            if ( strtolower($mailsettings["transport"]) != "file" )
+            {
+                try
+                {
+                    $transport->send( $mail );
+                }
+                catch ( ezcMailTransportException $e )
+                {
+                    eZDebug::writeError( $e->getMessage(), 'xrowFormGeneratorType::xrowSendFormMail' );
+                }
             }
         }
     }
