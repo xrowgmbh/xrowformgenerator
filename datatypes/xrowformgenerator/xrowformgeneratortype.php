@@ -1343,21 +1343,16 @@ class xrowFormGeneratorType extends eZDataType
         $disposable_ip = array();
         $ini = eZINI::instance( 'blacklist.ini' );
         $blacklist = $ini->variable( 'SetBlackList', 'DomainsList' );
-        while( list( $key, $domain_disposable ) = each( $blacklist ) )
+        foreach( $blacklist as $domain_disposable )
         {
             if( getmxrr( $domain_disposable, $hosts ) )
             {
                 foreach( $hosts as $host )
                 {
-                    $ip_temp_array = gethostbyname( $host );
-                    foreach( $ip_temp_array as $ip )
-                    {
-                        array_push( $disposable_ip, $ip );
-                    }
+                    $disposable_ip[] = gethostbyname( $host );
                 }
             }
         }
-
         if( preg_match( '/^' . self::REGEXP . '$/', $address ) )
         {
             list( $alias, $domain ) = explode( "@", $address );
