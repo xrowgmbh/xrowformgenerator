@@ -161,15 +161,6 @@
                         {/case}
                         {case match="telephonenumber"}
                             <label for="telephonenumber:{$id}:{$key}:number">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            {if is_set( $countryCodeIsSet )|not()}{def $countryCodeIsSet = false()}{/if}
-                            {if ezini_hasvariable( "Settings", "CountryCodes", "xrowformgenerator.ini" )}
-                                {set $countryCodeIsSet = true()}
-                            <select id="telephonenumber:{$id}:{$key}:country" name="XrowFormInput[{$id}][{$key}][country]" class="xrow-form-options xrow-form-{$item.type}-left {cond( $item.class|ne(''), concat( ' ', $item.class, '-left' ), '')}">
-                                {foreach ezini( "Settings", "CountryCodes", "xrowformgenerator.ini" ) as $countryCode}
-                                <option value="{$countryCode}"{if and( is_set( $item.def_error.country ), $item.def_error.country|eq( $countryCode ) )} selected="selected"{/if}>{$countryCode}</option>
-                                {/foreach}
-                            </select>
-                            {/if}
                             <input{if not( $content.has_error )} placeholder="{$item.def|wash}"{else} value="{if is_set( $item.def_error.number )}{$item.def_error.number|wash}{else}{$item.def|wash}{/if}"{/if} id="telephonenumber:{$id}:{$key}{if $countryCodeIsSet}:number{/if}" type="tel" autocomplete="off" name="XrowFormInput[{$id}][{$key}]{if $countryCodeIsSet}[number]{/if}" class="box xrow-form-{$item.type}{if $countryCodeIsSet}-right{/if}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true"{* pattern="^\+([1-9]){ldelim}1,4{rdelim}?[ |]?[1-9]{ldelim}1{rdelim}?(?:[0-9][ |]?){ldelim}4,14{rdelim}[0-9]$"*} /><br/>
                             {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<p class="input_desc">{$item.desc}</p>{/if}
                         {/case}

@@ -5,7 +5,7 @@
     {set $crmIsEnabled = true()}
 {/if}
 {ezscript_require( array( 'yahoo-dom-event/yahoo-dom-event.js', 'xrowformgenerator_backend.js', 'json2.js' ) )}
-{if and( ezini( 'Settings', 'ShowCaptchaAlways', 'xrowformgenerator.ini' )|eq("true"), ezini( 'ExtensionSettings', 'ActiveExtensions', 'site.ini' )|contains( 'xrowcaptcha' ) )}
+{if and( ezini_hasvariable( 'Settings', 'ShowCaptchaAlways', 'xrowformgenerator.ini' ), ezini( 'Settings', 'ShowCaptchaAlways', 'xrowformgenerator.ini' )|eq("true"), ezini( 'ExtensionSettings', 'ActiveExtensions', 'site.ini' )|contains( 'xrowcaptcha' ) )}
     <label>
         <input type="checkbox" name="XrowFormCaptcha{$id}" value="1" disabled="true" checked="checked"/> {"Form is using a captcha"|i18n( 'xrowformgenerator/edit' )} (* {"Captcha is automatically applied to all forms."|i18n( 'xrowformgenerator/edit' )} )
     </label>
@@ -116,15 +116,21 @@
 {def $types = hash( 'string', hash( 'name', 'String input field', 'default', true(), 'required', true() ),
                     'email', hash( 'name', 'Email input field', 'default', true(), 'required', true(), 'unique', true(), 'validation', true() ),
                     'text', hash( 'name', 'Text input field', 'default', true(), 'required', true() ),
-                    'country', hash( 'name', 'Country select dropdown', 'required', true() ),
                     'telephonenumber', hash( 'name', 'Telephone number input field', 'default', true(), 'required', true(), 'validation', true() ),
-                    'hidden', hash( 'name', 'Hidden' ),
+                    'password', hash( 'name', 'Password input field', 'required', true(), 'default', true(), 'validation', true() ),
                     'number', hash( 'name', 'Number input field', 'default', true(), 'required', true(), 'validation', true(), 'min', true(), 'max', true(), 'step', true() ),
-                    'checkbox', hash( 'name', 'Checkbox input field', 'default', true(), 'required', true() ),
-                    'upload', hash( 'name', 'Upload input field', 'required', true() ) )}
+                    'upload', hash( 'name', 'Upload input field', 'required', true() ),
+                    'country', hash( 'name', 'Country select dropdown', 'required', true() ),
+                    'checkbox', hash( 'name', 'Checkbox', 'default', true(), 'required', true() ),
+                    'options', hash( 'name', 'Options' ),
+                    'imageoptions', hash( 'name', 'Options with image' ),
+                    'desc', hash( 'name', 'Description' ),
+                    'spacer', hash( 'name', 'Spacer' ),
+                    'hidden', hash( 'name', 'Hidden field' ) )}
 
     <ol class="xrow-form-list hidden" id="xrow-form-list-{$id}">
         {foreach $types as $type => $typeElements}
+        {if and($type|ne('options'), $type|ne('imageoptions'), $type|ne('description'), $type|ne('spacer'))}
         <li class="xrow-form-element xrow-form-element-{$type}" id="xrow-form-element-{$type}-{$id}">
             <fieldset>
                 <legend>{$typeElements.name|i18n( 'xrowformgenerator/edit' )}</legend>
@@ -165,8 +171,8 @@
                         {if or( and( is_set( $typeElements.required ), $typeElements.required ), and( is_set( $typeElements.validation ), $typeElements.validation ), and( is_set( $typeElements.unique ), $typeElements.unique ) )}
                         <div class="block inline">
                             {if and( is_set( $typeElements.required ), $typeElements.required )}<label><input class="xrow-form-element-required" name="x1XrowFormElementReq{$id}[yyyxrowindexyyy]" value="yyyxrowreqyyy" title="{"Use this checkbox if the input of this form field is required."|i18n( 'xrowformgenerator/edit' )}" type="checkbox" />{"Required"|i18n( 'xrowformgenerator/edit' )}</label>{/if}
-                            {if and( is_set( $typeElements.validation ), $typeElements.validation )}<label><input class="xrow-form-element-unique" name="x1XrowFormElementUnique{$id}[yyyxrowindexyyy]" value="yyyxrowuniqueyyy" title="{"Unique"|i18n( 'xrowformgenerator/edit' )}" type="checkbox" />{"Unique"|i18n( 'xrowformgenerator/edit' )}</label>{/if}
-                            {if and( is_set( $typeElements.unique ), $typeElements.unique )}<label><input class="xrow-form-element-validation" name="x1XrowFormElementVal{$id}[yyyxrowindexyyy]" value="yyyxrowvalyyy" title="{"Use this checkbox if the input of this form field should be validated."|i18n( 'xrowformgenerator/edit' )}" type="checkbox" />{"Input requires validation"|i18n( 'xrowformgenerator/edit' )}</label>{/if}
+                            {if and( is_set( $typeElements.unique ), $typeElements.unique )}<label><input class="xrow-form-element-unique" name="x1XrowFormElementUnique{$id}[yyyxrowindexyyy]" value="yyyxrowuniqueyyy" title="{"Unique"|i18n( 'xrowformgenerator/edit' )}" type="checkbox" />{"Unique"|i18n( 'xrowformgenerator/edit' )}</label>{/if}
+                            {if and( is_set( $typeElements.validation ), $typeElements.validation )}<label><input class="xrow-form-element-validation" name="x1XrowFormElementVal{$id}[yyyxrowindexyyy]" value="yyyxrowvalyyy" title="{"Use this checkbox if the input of this form field should be validated."|i18n( 'xrowformgenerator/edit' )}" type="checkbox" />{"Input requires validation"|i18n( 'xrowformgenerator/edit' )}</label>{/if}
                         </div>
                         {/if}
                     </div>
@@ -175,6 +181,7 @@
                 <div class="break"></div>
             </fieldset>
         </li>
+        {/if}
         {/foreach}
 {* description *}
         <li class="xrow-form-element xrow-form-element-desc" id="xrow-form-element-desc-{$id}">
@@ -218,7 +225,7 @@
 {* options *}
         <li class="xrow-form-element xrow-form-element-options" id="xrow-form-element-options-{$id}">
             <fieldset>
-                <legend>{"Options input field"|i18n( 'xrowformgenerator/edit' )}</legend>
+                <legend>{"Options"|i18n( 'xrowformgenerator/edit' )}</legend>
                 <div class="block">
                     <div class="element xrow-trash-width"><img class="xrow-form-element-trash-button" src={"trash-icon-16x16.gif"|ezimage} alt="{"Delete form element."|i18n( 'xrowformgenerator/edit' )}"  title="{"Delete form element."|i18n( 'xrowformgenerator/edit' )}" width="16" height="16" /></div>
                     <div class="element xrow-form-element-width">
@@ -263,7 +270,7 @@
 {* options with image *}
         <li class="xrow-form-element xrow-form-element-options" id="xrow-form-element-imageoptions-{$id}">
             <fieldset>
-                <legend>{"Options with image input field"|i18n( 'xrowformgenerator/edit' )}</legend>
+                <legend>{"Options with image"|i18n( 'xrowformgenerator/edit' )}</legend>
                 <div class="block">
                     <div class="element xrow-trash-width"><img class="xrow-form-element-trash-button" src={"trash-icon-16x16.gif"|ezimage} alt="{"Delete form element."|i18n( 'xrowformgenerator/edit' )}"  title="{"Delete form element."|i18n( 'xrowformgenerator/edit' )}" width="16" height="16" /></div>
                     <div class="element xrow-form-element-width">
@@ -361,10 +368,6 @@
             {foreach $types as $type => $typeElements}
             <option value="{$type}">{$typeElements.name|i18n( 'xrowformgenerator/edit' )}</option>
             {/foreach}
-            <option value="options">{"Options"|i18n( 'xrowformgenerator/edit' )}</option>
-            <option value="imageoptions">{"Options with image"|i18n( 'xrowformgenerator/edit' )}</option>
-            <option value="spacer">{"Spacer"|i18n( 'xrowformgenerator/edit' )}</option>
-            <option value="desc">{"Description"|i18n( 'xrowformgenerator/edit' )}</option>
             {if $crmIsEnabled}
                 {include uri='design:content/datatype/edit/xrowformcrmfields.tpl'}
             {/if}

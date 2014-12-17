@@ -36,6 +36,10 @@
         <source>Return to site</source>
         <translation>Zur Übersichtsseite zurückkehren</translation>
     </message>
+    <message>
+        <source>Mandatory fields</source>
+        <translation>Pflichtfelder</translation>
+    </message>
 </context>
 <context>
     <name>kernel/classes/datatypes</name>
@@ -57,7 +61,7 @@
         <translation>Ihre E-Mailaddresse wurde schon mal an uns übersandt. Sie können das Formular kein zweites Mal benutzen.</translation>
     </message>
     <message>
-        <source>E-mail address is not valid.</source>
+        <source>Email address is not valid.</source>
         <translation>Die E-Mail Adresse ist nicht gültig.</translation>
     </message>
     <message>
@@ -88,9 +92,13 @@
         <source>Spam protection. The signs of the captcha code didn&apos;t match. Please enter the correct code of the image at the bottom.</source>
         <translation>Spam Schutz: Die Zeichen, die Sie eingegeben haben, stimmen nicht mit denen im Bild überein. Bitte geben Sie den korrekten Code am Formularende ein.</translation>
     </message>
-     <message>
+    <message>
         <source>Please respect the number range.</source>
         <translation>Bitte beachten Sie den Zahlenbereich.</translation>
+    </message>
+    <message>
+        <source>Please select</source>
+        <translation>Bitte wählen Sie</translation>
     </message>
 </context>
 <context>
@@ -150,7 +158,7 @@
         <source>Min</source>
         <translation>Minimalwert</translation>
     </message>
-        <message>
+    <message>
         <source>Max</source>
         <translation>Maximalwert</translation>
     </message>
@@ -198,9 +206,17 @@
         <source>Number input field</source>
         <translation>Eingabefeld Zahl</translation>
     </message>
-        <message>
+    <message>
         <source>Telephone number input field</source>
         <translation>Eingabefeld Telefonnummer</translation>
+    </message>
+    <message>
+        <source>Country select dropdown</source>
+        <translation>Länderauswahlliste</translation>
+    </message>
+    <message>
+        <source>Password input field</source>
+        <translation>Eingabefeld Passwort</translation>
     </message>
     <message>
         <source>Use this checkbox if the input of this form field should be validated.</source>
@@ -211,8 +227,8 @@
         <translation>Die Eingabe erfordert eine Überprüfung</translation>
     </message>
     <message>
-        <source>Checkbox input field</source>
-        <translation>Eingabefeld Kontrollkästchen</translation>
+        <source>Checkbox</source>
+        <translation>Kontrollkästchen</translation>
     </message>
     <message>
         <source>Use this checkbox if the checkbox should be selected by default.</source>
@@ -221,11 +237,10 @@
     <message>
         <source>Email input field</source>
         <translation>Eingabefeld E-Mail</translation>
-
     </message>
     <message>
-        <source>Options input field</source>
-        <translation>Eingabefeld Optionen</translation>
+        <source>Options</source>
+        <translation>Optionen</translation>
     </message>
     <message>
         <source>Choose option type</source>
@@ -288,10 +303,6 @@
         <translation>Kontrollkästchen</translation>
     </message>
     <message>
-        <source>options</source>
-        <translation>Optionen</translation>
-    </message>
-    <message>
         <source>email</source>
         <translation>E-Mail</translation>
     </message>
@@ -308,7 +319,7 @@
         <translation>Ein neues Formularfeld hinzufügen</translation>
     </message>
     <message>
-        <source>Hidden input field</source>
+        <source>Hidden field</source>
         <translation>Verstecktes Feld</translation>
     </message>
     <message>
@@ -320,27 +331,19 @@
         <translation>Abstand</translation>
     </message>
     <message>
-        <source>hidden</source>
-        <translation>Versteckt</translation>
-    </message>
-    <message>
-        <source>spacer</source>
-        <translation>Abstand</translation>
-    </message>
-    <message>
         <source>Show the amount of forms in the mail</source>
         <translation>Formular Nummer anzeigen</translation>
+    </message>
+    <message>
+        <source>Display data after submit</source>
+        <translation>Formulardaten nach Abschicken anzeigen</translation>
     </message>
     <message>
         <source>Select image</source>
         <translation>Bild auswählen</translation>
     </message>
     <message>
-        <source>Options with image input field</source>
-        <translation>Eingabefeld Bild-Optionen</translation>
-    </message>
-    <message>
-        <source>options with image</source>
+        <source>Options with image</source>
         <translation>Optionen mit Bildern</translation>
     </message>
     <message>
@@ -350,6 +353,10 @@
     <message>
         <source>description</source>
         <translation>Beschreibung</translation>
+    </message>
+    <message>
+        <source>Select a campaign</source>
+        <translation>Bitte wählen Sie ein Kampagne</translation>
     </message>
 </context>
 <context>
@@ -371,7 +378,7 @@
         <translation>Datum</translation>
     </message>
     <message>
-        <source>Receiver(separate multiple Emails with a semicolon)</source>
+        <source>Receiver (separate multiple emails with a semicolon)</source>
         <translation>Empfänger (mehrere E-Mails mit Semikolon trennen)</translation>
     </message>
     <message>

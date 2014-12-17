@@ -10,8 +10,6 @@
 class xrowFormGeneratorType extends eZDataType
 {
     const DATA_TYPE_STRING = "xrowformgenerator";
-    const REGEXP = '(((\"[^\"\f\n\r\t\v\b]+\")|([A-Za-z0-9_\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}\.]+(\.[A-Za-z0-9_\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}\.]+)*))@((\[(((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9])))\])|(((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9])))|((([A-Za-z0-9\-])+\.)+[A-Za-z\-]{2,})))';
-
 
     function xrowFormGeneratorType()
     {
@@ -67,9 +65,9 @@ class xrowFormGeneratorType extends eZDataType
         return is_array($value) ? array_map('xrowFormGeneratorType::strip', $value) : strip_tags($value);
     }
 
-    function strip_a_tag($value)
+    function strip_allowable_tag($value)
     {
-        return is_array($value) ? array_map('xrowFormGeneratorType::strip_a_tag', $value) : strip_tags($value,"<a><br>");
+        return is_array($value) ? array_map('xrowFormGeneratorType::strip_allowable_tag', $value) : strip_tags($value,"<a><br><b>");
     }
 
     /*
@@ -134,7 +132,7 @@ class xrowFormGeneratorType extends eZDataType
                     }
                     else
                     {
-                        $$varName = self::strip_a_tag($http->postVariable( $tplFormKey ));
+                        $$varName = self::strip_allowable_tag($http->postVariable( $tplFormKey ));
                     }
                 }
             }
@@ -686,7 +684,7 @@ class xrowFormGeneratorType extends eZDataType
                                             {
                                                 $content['form_elements'][$key]['error'] = true;
                                                 $content['has_error'] = true;
-                                                $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "E-mail address is not valid." );
+                                                $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Email address is not valid." );
                                             }
                                             elseif( $item['unique'] == true )
                                             {
@@ -695,9 +693,9 @@ class xrowFormGeneratorType extends eZDataType
                                                     $content['form_elements'][$key]['error'] = true;
                                                     $content['has_error'] = true;
                                                     $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Your email was already submitted to us. You can't use the form twice." );
-                                                }       
+                                                }
                                             }
-                                        }    
+                                        }
                                     }
                                     elseif ( $item['val'] == true && $data != '' )
                                     {
@@ -705,7 +703,7 @@ class xrowFormGeneratorType extends eZDataType
                                         {
                                             $content['form_elements'][$key]['error'] = true;
                                             $content['has_error'] = true;
-                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "E-mail address is not valid." );
+                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Email address is not valid." );
                                         }
                                         elseif( $item['unique'] == true ) 
                                         {
@@ -760,22 +758,6 @@ class xrowFormGeneratorType extends eZDataType
                                         {
                                             $data = trim( $inputArray[$elKey] );
                                         }
-                                        elseif( is_array( $inputArray[$elKey] ) )
-                                        {
-                                            $countyCode = $inputArray[$elKey]['country'];
-                                            if( isset( $inputArray[$elKey]['number'] ) )
-                                            {
-                                                $number = trim( $inputArray[$elKey]['number'] );
-                                                if( $number != '' )
-                                                {
-                                                    if( strpos( $number, '0', 0 ) === 0 )
-                                                    {
-                                                        $number = substr( $number, 1 );
-                                                    }
-                                                    $data = $inputArray[$elKey]['country'] . ' ' . $number;
-                                                }
-                                            }
-                                        }
                                     }
                                     if ( $item['req'] == true )
                                     {
@@ -801,10 +783,6 @@ class xrowFormGeneratorType extends eZDataType
                                         }
                                     }
                                     $content['form_elements'][$key]['def'] = $data;
-                                    if( isset( $countyCode ) && $number != '' )
-                                    {
-                                        $content['form_elements'][$key]['def_error'] = array( 'country' => $countyCode, 'number' => $number );
-                                    }
                                 }break;
 
                                 case "number":
@@ -970,7 +948,7 @@ class xrowFormGeneratorType extends eZDataType
                 }
             }
         }
-        elseif( $ini->variable( "Settings", "Captcha" )=="humancaptcha")
+        elseif( $ini->variable( "Settings", "Captcha" ) == "humancaptcha")
         {
             if ( $httpInput and $content['use_captcha'] )
             {
@@ -1318,10 +1296,9 @@ class xrowFormGeneratorType extends eZDataType
         }
         else
         {
-            // http://de.wikipedia.org/wiki/L%C3%A4ndervorwahlliste_sortiert_nach_Nummern
-            $areaCodes = '1|2[0,7]|2[1-6][0-9]|29[0-9]|3[6,9]|3[0-4]|35[0-9]|37[0-9]|38[0-2,5-9]|3906|4[0,3-9]|42[0,1,3]|5[1-8]|50[1-9]|59[1-9]|'.
-                         '6[0-6]|67[0,2-9]|68[0-3,5-9]|69[0,1,2]|7|8[1,2,4,6]|80[0,8]|85[0,2,3,5,6]|870|88[0,6]|9[0-5,8]|96[0-8]|97[0-7]|99[2-6,8,9]';
-            $pattern = '/^\+(' . $areaCodes . ')[ |]?[1-9]{1}(?:[0-9][ |]?){4,14}[0-9]$/';
+            $areaCodes = $ini->variable( "Settings", "TelephoneAreaCodes" );
+            $defaultPattern = $ini->variable( "Settings", "TelephoneDefaultPattern" );
+            $pattern = '/^\+(' . $areaCodes . ')[ |]?' . $defaultPattern . '/';
         }
         if( $ini->hasVariable( "Settings", "TelephoneNumberExample" ) && $ini->variable( "Settings", "TelephoneNumberExample" ) != '' )
         {
@@ -1332,7 +1309,7 @@ class xrowFormGeneratorType extends eZDataType
 
     /*!
       \static
-      Static function for validating e-mail addresses.
+      Static function for validating email addresses.
 
       Returns true if successful, false if not.
     */
@@ -1353,7 +1330,16 @@ class xrowFormGeneratorType extends eZDataType
                 }
             }
         }
-        if( preg_match( '/^' . self::REGEXP . '$/', $address ) )
+        $ini = eZINI::instance('xrowformgenerator.ini');
+        if( $ini->hasVariable( "Settings", "InputEmail" ) && $ini->variable( "Settings", "InputEmail" ) != '' )
+        {
+            $regexp = $ini->variable( "Settings", "InputEmail" );
+        }
+        else
+        {
+            $regexp = $ini->variable( "Settings", "EmailDefaultPattern" );
+        }
+        if( preg_match( $regexp, $address ) )
         {
             list( $alias, $domain ) = explode( "@", $address );
             if ( checkdnsrr( $domain, "MX")) 
