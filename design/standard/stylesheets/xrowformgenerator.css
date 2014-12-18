@@ -1,3 +1,26 @@
+/* field html5 css */
+
+abbr.required:after { content: " *"; color: black; }
+abbr.valid:after { content: " ✓"; color: green; }
+abbr.invalid:after { content: " !"; color: red; }
+li.xrow-form-passwort {
+    clear: both;
+    overflow: hidden;
+}
+.xrowform-password-validation { 
+    width: 6%;
+    float: right;
+    margin: -2% 0 0 29%;
+    position: absolute;
+}
+.xrowform-password-title { font-size: 10px }
+.xrowform-password-info { font-size: 9px }
+.password-validation-empty { width: 100%; height: 10px; display: block; background: gray }
+.password-validation-strong { width: 100%; height: 10px; display: block; background: green }
+.password-validation-medium { width: 100%; height: 10px; display: block; background: yellow }
+.password-validation-red { width: 100%; height: 10px; display: block; background: red }
+
+
 .xrow-form-error,
 .content-view-full .attribute-header,
 .content-view-full .attribute-long{
@@ -105,6 +128,7 @@ ol.xrow-form-container li.xrow-form-element
 .xrow-form-full li
 {
     margin-bottom: 1em;
+    overflow: hidden;
 }
 
 div.xrow-form-spacer
@@ -174,29 +198,29 @@ ol.xrow-form-xrowform .options_checkbox label
 }
 
 ol.xrow-form-xrowform .input_desc,
-ol.xrow-form-xrowform .option_bes,
-ol.xrow-form-xrowform .desc_eingabe_bild{
+ol.xrow-form-xrowform .options_desc,
+ol.xrow-form-xrowform .desc_eingabe_bild {
     color: #AAAAAA;
     font-size: 80%;
     line-height: 135%;
     margin-bottom: 5px;
-    margin-top: 5px;   
+    margin-top: 5px;
 }
 
-ol.xrow-form-xrowform abbr{
+ol.xrow-form-xrowform abbr {
     border-bottom:none;
 }
 
-ol.xrow-form-xrowform textarea{
+ol.xrow-form-xrowform textarea {
     background: none repeat scroll 0 0 #FFFFFF;
     border: 1px solid #999999;
     color: #999999;
     padding:0;
 }
 
-.xrow-form-full ol, 
-.xrow-form-full ul , 
-.xrow-form-full li{
+.xrow-form-full ol,
+.xrow-form-full ul,
+.xrow-form-full li {
     margin:0;
 }
 
@@ -213,7 +237,7 @@ ol.xrow-form-xrowform textarea{
 .xrow-form-full select.xrow-form-options.xrow-form-telephonenumber-left {
     width: 10%;
     float: left;
-    margin-right: 10px; 
+    margin-right: 10px;
 }
 .xrow-form-full input.box.xrow-form-telephonenumber-right {
     width: 86%;

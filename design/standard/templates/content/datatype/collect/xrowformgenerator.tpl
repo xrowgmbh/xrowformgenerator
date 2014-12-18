@@ -27,164 +27,105 @@
                 <li class="xrow-form-element xrow-form-{$item.type} xrow-form-element-{$key}{if $item.error} xrow-form-error{/if}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}">
                     {switch match=$item.type}
                         {case match="checkbox"}
-                            <label for="checkbox:{$id}:{$key}"><input id="checkbox:{$id}:{$key}" type="checkbox" name="XrowFormInput[{$id}][{$key}]" value="1" autocomplete="off" {if $item.def}checked="checked" {/if}/> &nbsp;{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<div class="form-checkbox-padding">{$item.desc}</div>{/if}
+                            {include uri='design:content/datatype/fields.tpl' 
+                                     fieldType=$item.type
+                                     autocompleteOff=true()}
                         {/case}
                         {case match="text"}
-                            <label for="text:{$id}:{$key}">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            <textarea cols="70" rows="10" id="text:{$id}:{$key}" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true"  {if not($content.has_error)}placeholder="{$item.def|wash}">{else}>{$item.def|wash}{/if}</textarea>
-                            {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<p class="input_desc">{$item.desc}</p>{/if}
+                            {include uri='design:content/datatype/fields.tpl' 
+                                     fieldType='textarea'
+                                     cssClass=concat("box xrow-form-", $item.type, cond( $item.class|ne(''), concat( ' ', $item.class ), ''))
+                                     cols=70
+                                     rows=10
+                                     autocompleteOff=true()}
                         {/case}
                         {case match="country"}
-                            <label for="country:{$id}:{$key}">{$item.name|wash()}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            {if is_set( $countries )|not()}{def $countries = fetch( 'content', 'country_list' )}{/if}
-                            <input id="country:{$id}:{$key}"{if and( is_set( $item.def ), $item.def|ne('') )} value="{$item.def}"{/if} type="hidden" autocomplete="off" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" value="" />
-                            <select id="select_{$id}_{$key}" class="field_half" onchange="$('input[name=\'XrowFormInput[{$id}][{$key}]\']').val($('#select_{$id}_{$key} option:selected').text());">
-                                <option value=""></option>
-                                {foreach $countries as $country_list_item}
-                                <option value="{$country_list_item.Alpha3}"{if and( is_set( $item.def ), $item.def|eq( $country_list_item.Name ) )} selected="selected"{/if} title="{$country_list_item.Name}">{$country_list_item.Name}</option>
-                                {/foreach}
-                            </select>
-                            {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<p class="input_desc">{$item.desc}</p>{/if}
+                            {include uri='design:content/datatype/fields.tpl' 
+                                     fieldType=$item.type
+                                     autocompleteOff=true()}
                         {/case}
                         {case match="upload"}
-                            <label for="upload:{$id}:{$key}">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            <input id="upload:{$id}:{$key}" type="file" class="file_input_div"  name="XrowFormInputFile_{$id}_{$key}" value="" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" /><br/>
-                            {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<p class="input_desc">{$item.desc}</p>{/if}
+                            {include uri='design:content/datatype/fields.tpl' 
+                                     fieldType=$item.type
+                                     cssClass=concat("file_input_div box xrow-form-", $item.type, cond($item.class|ne(''), concat(' ', $item.class), ''))}
                         {/case}
                         {case match="options"}
-                            <label class="options">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
                             {switch match=$item.option_type}
                                 {case match="checkbox"}
-                                <ul class="options_checkbox">
-                                    {foreach $item.option_array as $opt_key => $opt_item}
-                                        <li>
-                                            <span class="radio_button">
-                                               <input id="options_chekbox:{$id}:{$key}:{$opt_key}" class="xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" type="checkbox" autocomplete="off" aria-required="true" name="XrowFormInput[{$id}][{$key}][{$opt_key}]" value="{$opt_item.name|wash}" {if $opt_item.def}checked="checked" {/if} />
-                                            </span>
-                                            <span class="radio_label">
-                                               <label class="black_label" for="options_chekbox:{$id}:{$key}:{$opt_key}">{$opt_item.name|wash}</label>
-                                            </span>
-                                        </li>
-                                    {/foreach}
-                                </ul>
+                                    {include uri='design:content/datatype/fields.tpl' 
+                                             fieldType=$item.type
+                                             underFieldType=$item.option_type
+                                             autocompleteOff=true()
+                                             cssClass=concat("xrow-form-", $item.type, cond( $item.class|ne(''), concat( ' ', $item.class ), ''))}
                                 {/case}
                                 {case match="radio"}
-                                <ul class="options_radio">
-                                    {foreach $item.option_array as $opt_key => $opt_item}
-                                    <li>
-                                        <span class="radio_button">
-                                            <input id="options_radio:{$id}:{$key}:{$opt_key}" class="xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" type="radio" autocomplete="off" aria-required="true" name="XrowFormInput[{$id}][{$key}]" value="{$opt_item.name|wash}" {if $opt_item.def}checked="checked" {/if} />
-                                        </span>
-                                        <span class="options_label">
-                                            <label class="black_label" for="options_radio:{$id}:{$key}:{$opt_key}">{$opt_item.name|wash}</label>
-                                        </span>
-                                    </li>
-                                    {/foreach}
-                                </ul>
+                                    {include uri='design:content/datatype/fields.tpl' 
+                                             fieldType=$item.type
+                                             underFieldType=$item.option_type
+                                             autocompleteOff=true()
+                                             cssClass=concat("xrow-form-", $item.type, cond( $item.class|ne(''), concat( ' ', $item.class ), ''))}
                                 {/case}
                                 {case match="select-one"}
-                                    <select class="xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" name="XrowFormInput[{$id}][{$key}][]">
-                                        <option value="0"></option>
-                                    {foreach $item.option_array as $opt_key => $opt_item}
-                                        <option value="{$opt_item.name|wash}"{if $opt_item.def} selected="selected"{/if} title="{$opt_item.name|wash}">{$opt_item.name|wash}</option>
-                                    {/foreach}
-                                    </select>
+                                    {include uri='design:content/datatype/fields.tpl' 
+                                             fieldType=$item.type
+                                             underFieldType=$item.option_type
+                                             startWithEmptyValue=true()
+                                             autocompleteOff=true()
+                                             cssClass=concat("xrow-form-", $item.type, cond( $item.class|ne(''), concat( ' ', $item.class ), ''))}
                                 {/case}
                                 {case match="select-all"}
-                                    <select id="xrow-form-bes" class="xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" name="XrowFormInput[{$id}][{$key}][]" size="4" multiple="multiple">
-                                    {foreach $item.option_array as $opt_key => $opt_item}
-                                        <option value="{$opt_item.name|wash}"{if $opt_item.def} selected="selected"{/if} title="{$opt_item.name|wash}">{$opt_item.name|wash}</option>
-                                    {/foreach}
-                                    </select>
+                                    {include uri='design:content/datatype/fields.tpl' 
+                                             fieldType=$item.type
+                                             underFieldType=$item.option_type
+                                             size=4
+                                             multiple=true()
+                                             autocompleteOff=true()
+                                             cssClass=concat('xrow-form-', $item.type, cond($item.class|ne(''), concat(' ', $item.class), ''))}
                                 {/case}
                             {/switch}
-                            {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<p class="option_bes">{$item.desc}</p>{/if}
                         {/case}
                         {case match="imageoptions"}
-                            <label>{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            <div class="block">
-                            {switch match=$item.option_type}
-                                {case match="checkbox"}
-                                    {foreach $item.option_array as $opt_key => $opt_item}
-                                    <div class="element xrow-image-opt-ele">
-                                        <label for="imageoptions_checkbox:{$id}:{$key}:{$opt_key}" class="xrow-image-options">
-                                        <div class="che"> <input id="imageoptions_checkbox:{$id}:{$key}:{$opt_key}" class="xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" type="checkbox" autocomplete="off" name="XrowFormInput[{$id}][{$key}][{$opt_key}]" value="{$opt_item.name|wash}" {if $opt_item.def}checked="checked" {/if} /></div>
-                                        <div class="img">{def $tempimg=fetch( 'content', 'node', hash( 'node_id', $opt_item.image ) )}
-                                            {if $tempimg}
-                                            {foreach $tempimg.data_map as $ditem}
-                                                {if and( $ditem.data_type_string|eq( 'ezimage' ), $ditem.has_content )}
-                                                {attribute_view_gui attribute=$ditem image_class="small"}
-                                                {break}
-                                                {/if}
-                                            {/foreach}
-                                            {/if}
-                                            {undef $tempimg}
-                                        </div>
-                                        <div class="bes">&nbsp;{$opt_item.name|wash}</div>
-                                        </label>
-                                    </div>
-                                    {delimiter modulo=3}<div class="break"></div>{/delimiter}
-                                    {/foreach}
-                                {/case}
-                                {case match="radio"}
-                                    {foreach $item.option_array as $opt_key => $opt_item}
-                                        <div class="element">
-                                            <label for="imageoptions_radio:{$id}:{$key}:{$opt_key}" class="xrow-image-options">
-                                            <div class="che"><input id="imageoptions_radio:{$id}:{$key}:{$opt_key}" class="xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" type="radio" autocomplete="off" name="XrowFormInput[{$id}][{$key}]" value="{$opt_item.name|wash}" {if $opt_item.def}checked="checked" {/if} /></div>
-                                            <div class="img">{def $tempimg=fetch( 'content', 'node', hash( 'node_id', $opt_item.image ) )}
-                                                {if $tempimg}
-                                                {foreach $tempimg.data_map as $ditem}
-                                                    {if and( $ditem.data_type_string|eq( 'ezimage' ), $ditem.has_content )}
-                                                    {attribute_view_gui attribute=$ditem image_class="small"}
-                                                    {break}
-                                                    {/if}
-                                                {/foreach}
-                                                {/if}
-                                                {undef $tempimg}
-                                            </div>
-                                            <div class="bes">&nbsp;{$opt_item.name|wash}</div>
-                                            </label>
-                                        </div>
-                                        {delimiter modulo=3}<div class="break"></div>{/delimiter}
-                                    {/foreach}
-                                {/case}
-                            {/switch}
-                            </div>
-                            <div class="break"></div>
-                            {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<p class="desc_eingabe_bild">{$item.desc}</p>{/if}
+                            {include uri='design:content/datatype/fields.tpl'
+                                     fieldType=$item.type
+                                     underFieldType=$item.option_type
+                                     autocompleteOff=true()
+                                     cssClass=concat('xrow-form-', $item.type, cond($item.class|ne(''), concat(' ', $item.class), ''))}
                         {/case}
                         {case match="number"}
-                            <label for="number:{$id}:{$key}">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            <input id="number:{$id}:{$key}" type="number" autocomplete="off" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" min="{$item.min}" max="{$item.max}" step="{$item.step}"{if not($content.has_error)} placeholder="{$item.def|wash}"{else} value="{$item.def|wash}"{/if}{* pattern="[-+]?[0-9]*[.,]?[0-9]+"*} /><br/>
-                            {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<p class="input_desc">{$item.desc}</p>{/if}
+                            {include uri='design:content/datatype/fields.tpl'
+                                     fieldType=$item.type
+                                     autocompleteOff=true()
+                                     cssClass=concat("box xrow-form-", $item.type, cond( $item.class|ne(''), concat( ' ', $item.class ), ''))}
                         {/case}
                         {case match="telephonenumber"}
-                            <label for="telephonenumber:{$id}:{$key}:number">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            <input{if not( $content.has_error )} placeholder="{$item.def|wash}"{else} value="{if is_set( $item.def_error.number )}{$item.def_error.number|wash}{else}{$item.def|wash}{/if}"{/if} id="telephonenumber:{$id}:{$key}{if $countryCodeIsSet}:number{/if}" type="tel" autocomplete="off" name="XrowFormInput[{$id}][{$key}]{if $countryCodeIsSet}[number]{/if}" class="box xrow-form-{$item.type}{if $countryCodeIsSet}-right{/if}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true"{* pattern="^\+([1-9]){ldelim}1,4{rdelim}?[ |]?[1-9]{ldelim}1{rdelim}?(?:[0-9][ |]?){ldelim}4,14{rdelim}[0-9]$"*} /><br/>
-                            {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<p class="input_desc">{$item.desc}</p>{/if}
+                            {include uri='design:content/datatype/fields.tpl'
+                                     fieldType=$item.type
+                                     autocompleteOff=true()
+                                     cssClass=concat("box xrow-form-", $item.type, cond( $item.class|ne(''), concat( ' ', $item.class ), ''))}
                         {/case}
                         {case match="hidden"}
-                            <input type="hidden" class="formhidden" name="XrowFormInput[{$id}][{$key}]" {if not( $content.has_error )} placeholder="{$item.def|wash}" {else} value="{$item.def|wash}" {/if} />
+                            <input type="{$item.type}" class="formhidden" name="XrowFormInput[{$id}][{$key}]" />
                         {/case}
                         {case match="spacer"}
                             <div class="xrow-form-spacer"></div>
                         {/case}
                         {case match="desc"}
-                            <p class="xrow-form-desc">{cond( is_set( $item.desc ), $item.desc, '')}</p>
+                            {if and(is_set($item.desc), $item.desc|ne(''))}<p class="xrow-form-desc">{$item.desc}</p>{/if}
                         {/case}
                         {case match="email"}
-                            <label for="email:{$id}:{$key}">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                            <input id="email:{$id}:{$key}" type="email" autocomplete="off" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" {if not($content.has_error)} placeholder="{$item.def|wash}" {else} value="{$item.def|wash}" {/if} />
-                            {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<p class="input_desc">{$item.desc}</p>{/if}
+                            {include uri='design:content/datatype/fields.tpl' 
+                                     fieldType=$item.type
+                                     autocompleteOff=true()
+                                     cssClass=concat("box xrow-form-", $item.type, cond( $item.class|ne(''), concat( ' ', $item.class ), ''))}
                         {/case}
                         {case}
                             {if and( $item.type|contains( 'crmfield:' ), $crmIsEnabled )}
                                 {include uri='design:content/datatype/collect/xrowformcrmfielditem.tpl'}
                             {else}
-                                <label for="description:{$id}:{$key}">{$item.name|wash}{if $item.req}<abbr class="required" title="{"Input required."|i18n( 'kernel/classes/datatypes' )}"> * </abbr>{/if}</label>
-                                <input id="description:{$id}:{$key}" type="text" autocomplete="off" name="XrowFormInput[{$id}][{$key}]" class="box xrow-form-{$item.type}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}" aria-required="true" {if not($content.has_error)} placeholder="{$item.def|wash}" {else} value="{$item.def|wash}" {/if} />
-                                {if and( is_set( $item.desc ), $item.desc|ne( '' ) )}<p class="input_desc">{$item.desc}</p>{/if}
+                                {include uri='design:content/datatype/fields.tpl' 
+                                         fieldType='text'
+                                         autocompleteOff=true()
+                                         cssClass=concat("box xrow-form-", $item.type, cond( $item.class|ne(''), concat( ' ', $item.class ), ''))}
                             {/if}
                         {/case}
                     {/switch}
