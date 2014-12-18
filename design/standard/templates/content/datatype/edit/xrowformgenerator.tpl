@@ -117,7 +117,6 @@
                     'email', hash( 'name', 'Email input field', 'default', true(), 'required', true(), 'unique', true(), 'validation', true() ),
                     'text', hash( 'name', 'Text input field', 'default', true(), 'required', true() ),
                     'telephonenumber', hash( 'name', 'Telephone number input field', 'default', true(), 'required', true(), 'validation', true() ),
-                    'password', hash( 'name', 'Password input field', 'required', true(), 'default', true(), 'validation', true() ),
                     'number', hash( 'name', 'Number input field', 'default', true(), 'required', true(), 'validation', true(), 'min', true(), 'max', true(), 'step', true() ),
                     'upload', hash( 'name', 'Upload input field', 'required', true() ),
                     'country', hash( 'name', 'Country select dropdown', 'required', true() ),
