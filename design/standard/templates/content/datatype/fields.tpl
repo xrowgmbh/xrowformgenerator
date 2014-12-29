@@ -65,43 +65,43 @@
         {set $cssClassDescription = concat($fieldType, '_desc')}
         {* SELECT ONE|SELECT MULTI *}
         {if is_set($underFieldType)}
-        {if $optionsSelectArray|contains( $underFieldType )}
-            <select id="{$fieldType}{$underFieldType}:{$id}:{$key}" name="{if is_set($overwriteNameValue)}{$overwriteNameValue}{else}XrowFormInput[{$id}][{$key}]{/if}"
-                                                                    {if $item.req} required class="onloadCheckFieldType{if is_set($cssClass)} {$cssClass}{/if}"
-                                                                        {if and(is_set($emptyText), $emptyText|ne(''))}data-emptytext="{$emptyText}"{/if}
-                                                                    {elseif is_set($cssClass)} class="{$cssClass}"{/if}
-                                                                    {if is_set($size)} size="{$size}"{/if}
-                                                                    {if is_set($multiple)}  multiple="multiple"{/if}>
-                {if and(is_set($labelOff), $labelOff)}
-                <option value="" class="optionDisabled">{$itemName}{if $item.req} *{/if}</option>
-                {elseif is_set($startWithEmptyValue)}
-                <option value="0"></option>
-                {/if}
-                {foreach $item.option_array as $opt_key => $opt_item}
-                <option value="{$opt_item.name|wash}"{if $opt_item.def} selected="selected"{/if} title="{$opt_item.name|wash}">{$opt_item.name|wash}</option>
-                {/foreach}
-            </select>
-        {* CHECKBOX|RADIO *}
-        {elseif $optionsCheckboxRadioArray|contains( $underFieldType )}
-            <ul class="options_{$underFieldType}">
-                {foreach $item.option_array as $opt_key => $opt_item}
-                    <li>
-                        <span class="radio_button">
-                           <input id="{$fieldType}{$underFieldType}:{$id}:{$key}:{$opt_key}" name="XrowFormInput[{$id}][{$key}]{if $fieldType|eq('checkbox')}[{$opt_key}]{/if}"
-                                                                                             type="{$underFieldType}"
-                                                                                             value="{$opt_item.name|wash}"
-                                                                                             {if $item.req} required{/if}
-                                                                                             {if is_set($autocompleteOff)} autocomplete="off"{/if}
-                                                                                             {if $opt_item.def}checked="checked" {/if}
-                                                                                             {if is_set($cssClass)} class="{$cssClass}"{/if} />
-                        </span>
-                        <span class="radio_label">
-                           <label class="black_label" for="{$fieldType}{$underFieldType}:{$id}:{$key}:{$opt_key}">{$opt_item.name|wash}</label>
-                        </span>
-                    </li>
-                {/foreach}
-            </ul>
-        {/if}
+            {if $optionsSelectArray|contains($underFieldType)}
+                <select id="{$fieldType}{$underFieldType}:{$id}:{$key}" name="{if is_set($overwriteNameValue)}{$overwriteNameValue}{else}XrowFormInput[{$id}][{$key}]{/if}"
+                                                                        {if $item.req} required class="onloadCheckFieldType{if is_set($cssClass)} {$cssClass}{/if}"
+                                                                            {if and(is_set($emptyText), $emptyText|ne(''))}data-emptytext="{$emptyText}"{/if}
+                                                                        {elseif is_set($cssClass)} class="{$cssClass}"{/if}
+                                                                        {if is_set($size)} size="{$size}"{/if}
+                                                                        {if is_set($multiple)}  multiple="multiple"{/if}>
+                    {if and(is_set($labelOff), $labelOff)}
+                    <option value="" class="optionDisabled">{$itemName}{if $item.req} *{/if}</option>
+                    {elseif is_set($startWithEmptyValue)}
+                    <option value="0"></option>
+                    {/if}
+                    {foreach $item.option_array as $opt_key => $opt_item}
+                    <option value="{$opt_item.name|wash}"{if $opt_item.def} selected="selected"{/if} title="{$opt_item.name|wash}">{$opt_item.name|wash}</option>
+                    {/foreach}
+                </select>
+            {* CHECKBOX|RADIO *}
+            {elseif $optionsCheckboxRadioArray|contains($underFieldType)}
+                <ul class="options_{$underFieldType}">
+                    {foreach $item.option_array as $opt_key => $opt_item}
+                        <li>
+                            <span class="radio_button">
+                               <input id="{$fieldType}{$underFieldType}:{$id}:{$key}:{$opt_key}" name="XrowFormInput[{$id}][{$key}]{if $fieldType|eq('checkbox')}[{$opt_key}]{/if}"
+                                                                                                 type="{$underFieldType}"
+                                                                                                 value="{$opt_item.name|wash}"
+                                                                                                 {if $item.req} required{/if}
+                                                                                                 {if is_set($autocompleteOff)} autocomplete="off"{/if}
+                                                                                                 {if $opt_item.def}checked="checked" {/if}
+                                                                                                 {if is_set($cssClass)} class="{$cssClass}"{/if} />
+                            </span>
+                            <span class="radio_label">
+                               <label class="black_label" for="{$fieldType}{$underFieldType}:{$id}:{$key}:{$opt_key}">{$opt_item.name|wash}</label>
+                            </span>
+                        </li>
+                    {/foreach}
+                </ul>
+            {/if}
         {/if}
     {* OPTIONS WITH IMAGES *}
     {elseif $fieldType|eq('imageoptions')}
@@ -191,11 +191,11 @@
                                               {if is_set($autocompleteOff)} autocomplete="off"{/if}
                                               {if $item.def} checked="checked"{/if}
                                                />
-        {if $itemName|ne('')} &nbsp;{$itemName}<abbr id="abbr{$fieldType}{$underFieldType}{$id}{$key}"{if $item.req} class="required"{/if} title="{if $item.req}{'Input required.'|i18n( 'kernel/classes/datatypes' )}{/if}"></abbr>{/if}
+        {if $itemName|ne('')} &nbsp;{$itemName}<abbr id="abbr{$fieldType}{$id}{$key}"{if $item.req} class="required"{/if} title="{if $item.req}{'Input required.'|i18n( 'kernel/classes/datatypes' )}{/if}"></abbr>{/if}
     {if or(is_set($labelOff)|not(), and(is_set($labelOff), $labelOff|not()))}</label>{/if}
     {if and(is_set($item.desc), $item.desc|ne(''))}
         <div class="form-checkbox-padding{if $itemName|eq('')} emptyname{/if}">
-            {$item.desc}{if or($itemName|eq(''), and(is_set($labelOff), $labelOff))}<abbr id="abbr{$fieldType}{$underFieldType}{$id}{$key}"{if $item.req} class="required"{/if} title="{if $item.req}{'Input required.'|i18n( 'kernel/classes/datatypes' )}{/if}"></abbr>{/if}
+            {$item.desc}{if or($itemName|eq(''), and(is_set($labelOff), $labelOff))}<abbr id="abbr{$fieldType}{$id}{$key}"{if $item.req} class="required"{/if} title="{if $item.req}{'Input required.'|i18n( 'kernel/classes/datatypes' )}{/if}"></abbr>{/if}
         </div>
     {/if}
 {/if}
