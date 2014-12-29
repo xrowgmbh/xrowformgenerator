@@ -529,7 +529,6 @@ class xrowFormGeneratorType extends eZDataType
         {
             $inputAllKeyArray = self::strip( $http->postVariable( $httpKey ) );
             $inputKeyArray = $inputAllKeyArray[$id];
-
             if ( count( $inputKeyArray ) > 0 )
             {
                 $httpInput = true;
@@ -572,7 +571,7 @@ class xrowFormGeneratorType extends eZDataType
                 }
             }
         }
-
+        #die(var_dump($inputCRMFieldsArray));
         if ( strlen( $raw_content ) > 0 )
         {
             $content = unserialize( $raw_content );

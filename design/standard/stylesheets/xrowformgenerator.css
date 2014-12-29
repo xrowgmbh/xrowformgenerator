@@ -2,7 +2,7 @@
 
 abbr.required:after { content: " *"; color: black; }
 abbr.valid:after { content: " ✓"; color: green; }
-abbr.invalid:after { content: " !"; color: red; }
+.xrow-form-error abbr:after, abbr.invalid:after { content: " !"; color: red; }
 li.xrow-form-passwort {
     clear: both;
     overflow: hidden;
@@ -13,21 +13,14 @@ li.xrow-form-passwort {
     margin: -2% 0 0 29%;
     position: absolute;
 }
-.xrowform-password-title { font-size: 10px }
-.xrowform-password-info { font-size: 9px }
-.password-validation-empty { width: 100%; height: 10px; display: block; background: gray }
-.password-validation-strong { width: 100%; height: 10px; display: block; background: green }
-.password-validation-medium { width: 100%; height: 10px; display: block; background: yellow }
-.password-validation-red { width: 100%; height: 10px; display: block; background: red }
 
-
-.xrow-form-error,
+.content-view-full .xrow-form-error,
 .content-view-full .attribute-header,
 .content-view-full .attribute-long{
     padding:0 5px;
 }
 
-.xrow-form-error input, .xrow-form-error textarea, .xrow-form-error select
+.content-view-full .xrow-form-error input, .content-view-full .xrow-form-error textarea, .content-view-full .xrow-form-error select
 {
     border: 2px solid #e1071d;
 }

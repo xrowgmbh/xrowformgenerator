@@ -13,7 +13,7 @@ jQuery(document).ready(function($){
                      });
                 }
                 else {
-                    if(input.hasAttribute('data-emptytext'))
+                    if(input.hasAttribute('data-emptytext') && $.trim($(this).val()) == '')
                         input.setCustomValidity($(this).data('emptytext'));
                     $(this).keyup(function() {
                         checkFieldType(this);
@@ -29,11 +29,18 @@ jQuery(document).ready(function($){
             }
         });
     }
-    if($('.onloadPasswordChanged').length) {
-        $('.onloadPasswordChanged').keyup(function() {
-            passwordChanged(this);
-        });
-    }
+    // required for safari
+    $('.html5validation').submit(function (e) {
+        if (!this.checkValidity()) {
+            e.preventDefault();
+            $('[required]').each(function() {
+                if($(this).val() == '')
+                    $(this).parent().addClass('xrow-form-error');
+            });
+        } else {
+            $(this).children().removeClass('xrow-form-error');
+        }
+    });
 });
 
 function checkFieldType(formField) {
@@ -51,19 +58,22 @@ function checkFieldType(formField) {
             if(abbr.length)
                 abbr.removeClass('valid').removeClass('required').addClass('invalid');
             else
-                field.removeClass('valid').addClass('invalid');
+                field.parent().addClass('xrow-form-error');
         }
         else {
             formField.setCustomValidity('');
             if(abbr.length)
                 abbr.removeClass('invalid').removeClass('required').addClass('valid');
             else
-                field.removeClass('invalid').addClass('valid');
+                field.parent().removeClass('xrow-form-error');
         }
     }
     else if(formField.hasAttribute('required') && formField.hasAttribute('data-emptytext')) {
         formField.setCustomValidity(field.data('emptytext'));
+        window.console.log(field.parent());
         if(abbr.length)
             abbr.removeClass('invalid').removeClass('valid').addClass('required');
+        else
+            field.parent().addClass('xrow-form-error');
     }
 }

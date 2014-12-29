@@ -30,7 +30,6 @@ if ( $Module->isCurrentAction( 'CollectInformation' ) )
         return $Module->handleError( eZError::KERNEL_ACCESS_DENIED, 'kernel' );
     $version = $object->currentVersion();
     $contentObjectAttributes = $version->contentObjectAttributes();
-
     $user = eZUser::currentUser();
     $isLoggedIn = $user->attribute( 'is_logged_in' );
     $allowAnonymous = true;
@@ -76,7 +75,6 @@ if ( $Module->isCurrentAction( 'CollectInformation' ) )
         $section = eZSection::fetch( $object->attribute( 'section_id' ) );
         if ( $section )
             $navigationPartIdentifier = $section->attribute( 'navigation_part_identifier' );
-
         $res = eZTemplateDesignResource::instance();
         $res->setKeys( array( array( 'object', $object->attribute( 'id' ) ),
                               array( 'node', $node->attribute( 'node_id' ) ),
@@ -140,7 +138,6 @@ if ( $Module->isCurrentAction( 'CollectInformation' ) )
     }
     else
         $collection->setAttribute( 'modified', time() );
-
 
     // Check every attribute if it's supposed to collect information
     $attributeDataBaseName = 'ContentObjectAttribute';
@@ -223,121 +220,35 @@ if ( $Module->isCurrentAction( 'CollectInformation' ) )
     {
         $collection->sync();
 
-        $sendEmail = eZInformationCollection::sendOutEmail( $object );
         $redirectToNodeID = false;
 
-        if ( $sendEmail )
-        {
-            $tpl = eZTemplate::factory();
+        $tpl = eZTemplate::factory();
 
-            $attributeHideList = eZInformationCollection::attributeHideList();
-            $informationCollectionTemplate = eZInformationCollection::templateForObject( $object );
+        $attributeHideList = eZInformationCollection::attributeHideList();
+        $informationCollectionTemplate = eZInformationCollection::templateForObject( $object );
 
-            $node = eZContentObjectTreeNode::fetch( $NodeID );
+        $node = eZContentObjectTreeNode::fetch( $NodeID );
 
-            $section = eZSection::fetch( $object->attribute( 'section_id' ) );
-            if ( $section )
-                $navigationPartIdentifier = $section->attribute( 'navigation_part_identifier' );
+        $section = eZSection::fetch( $object->attribute( 'section_id' ) );
+        if ( $section )
+            $navigationPartIdentifier = $section->attribute( 'navigation_part_identifier' );
 
-            $res = eZTemplateDesignResource::instance();
-            $res->setKeys( array( array( 'object', $object->attribute( 'id' ) ),
-                                  array( 'node', $node->attribute( 'node_id' ) ),
-                                  array( 'parent_node', $node->attribute( 'parent_node_id' ) ),
-                                  array( 'class', $object->attribute( 'contentclass_id' ) ),
-                                  array( 'class_identifier', $object->attribute( 'class_identifier' ) ),
-                                  array( 'viewmode', $ViewMode ),
-                                  array( 'remote_id', $object->attribute( 'remote_id' ) ),
-                                  array( 'node_remote_id', $node->attribute( 'remote_id' ) ),
-                                  array( 'navigation_part_identifier', $navigationPartIdentifier ),
-                                  array( 'depth', $node->attribute( 'depth' ) ),
-                                  array( 'url_alias', $node->attribute( 'url_alias' ) ),
-                                  array( 'class_group', $object->attribute( 'match_ingroup_id_list' ) ),
-                                  array( 'state', $object->attribute( 'state_id_array' ) ),
-                                  array( 'state_identifier', $object->attribute( 'state_identifier_array' ) )
-                                  ) );
-
-            $tpl->setVariable( 'node_id', $node->attribute( 'node_id' ) );
-            $tpl->setVariable( 'collection_id', $collection->attribute( 'id' ) );
-            $tpl->setVariable( 'collection', $collection );
-            $tpl->setVariable( 'node', $node );
-            $tpl->setVariable( 'viewmode', $ViewMode );
-            $tpl->setVariable( 'view_parameters', $userParameters );
-            $tpl->setVariable( 'object', $object );
-            $tpl->setVariable( 'attribute_hide_list', $attributeHideList );
-
-            $tpl->setVariable( 'collection', $collection );
-            $tpl->setVariable( 'object', $object );
-            $templateResult = $tpl->fetch( 'design:content/collectedinfomail/' . $informationCollectionTemplate . '.tpl' );
-
-            $subject = $tpl->variable( 'subject' );
-            $receiver = $tpl->variable( 'email_receiver' );
-            $ccReceivers = $tpl->variable( 'email_cc_receivers' );
-            $bccReceivers = $tpl->variable( 'email_bcc_receivers' );
-            $sender = $tpl->variable( 'email_sender' );
-            $replyTo = $tpl->variable( 'email_reply_to' );
-            $redirectToNodeID = $tpl->variable( 'redirect_to_node_id' );
-
-            $ini = eZINI::instance();
-            $mail = new eZMail();
-
-            if ( $tpl->hasVariable( 'content_type' ) )
-                $mail->setContentType( $tpl->variable( 'content_type' ) );
-
-            if ( !$mail->validate( $receiver ) )
-            {
-                $receiver = $ini->variable( "InformationCollectionSettings", "EmailReceiver" );
-                if ( !$receiver )
-                    $receiver = $ini->variable( "MailSettings", "AdminEmail" );
-            }
-            $mail->setReceiver( $receiver );
-
-            if ( !$mail->validate( $sender ) )
-            {
-                $sender = $ini->variable( "MailSettings", "EmailSender" );
-            }
-            $mail->setSender( $sender );
-
-            if ( !$mail->validate( $replyTo ) )
-            {
-                // If replyTo address is not set in the template, take it from the settings
-                $replyTo = $ini->variable( "MailSettings", "EmailReplyTo" );
-                if ( !$mail->validate( $replyTo ) )
-                {
-                    // If replyTo address is not set in the settings, use the sender address
-                    $replyTo = $sender;
-                }
-            }
-            $mail->setReplyTo( $replyTo );
-
-            // Handle CC recipients
-            if ( $ccReceivers )
-            {
-                if ( !is_array( $ccReceivers ) )
-                    $ccReceivers = array( $ccReceivers );
-                foreach ( $ccReceivers as $ccReceiver )
-                {
-                    if ( $mail->validate( $ccReceiver ) )
-                        $mail->addCc( $ccReceiver );
-                }
-            }
-
-            // Handle BCC recipients
-            if ( $bccReceivers )
-            {
-                if ( !is_array( $bccReceivers ) )
-                    $bccReceivers = array( $bccReceivers );
-
-                foreach ( $bccReceivers as $bccReceiver )
-                {
-                    if ( $mail->validate( $bccReceiver ) )
-                        $mail->addBcc( $bccReceiver );
-                }
-            }
-
-            $mail->setSubject( $subject );
-            $mail->setBody( $templateResult );
-            $mailResult = eZMailTransport::send( $mail );
-        }
+        $res = eZTemplateDesignResource::instance();
+        $res->setKeys( array( array( 'object', $object->attribute( 'id' ) ),
+                              array( 'node', $node->attribute( 'node_id' ) ),
+                              array( 'parent_node', $node->attribute( 'parent_node_id' ) ),
+                              array( 'class', $object->attribute( 'contentclass_id' ) ),
+                              array( 'class_identifier', $object->attribute( 'class_identifier' ) ),
+                              array( 'viewmode', $ViewMode ),
+                              array( 'remote_id', $object->attribute( 'remote_id' ) ),
+                              array( 'node_remote_id', $node->attribute( 'remote_id' ) ),
+                              array( 'navigation_part_identifier', $navigationPartIdentifier ),
+                              array( 'depth', $node->attribute( 'depth' ) ),
+                              array( 'url_alias', $node->attribute( 'url_alias' ) ),
+                              array( 'class_group', $object->attribute( 'match_ingroup_id_list' ) ),
+                              array( 'state', $object->attribute( 'state_id_array' ) ),
+                              array( 'state_identifier', $object->attribute( 'state_identifier_array' ) )
+                              ) );
 
         $icMap = array();
         if ( $http->hasSessionVariable( 'InformationCollectionMap' ) )
@@ -345,33 +256,25 @@ if ( $Module->isCurrentAction( 'CollectInformation' ) )
         $icMap[$object->attribute( 'id' )] = $collection->attribute( 'id' );
         $http->setSessionVariable( 'InformationCollectionMap', $icMap );
 
-        if ( is_numeric( $redirectToNodeID ) )
+        $display = eZInformationCollection::displayHandling( $object );
+        if ( $display == 'node' )
         {
-            $Module->redirectToView( 'view', array( 'full', $redirectToNodeID ) );
+            $Module->redirectToView( 'view', array( $ViewMode, $NodeID ) );
+        }
+        else if ( $display == 'redirect' )
+        {
+            $redirectURL = eZInformationCollection::redirectURL( $object );
+            $Module->redirectTo( $redirectURL );
         }
         else
         {
-            $display = eZInformationCollection::displayHandling( $object );
-            if ( $display == 'node' )
-            {
-                $Module->redirectToView( 'view', array( $ViewMode, $NodeID ) );
-            }
-            else if ( $display == 'redirect' )
-            {
-                $redirectURL = eZInformationCollection::redirectURL( $object );
-                $Module->redirectTo( $redirectURL );
-            }
-            else
-            {
-                $Module->redirectToView( 'collectedinfo', array( $NodeID ) );
-            }
+            $Module->redirectToView( 'collectedinfo', array( $NodeID, $ViewMode ) );
         }
     }
     else
     {
         $collection->remove();
-
-        return $Module->run( 'view', array( $ViewMode, $NodeID ),
+        return $Module->run( 'viewform', array( $ViewMode, $NodeID ),
                              array( 'ViewCache' => false,
                                     'AttributeValidation' => array( 'processed' => true,
                                                                     'attributes' => $unvalidatedAttributes ),

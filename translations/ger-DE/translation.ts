@@ -66,7 +66,7 @@
     </message>
     <message>
         <source>You need to select this checkbox.</source>
-        <translation>Sie müssen dieses Kontrollkästchen auswählen.</translation>
+        <translation>Sie müssen das Kontrollkästchen auswählen.</translation>
     </message>
     <message>
         <source>Please enter a valid number.</source>
@@ -391,7 +391,7 @@
     </message>
     <message>
         <source>Form sent successfully</source>
-        <translation>Formular erfolgreich versendet</translation>
+        <translation>Das Formular wurde erfolgreich versendet</translation>
     </message>
     <message>
         <source>Thank You! You have successfully submitted the form.</source>

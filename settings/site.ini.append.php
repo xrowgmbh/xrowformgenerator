@@ -7,8 +7,10 @@ TranslationExtensions[]=xrowformgenerator
 ExtensionAutoloadPath[]=xrowformgenerator
 
 [RoleSettings]
-PolicyOmitList[]=xrowform/action
+PolicyOmitList[]=xrowform/actionform
 PolicyOmitList[]=xrowform/collectinformation
+PolicyOmitList[]=xrowform/collectedinfo
+PolicyOmitList[]=xrowform/viewform
 
 #[Event]
 #Listeners[]=formgenerator/export@xrowFormCRMPlugin::sendExportData

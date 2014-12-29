@@ -5,9 +5,9 @@ $Module = array( 'name' => 'xrow Form',
 
 $ViewList = array();
 
-$ViewList['action'] = array('script' => 'action.php',
-                            'functions' => array('read'),
-                            'params' => array() );
+$ViewList['actionform'] = array('script' => 'actionform.php',
+                                'functions' => array('read'),
+                                'params' => array() );
 $ViewList['collectinformation'] = array('script' => 'collectinformation.php',
                                         'functions' => array('read'),
                                         'default_navigation_part' => 'ezcontentnavigationpart',
@@ -16,15 +16,16 @@ $ViewList['collectinformation'] = array('script' => 'collectinformation.php',
                                                                                                         'ContentNodeID' => 'ContentNodeID',
                                                                                                         'ViewMode' => 'ViewMode')),
                                         'params' => array());
-$ViewList['view'] = array('script' => 'view.php',
-                          'functions' => array('read'),
-                          'default_navigation_part' => 'ezcontentnavigationpart',
-                          'params' => array('ViewMode', 'NodeID'),
-                          'unordered_params' => array('language' => 'Language',
-                                                      'offset' => 'Offset',
-                                                      'year' => 'Year',
-                                                      'month' => 'Month',
-                                                      'day' => 'Day'));
+$ViewList['collectedinfo'] = array('script' => 'collectedinfo.php',
+                                   'functions' => array('read'),
+                                   'default_navigation_part' => 'ezcontentnavigationpart',
+                                   'params' => array('NodeID', 'ViewMode'));
+$ViewList['viewform'] = array('script' => 'viewform.php',
+                              'functions' => array('read'),
+                              'default_navigation_part' => 'ezcontentnavigationpart',
+                              'params' => array('ViewMode', 'NodeID'),
+                              'unordered_params' => array('language' => 'Language',
+                                                          'offset' => 'Offset'));
 $ViewList['export'] = array('script' => 'export.php',
                             'functions' => array('export'),
                             'params' => array('NodeID', 'Offset', 'Limit'));

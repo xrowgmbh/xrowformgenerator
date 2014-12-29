@@ -41,7 +41,7 @@
                             {switch match=$item.option_type}
                                 {case match="checkbox"}
                                     {def $output = ''}
-                                    {foreach $item.option_array as $opt_key => $opt_item}{if $opt_item.def}{if $output|ne( '' ){set $output = concat( ', ', $output )}{/if}{set $output = concat( $output, $opt_item.name )}{/if}{/foreach}
+                                    {foreach $item.option_array as $opt_key => $opt_item}{if $opt_item.def}{if $output|ne( '' )}{set $output = concat( ', ', $output )}{/if}{set $output = concat( $output, $opt_item.name )}{/if}{/foreach}
                                     {$output}
                                     {undef $output}
                                 {/case}
@@ -57,7 +57,7 @@
                                 {/case}
                                 {case match="select-all"}
                                     {def $output = ''}
-                                    {foreach $item.option_array as $opt_key => $opt_item}{if $opt_item.def}{if $output|ne( '' ){set $output = concat( ', ', $output )}{/if}{set $output = concat( $output, $opt_item.name )}{/if}{/foreach}
+                                    {foreach $item.option_array as $opt_key => $opt_item}{if $opt_item.def}{if $output|ne( '' )}{set $output = concat( ', ', $output )}{/if}{set $output = concat( $output, $opt_item.name )}{/if}{/foreach}
                                     {$output}
                                     {undef $output}
                                 {/case}
