@@ -104,7 +104,7 @@
                                      cssClass=concat("box xrow-form-", $item.type, cond( $item.class|ne(''), concat( ' ', $item.class ), ''))}
                         {/case}
                         {case match="hidden"}
-                            <input type="{$item.type}" class="formhidden" name="XrowFormInput[{$id}][{$key}]" />
+                            <input type="{$item.type}" class="formhidden" name="XrowFormInput[{$id}][{$key}]" value="{$item.def|wash}" />
                         {/case}
                         {case match="spacer"}
                             <div class="xrow-form-spacer"></div>
