@@ -391,7 +391,7 @@
     </message>
     <message>
         <source>Form sent successfully</source>
-        <translation>Das Formular wurde erfolgreich versendet</translation>
+        <translation>Das Formular wurde erfolgreich versendet.</translation>
     </message>
     <message>
         <source>Thank You! You have successfully submitted the form.</source>
