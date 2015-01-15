@@ -28,7 +28,7 @@
 {case match="checkbox"}
 
 
-{def $output = ''}{foreach $item.option_array as $opt_key => $opt_item}{if $opt_item.def}{if $output|ne( '' ){set $output = concat( ', ', $output )}{/if}{set $output = concat( $output, $opt_item.name )}{/if}{/foreach}
+{def $output = ''}{foreach $item.option_array as $opt_key => $opt_item}{if $opt_item.def}{if $output|ne( '' )}{set $output = concat( ', ', $output )}{/if}{set $output = concat( $output, $opt_item.name )}{/if}{/foreach}
 {if $output|ne('')}{$output}{/if}{undef $output}
 {/case}
 {case match="radio"}
@@ -44,7 +44,7 @@
 {case match="select-all"}
 
 
-{def $output = ''}{foreach $item.option_array as $opt_key => $opt_item}{if $opt_item.def}{if $output|ne( '' ){set $output = concat( ', ', $output )}{/if}{set $output = concat( $output, $opt_item.name )}{/if}{/foreach}
+{def $output = ''}{foreach $item.option_array as $opt_key => $opt_item}{if $opt_item.def}{if $output|ne( '' )}{set $output = concat( ', ', $output )}{/if}{set $output = concat( $output, $opt_item.name )}{/if}{/foreach}
 {if $output|ne('')}{$output}{/if}{undef $output}
 {/case}
 {/switch}
@@ -54,7 +54,7 @@
 {case match="checkbox"}
 
 
-{def $output = ''}{foreach $item.option_array as $opt_key => $opt_item}{if $opt_item.def}{if $output|ne( '' ){set $output = concat( ', ', $output )}{/if}{set $output = concat( $output, $opt_item.name )}{/if}{/foreach}
+{def $output = ''}{foreach $item.option_array as $opt_key => $opt_item}{if $opt_item.def}{if $output|ne( '' )}{set $output = concat( ', ', $output )}{/if}{set $output = concat( $output, $opt_item.name )}{/if}{/foreach}
 {if $output|ne('')}{$output}{/if}{undef $output}
 {/case}
 {case match="radio"}

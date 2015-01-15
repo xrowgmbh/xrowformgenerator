@@ -628,12 +628,12 @@ class xrowFormGeneratorType extends eZDataType
                             if( isset( $inputCRMArray ) && isset( $inputCRMArray[$elKey] ) )
                             {
                                 $inputContentCollection = $inputCRMArray[$elKey];
-                                $content = $pluginHandler->setAttributeDataForCollectCRMField( $content, $key, $item, $inputContentCollection, $contentobject_id, $trans );
+                                $content = $pluginHandler->setAttributeDataForCollectCRMField( $content, $key, $item, $inputContentCollection, $contentobject_id, $trans, $inputCRMFieldsArray[$elKey] );
                             }
                             elseif( isset( $inputCRMFieldsArray ) && isset( $inputCRMFieldsArray[$elKey] ) ) // if it is a checkbox
                             {
                                 $inputContentCollection = $inputCRMFieldsArray[$elKey];
-                                $content = $pluginHandler->setAttributeDataForCollectCRMField( $content, $key, $item, $inputContentCollection, $contentobject_id, $trans );
+                                $content = $pluginHandler->setAttributeDataForCollectCRMField( $content, $key, $item, $inputContentCollection, $contentobject_id, $trans, $inputCRMFieldsArray[$elKey] );
                             }
                         }
                         if ( $item['type'] == $inputTypeArray[$elKey] )
@@ -962,6 +962,10 @@ class xrowFormGeneratorType extends eZDataType
             }
         }
         $GLOBALS['XrowFormCache'][$id][$cacheKey] = $content;
+        #echo "<pre>";
+        #var_dump($content);
+        #echo "</pre>";
+        #die();
         return $content;
     }
 
