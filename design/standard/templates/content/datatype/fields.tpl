@@ -39,8 +39,8 @@
        $fieldType|eq('upload'), $fieldType|eq('country'))}
     {* LABEL ON/OFF *}
     {if or(is_set($labelOff)|not(), and(is_set($labelOff), $labelOff|not()))}
-        <label for="{$fieldType}:{$id}:{$key}"{if $item_tmp_error} class="xrow-form-label-error"{/if}>
-            {$itemName}<abbr id="abbr{$fieldType}{$id}{$key}"{if $item.req} class="required"{/if} title="{if $item.req}{'Input required.'|i18n( 'kernel/classes/datatypes' )}{/if}"></abbr>
+        <label for="{$fieldType}:{if is_set($underFieldType)}{$underFieldType}:{/if}{$id}:{$key}"{if $item_tmp_error} class="xrow-form-label-error"{/if}>
+            {$itemName}<abbr id="abbr{$fieldType}{if is_set($underFieldType)}{$underFieldType}{/if}{$id}{$key}"{if $item.req} class="required"{/if} title="{if $item.req}{'Input required.'|i18n( 'kernel/classes/datatypes' )}{/if}"></abbr>
         </label>
     {/if}
     {* INPUT TEXT|NUMBER|EMAIL|TELEPHONENUMBER *}

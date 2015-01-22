@@ -26,6 +26,8 @@ jQuery(document).ready(function($){
                 $(this).change(function() {
                     checkFieldType(this);
                 });
+                if(input.hasAttribute('required') && $(this).val() != 0)
+                    checkFieldType(this);
             }
         });
     }
@@ -52,7 +54,7 @@ function checkFieldType(formField) {
         //window.console.log(formField.validity);
         if((field.is("input") && field.attr("type") != 'checkbox' && field.attr("type") != 'radio' && formField.validity.patternMismatch) ||
            (field.is("input") && (field.attr("type") == 'checkbox' || field.attr("type") == 'radio') && formField.validity.valueMissing) || 
-           (field.is("select") && formField.validity.valueMissing)) {
+           (field.is("select") && (formField.validity.valueMissing || $.trim(field.val()) == 0))) {
             if(formField.hasAttribute('data-invalidtext'))
                 formField.setCustomValidity(field.data('invalidtext'));
             if(abbr.length)
