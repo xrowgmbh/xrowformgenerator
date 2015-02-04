@@ -78,7 +78,15 @@ $res->setKeys( array( array( 'object', $object->attribute( 'id' ) ),
                       ) );
 
 $Result = array();
-$Result['content'] = $tpl->fetch( 'design:content/collectedinfo/' . $viewMode . '/' . $informationCollectionTemplate . '.tpl' );
+if( $viewMode != 'full' )
+{
+    $templatePath = 'design:content/collectedinfo/' . $viewMode . '/' . $informationCollectionTemplate . '.tpl';
+}
+else
+{
+    $templatePath = 'design:content/collectedinfo/' . $informationCollectionTemplate . '.tpl';
+}
+$Result['content'] = $tpl->fetch( $templatePath );
 $Result['section_id'] = $object->attribute( 'section_id' );
 $Result['node_id'] = $node->attribute( 'node_id' );
 $Result['view_parameters'] = $userParameters;
@@ -112,4 +120,7 @@ $titlePath[] = array( 'text' => $title,
 
 $Result['path'] = $path;
 $Result['title_path'] = $titlePath;
-$Result['pagelayout'] = 'design:' . $viewMode . '/pagelayout.tpl';
+if( $viewMode != 'full' )
+{
+    $Result['pagelayout'] = 'design:' . $viewMode . '/pagelayout.tpl';
+}
