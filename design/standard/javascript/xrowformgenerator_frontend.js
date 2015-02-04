@@ -72,7 +72,6 @@ function checkFieldType(formField) {
     }
     else if(formField.hasAttribute('required') && formField.hasAttribute('data-emptytext')) {
         formField.setCustomValidity(field.data('emptytext'));
-        window.console.log(field.parent());
         if(abbr.length)
             abbr.removeClass('invalid').removeClass('valid').addClass('required');
         else
