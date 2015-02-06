@@ -21,7 +21,7 @@
                 {/if}
             </div>
         {/if}
-        <form method="post" enctype="multipart/form-data" action={"content/action"|ezurl}>
+        <form method="post" enctype="multipart/form-data" action={"xrowform/actionform"|ezurl}>
             <ol class="xrow-form xrow-form-{$attribute.object.class_identifier} xrow-form-{$id}">
             {foreach $content.form_elements as $key => $item}
                 <li class="xrow-form-element xrow-form-{$item.type} xrow-form-element-{$key}{if $item.error} xrow-form-error{/if}{cond( $item.class|ne(''), concat( ' ', $item.class ), '')}">

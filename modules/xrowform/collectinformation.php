@@ -205,6 +205,7 @@ if ( $Module->isCurrentAction( 'CollectInformation' ) )
             {
                 if ( $canCollect )
                 {
+                    $collectionAttribute->DataInt = 1;
                     $collectionAttribute->store();
                 }
             }

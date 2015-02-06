@@ -29,6 +29,8 @@ $ViewList['viewform'] = array('script' => 'viewform.php',
 $ViewList['export'] = array('script' => 'export.php',
                             'functions' => array('export'),
                             'params' => array('NodeID', 'Offset', 'Limit'));
+$ViewList['optin'] = array('script' => 'optin.php',
+                           'params' => array() );
 
 $ClassID = array(
         'name'=> 'Class',

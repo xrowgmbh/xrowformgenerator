@@ -23,6 +23,10 @@
     <input type="checkbox" name="XrowFormAnzeige{$id}" value="1"{if and( is_set( $content.show_anzeige ), $content.show_anzeige )} checked="checked"{/if} /> {"Display data after submit"|i18n( 'xrowformgenerator/edit' )}
 </label>
 
+<label>
+    <input type="checkbox" name="XrowFormOptin{$id}" value="1"{if and( is_set( $content.optin ), $content.optin )} checked="checked"{/if} /> {"Double Opt-in"|i18n( 'xrowformgenerator/edit' )}
+</label>
+
 <div class="block ezcca-edit-datatype-ezstring ezcca-edit-receiver">
     <label>{"Receiver (separate multiple emails with a semicolon)"|i18n( 'xrowformgenerator/mail' )}</label>
     <input type="text" class="box" name="XrowFormReceiver{$id}" value="{$content.receiver}" />

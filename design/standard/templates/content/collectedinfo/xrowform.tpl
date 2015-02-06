@@ -4,23 +4,36 @@
 {set-block scope=global variable=title}{'Form %formname'|i18n( 'design/ezwebin/collectedinfo/form', , hash( '%formname', $node.name|wash() ) )}{/set-block}
 
 <div class="thankyou_page">
-
-<div class="attribute-header">
-    <h1>{'Form sent successfully'|i18n( 'xrowformgenerator/mail' )}</h1>
-</div>
-
-{if $node.data_map.thankyou_page.has_content}
-   {attribute_view_gui attribute=$node.data_map.thankyou_page}
+{if $node.data_map.form.content.optin}
+    {if $active|eq("0")}
+        <div class="attribute-header">
+            <h1>{'Form sent successfully'|i18n( 'xrowformgenerator/mail' )}</h1>
+        </div>
+        {if $node.data_map.thankyou_page.has_content}
+            {attribute_view_gui attribute=$node.data_map.thankyou_page}
+        {else}
+            <p>{'Thank You! You have successfully submitted the form.'|i18n( 'xrowformgenerator/mail' )}</p>
+        {/if}
+    {else}
+        {if $error}
+            {if $error_existing_data}
+                <p>{'You have already submitted this form. The data you entered was:'|i18n('design/ezwebin/collectedinfo/form')}</p>
+            {/if}
+        {else}
+            <div class="attribute-header">
+                <h1>{'We have received your data and have send you an email for validation. Please follow the intructions in the email and click the link.'|i18n('xrowformgenerator/mail')}</h1>
+            </div>
+        {/if}
+    {/if}
 {else}
-    <p>{'Thank You! You have successfully submitted the form.'|i18n( 'xrowformgenerator/mail' )}</p>
-{/if}
-
-{if $error}
-
-{if $error_existing_data}
-<p>{'You have already submitted this form. The data you entered was:'|i18n('design/ezwebin/collectedinfo/form')}</p>
-{/if}
-
+    <div class="attribute-header">
+        <h1>{'Form sent successfully'|i18n( 'xrowformgenerator/mail' )}</h1>
+    </div>
+    {if $node.data_map.thankyou_page.has_content}
+        {attribute_view_gui attribute=$node.data_map.thankyou_page}
+    {else}
+        <p>{'Thank You! You have successfully submitted the form.'|i18n( 'xrowformgenerator/mail' )}</p>
+    {/if}
 {/if}
 
 {if $node.data_map.form.content.show_anzeige}
