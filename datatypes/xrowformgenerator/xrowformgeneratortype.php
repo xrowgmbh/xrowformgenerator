@@ -702,7 +702,8 @@ class xrowFormGeneratorType extends eZDataType
                                             $content['has_error'] = true;
                                             $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
                                         }
-                                        elseif( $item['val'] == true )
+                                        
+                                        if( $item['val'] == true )
                                         {
                                             if ( !self::validate( $data ) )
                                             {
@@ -710,14 +711,15 @@ class xrowFormGeneratorType extends eZDataType
                                                 $content['has_error'] = true;
                                                 $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Email address is not valid." );
                                             }
-                                            elseif( $item['unique'] == true )
+                                        }
+                                        
+                                        if( $item['unique'] == true )
+                                        {
+                                            if ( !self::email_unique( $data, $contentobject_id ) )
                                             {
-                                                if ( !self::email_unique( $data, $contentobject_id ) )
-                                                {
-                                                    $content['form_elements'][$key]['error'] = true;
-                                                    $content['has_error'] = true;
-                                                    $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Your email was already submitted to us. You can't use the form twice." );
-                                                }
+                                                $content['form_elements'][$key]['error'] = true;
+                                                $content['has_error'] = true;
+                                                $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Your email was already submitted to us. You can't use the form twice." );
                                             }
                                         }
                                     }
@@ -729,7 +731,8 @@ class xrowFormGeneratorType extends eZDataType
                                             $content['has_error'] = true;
                                             $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Email address is not valid." );
                                         }
-                                        elseif( $item['unique'] == true ) 
+                                        
+                                        if( $item['unique'] == true ) 
                                         {
                                             if ( !self::email_unique( $data, $contentobject_id ) )
                                             {
@@ -1431,12 +1434,11 @@ class xrowFormGeneratorType extends eZDataType
         $db = eZDB::instance();
 
         $sql = "
-           SELECT ezinfocollection_attribute.data_text, count( ezinfocollection_attribute.id ) as count 
+           SELECT ezinfocollection_attribute.data_text
            FROM 
               ezinfocollection_attribute
            WHERE 
-              ezinfocollection_attribute.data_text LIKE '%" . $address . "%'
-           AND contentobject_id = " . $contentobject_id;
+              contentobject_id = '$contentobject_id'";
 
         // executes query
         $resArray = $db->arrayQuery( $sql );
@@ -1444,14 +1446,26 @@ class xrowFormGeneratorType extends eZDataType
         {
             foreach( $resArray as $resItem )
             {
-                $resItemArray = unserialize( $resItem["data_text"] );
+                if(! unserialize($resItem["data_text"]))
+                {
+                    $resItemArray = unserialize(self::decryptData($resItem["data_text"]));
+                }else{
+                    $resItemArray = unserialize( $resItem["data_text"] );
+                }
+               
                 if( is_array( $resItemArray ) && count( $resItemArray ) > 0 )
                 {
-                    foreach( $resItemArray as $resItemArrayItem )
+                    foreach( $resItemArray as $resItemArrayItems )
                     {
-                        if( $resItemArrayItem == $address )
-                        { 
-                            return false;
+                        if(is_array($resItemArrayItems))
+                        {
+                            foreach($resItemArrayItems as $resItemArrayItem)
+                            {
+                                if( in_array( $address,$resItemArrayItem ))
+                                {
+                                    return false;
+                                }
+                            }
                         }
                     }
                 }
