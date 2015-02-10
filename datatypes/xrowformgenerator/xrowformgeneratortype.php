@@ -702,8 +702,7 @@ class xrowFormGeneratorType extends eZDataType
                                             $content['has_error'] = true;
                                             $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
                                         }
-                                        
-                                        if( $item['val'] == true )
+                                        elseif( $item['val'] == true )
                                         {
                                             if ( !self::validate( $data ) )
                                             {
@@ -712,8 +711,7 @@ class xrowFormGeneratorType extends eZDataType
                                                 $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Email address is not valid." );
                                             }
                                         }
-                                        
-                                        if( $item['unique'] == true )
+                                        elseif( $item['unique'] == true )
                                         {
                                             if ( !self::email_unique( $data, $contentobject_id ) )
                                             {
@@ -731,8 +729,7 @@ class xrowFormGeneratorType extends eZDataType
                                             $content['has_error'] = true;
                                             $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Email address is not valid." );
                                         }
-                                        
-                                        if( $item['unique'] == true ) 
+                                        elseif( $item['unique'] == true ) 
                                         {
                                             if ( !self::email_unique( $data, $contentobject_id ) )
                                             {
