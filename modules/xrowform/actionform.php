@@ -63,4 +63,7 @@ if(isset($result))
         $Result[$key] = $item;
     }
 }
-$Result['pagelayout'] = 'design:' . $viewMode . '/pagelayout.tpl';
+if( $viewMode != 'full' )
+{
+    $Result['pagelayout'] = 'design:' . $viewMode . '/pagelayout.tpl';
+}
