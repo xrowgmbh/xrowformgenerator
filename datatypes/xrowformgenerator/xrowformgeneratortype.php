@@ -710,6 +710,15 @@ class xrowFormGeneratorType extends eZDataType
                                                 $content['has_error'] = true;
                                                 $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Email address is not valid." );
                                             }
+                                            elseif( $item['unique'] == true )
+                                            {
+                                                if ( !self::email_unique( $data, $contentobject_id ) )
+                                                {
+                                                    $content['form_elements'][$key]['error'] = true;
+                                                    $content['has_error'] = true;
+                                                    $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Your email was already submitted to us. You can't use the form twice." );
+                                                }
+                                            }
                                         }
                                         elseif( $item['unique'] == true )
                                         {
