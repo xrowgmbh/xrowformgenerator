@@ -358,6 +358,10 @@
         <source>Select a campaign</source>
         <translation>Bitte wählen Sie ein Kampagne</translation>
     </message>
+    <message>
+        <source>Double Opt-in</source>
+        <translation>Double Opt-in</translation>
+    </message>
 </context>
 <context>
     <name>xrowformgenerator/mail</name>
@@ -404,6 +408,18 @@
     <message>
         <source>Your data</source>
         <translation>Ihre Daten</translation>
+    </message>
+    <message>
+        <source>Validate your email address</source>
+        <translation>Validieren Sie ihre E-Mail-Adresse</translation>
+    </message>
+    <message>
+        <source>We have received your data. To successfully complete the request and to confirm your email address, please click the following link.</source>
+        <translation>Wir haben Ihre Daten erhalten. Um die Anfrage erfolgreich abzuschließen und Ihre E-Mail-Adresse zu bestätigen, klicken Sie bitte den folgenden Link.</translation>
+    </message>
+    <message>
+        <source>We have received your data and have send you an email for validation. Please follow the intructions in the email and click the link.</source>
+        <translation>Wir haben Ihre Daten erhalten und haben Ihnen eine E-Mail geschickt. Bitte folgen Sie den Anweisungen und klicken Sie den Link der E-Mail.</translation>
     </message>
 </context>
 </TS>

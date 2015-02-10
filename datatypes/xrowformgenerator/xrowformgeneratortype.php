@@ -78,6 +78,7 @@ class xrowFormGeneratorType extends eZDataType
         $id = $attribute->attribute( "id" );
         $data_array['use_captcha'] = false;
         $data_array['show_anzeige'] = false;
+        $data_array['optin'] = false;
         $data_array['button_text'] = "";
         $tplKey = "XrowFormElementArray" . $id;
         if ( $http->hasPostVariable( $tplKey ) )
@@ -91,6 +92,7 @@ class xrowFormGeneratorType extends eZDataType
                                   'XrowFormSender' => 'sender',
                                   'XrowFormButton' => 'button_text',
                                   'XrowFormAnzeige' => 'show_anzeige',
+                                  'XrowFormOptin' => 'optin',
                                   'XrowCampaignID' => 'campaign_id');
             foreach( $tplKeyArray as $tplKeyIndex => $tplKeyItem )
             {
@@ -294,7 +296,7 @@ class xrowFormGeneratorType extends eZDataType
             $amount = $this->fetchCollectionCountForObject( $collection->attribute( 'contentobject_id' ), $collection->attribute( 'id' ) );
             $content['no'] = $amount;
 
-            $dataText = serialize( $content );
+            $dataText = self::encryptData(serialize( $content ));
             $collectionAttribute->setAttribute( 'data_text', $dataText );
 
             // start an event
@@ -325,11 +327,27 @@ class xrowFormGeneratorType extends eZDataType
         $tpl->setVariable( 'object', $object );
 
         $tpl->setVariable( 'content', $content );
-        $tpl->setVariable( 'object', $object );
-        $templateResult = $tpl->fetch( 'design:xrowformgenerator/xrowformmail.tpl' );
 
-        $subject = $tpl->variable( 'subject' );
-        $receiverString = $tpl->variable( 'email_receiver_xrow' );
+        if ( $content['optin'] )
+        {
+            $info_collect_id = $collectionAttribute->InformationCollectionID;
+            $hash= self::urlsafe_b64encode($info_collect_id);
+            $actual_link="http://$_SERVER[HTTP_HOST]/xrowform/optin/?id=".$hash;
+            $tpl->setVariable( 'actual_link', $actual_link );
+            $templateResult = $tpl->fetch( 'design:xrowformgenerator/xrowformmail_noaktive.tpl' );
+            $subject=$tpl->variable( 'subject' );
+            foreach ( $content['form_elements'] as $item )
+            {
+                if ( $item['type'] == 'email' and isset( $item['def'] ) and $item['def'] != '' )
+                {
+                    $receiverString = $item['def'];
+                }
+            }
+        }else{
+            $templateResult = $tpl->fetch( 'design:xrowformgenerator/xrowformmail.tpl' );
+            $subject = $tpl->variable( 'subject' );
+            $receiverString = $tpl->variable( 'email_receiver_xrow' );
+        }
         $receiverArray = array();
         if( $receiverString != '' )
         {
@@ -510,9 +528,16 @@ class xrowFormGeneratorType extends eZDataType
 
         $trans = eZCharTransform::instance();
 
-        $raw_content = $contentObjectAttribute->attribute( "data_text" );
+        if(! unserialize($contentObjectAttribute->attribute( "data_text" )))
+        {
+            $raw_content = self::decryptData($contentObjectAttribute->attribute( "data_text" ));
+        }else{
+            $raw_content = $contentObjectAttribute->attribute( "data_text" );
+        }
+        
         $content = array( 'form_elements' => array(),
                           'use_captcha' => false,
+                          'optin'=>false,
                           'show_amount' => false,
                           'show_anzeige'=> false,
                           'json' => json_encode( array() ),
@@ -874,7 +899,41 @@ class xrowFormGeneratorType extends eZDataType
 
                                         if ( $binaryFile instanceof eZHTTPFile )
                                         {
+                                            $contentObjectAttributeID = $contentObjectAttribute->attribute( "id" );
+                                            $version = $contentObjectAttribute->attribute( "version" );
+                                            
+                                            $mimeData = eZMimeType::findByFileContents( $binaryFile->attribute( "original_filename" ) );
+                                            $mime = $mimeData['name'];
+                                            
+                                            if ( $mime == '' )
+                                            {
+                                                $mime = $binaryFile->attribute( "mime_type" );
+                                            }
+                                            
+                                            $extension = eZFile::suffix( $binaryFile->attribute( "original_filename" ) );
+                                            $binaryFile->setMimeType( $mime );
+                                            if ( !$binaryFile->store( "original", $extension ) )
+                                            {
+                                                eZDebug::writeError( "Failed to store http-file: " . $binaryFile->attribute( "original_filename" ),
+                                                "EnhancedeZBinaryFileType" );
+                                                return false;
+                                            }
+                                            
+                                            $binary = eZBinaryFile::fetch( $contentObjectAttributeID, $version );
+                                            if ( $binary === null )
+                                                $binary = eZBinaryFile::create( $contentObjectAttributeID, $version );
+                                            
+                                            $orig_dir = $binaryFile->storageDir( "original" );
+                                            
+                                            $binary->setAttribute( "contentobject_attribute_id", $contentObjectAttributeID );
+                                            $binary->setAttribute( "version", $version );
+                                            $binary->setAttribute( "filename", basename( $binaryFile->attribute( "filename" ) ) );
+                                            $binary->setAttribute( "original_filename", $binaryFile->attribute( "original_filename" ) );
+                                            $binary->setAttribute( "mime_type", $mime );
+                                            $binary->store();
+                                            $filepath=$binary->filePath();
                                             $content['form_elements'][$key]['def'] = $fileKey;
+                                            $content['form_elements'][$key]['file_path'] = $filepath;
                                             $content['form_elements'][$key]['original_filename'] = $binaryFile->attribute( 'original_filename' );
                                         }
                                     }
@@ -1399,6 +1458,99 @@ class xrowFormGeneratorType extends eZDataType
             }
         }
         return true;
+    }
+    
+    static function encryptData( $planeTextData )
+    {
+        if ( $planeTextData != '' || is_object( $planeTextData ) || is_array( $planeTextData ) )
+        {
+            $xrowini = eZINI::instance( 'xrowformgenerator.ini' );
+            $key = $xrowini->variable( 'EncryptionSettings', 'Key' );
+            $algorithm = $xrowini->variable( 'EncryptionSettings', 'Algorithm' );
+            $mode = $xrowini->variable( 'EncryptionSettings', 'Mode' );
+            if ( is_object( $planeTextData ) || is_array( $planeTextData ) )
+            {
+                foreach ( $planeTextData as $planeTextItem )
+                {
+                    $planeText = $planeTextItem;
+                }
+            }
+            else
+            {
+                $planeText = $planeTextData;
+            }
+            $td = mcrypt_module_open( $algorithm, '', $mode, '' );
+            $iv = mcrypt_create_iv( mcrypt_enc_get_iv_size( $td ), MCRYPT_RAND );
+            $okey = substr( md5( $key . rand( 0, 9 ) ), 0, mcrypt_enc_get_key_size( $td ) );
+            mcrypt_generic_init( $td, $okey, $iv );
+            $encrypted = mcrypt_generic( $td, $planeText . chr( 194 ) );
+            $encryptedString = $encrypted . $iv;
+    
+            return base64_encode( $encryptedString );
+        }
+        break;
+    }
+    
+    static function decryptData( $encryptedStringData, $limit = 0 )
+    {
+        if ( $encryptedStringData != '' || is_object( $encryptedStringData ) || is_array( $encryptedStringData ) )
+        {
+            $xrowini = eZINI::instance( 'xrowformgenerator.ini' );
+            $key = $xrowini->variable( 'EncryptionSettings', 'Key' );
+            $algorithm = $xrowini->variable( 'EncryptionSettings', 'Algorithm' );
+            $mode = $xrowini->variable( 'EncryptionSettings', 'Mode' );
+    
+            if ( is_object( $encryptedStringData ) || is_array( $encryptedStringData ) )
+            {
+                foreach ( $encryptedStringData as $encryptedStringDataItem )
+                {
+                    $encryptedString = base64_decode( $encryptedStringDataItem );
+                }
+            }
+            else
+            {
+                $encryptedString = base64_decode( $encryptedStringData );
+            }
+    
+            $td = mcrypt_module_open( $algorithm, '', $mode, '' );
+            $iv = substr( $encryptedString, - 8 );
+            $encrypted = substr( $encryptedString, 0, - 8 );
+            for ( $i = 0; $i < 10; $i ++ )
+            {
+                $okey = substr( md5( $key . $i ), 0, mcrypt_enc_get_key_size( $td ) );
+                mcrypt_generic_init( $td, $okey, $iv );
+                $decrypted = trim( mdecrypt_generic( $td, $encrypted ) );
+                mcrypt_generic_deinit( $td );
+                $planeText = substr( $decrypted, 0, - 1 );
+                if ( ord( substr( $decrypted, - 1 ) ) == 194 )
+                    break;
+            }
+            mcrypt_module_close( $td );
+            // cut the result, if a limit is greater than 0
+            if ( $limit > 0 )
+            {
+                $planeText = strrev( substr( strrev( $planeText ), 0, 4 ) );
+            }
+    
+            return $planeText;
+        }
+        break;
+    }
+    
+    static function urlsafe_b64encode($string) {
+        $data = base64_encode($string);
+        $data = str_replace(array('+','/','='),array('-','_',''),$data);
+        return $data;
+    }
+    
+    static function urlsafe_b64decode($string) {
+        $data = str_replace(array('-','_'),array('+','/'),$string);
+        $mod4 = strlen($data) % 4;
+        if ($mod4)
+        {
+            $data .= substr('====', $mod4);
+        }
+        return base64_decode($data);
     }
     
     public $escape = true;

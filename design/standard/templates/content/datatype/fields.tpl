@@ -1,5 +1,5 @@
 {def $inputArray = array('text', 'number', 'email', 'telephonenumber')
-     $optionsArray = array('options')
+     $optionsArray = array('options','imageoptions')
      $optionsSelectArray = array('select-one', 'select-all')
      $optionsCheckboxRadioArray = array('checkbox', 'radio')
      $cssClassDescription = 'input_desc'
@@ -124,7 +124,7 @@
                 <div class="img">
                     {foreach $tempimg.data_map as $ditem}
                         {if and($ditem.data_type_string|eq('ezimage'), $ditem.has_content)}
-                        {attribute_view_gui attribute=$ditem image_class="evo_80x60"}
+                        {attribute_view_gui attribute=$ditem image_class="small"}
                         {break}
                         {/if}
                     {/foreach}
