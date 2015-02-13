@@ -1479,7 +1479,7 @@ class xrowFormGeneratorType extends eZDataType
         }
         return true;
     }
-    
+
     static function encryptData( $planeTextData )
     {
         if ( $planeTextData != '' || is_object( $planeTextData ) || is_array( $planeTextData ) )
@@ -1505,12 +1505,11 @@ class xrowFormGeneratorType extends eZDataType
             mcrypt_generic_init( $td, $okey, $iv );
             $encrypted = mcrypt_generic( $td, $planeText . chr( 194 ) );
             $encryptedString = $encrypted . $iv;
-    
+
             return base64_encode( $encryptedString );
         }
-        break;
     }
-    
+
     static function decryptData( $encryptedStringData, $limit = 0 )
     {
         if ( $encryptedStringData != '' || is_object( $encryptedStringData ) || is_array( $encryptedStringData ) )
@@ -1519,7 +1518,7 @@ class xrowFormGeneratorType extends eZDataType
             $key = $xrowini->variable( 'EncryptionSettings', 'Key' );
             $algorithm = $xrowini->variable( 'EncryptionSettings', 'Algorithm' );
             $mode = $xrowini->variable( 'EncryptionSettings', 'Mode' );
-    
+
             if ( is_object( $encryptedStringData ) || is_array( $encryptedStringData ) )
             {
                 foreach ( $encryptedStringData as $encryptedStringDataItem )
@@ -1531,7 +1530,7 @@ class xrowFormGeneratorType extends eZDataType
             {
                 $encryptedString = base64_decode( $encryptedStringData );
             }
-    
+
             $td = mcrypt_module_open( $algorithm, '', $mode, '' );
             $iv = substr( $encryptedString, - 8 );
             $encrypted = substr( $encryptedString, 0, - 8 );
@@ -1551,10 +1550,9 @@ class xrowFormGeneratorType extends eZDataType
             {
                 $planeText = strrev( substr( strrev( $planeText ), 0, 4 ) );
             }
-    
+
             return $planeText;
         }
-        break;
     }
     
     static function urlsafe_b64encode($string) {
