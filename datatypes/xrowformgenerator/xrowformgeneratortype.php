@@ -1467,7 +1467,7 @@ class xrowFormGeneratorType extends eZDataType
                         {
                             foreach($resItemArrayItems as $resItemArrayItem)
                             {
-                                if( in_array( $address,$resItemArrayItem ))
+                                if( in_array( $address,$resItemArrayItem,true ))
                                 {
                                     return false;
                                 }
