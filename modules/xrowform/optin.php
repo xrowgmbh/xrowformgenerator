@@ -41,6 +41,21 @@ if(!empty($_GET["id"]))
                 $receiverString = $inhalt["receiver"];
                 if($receiverString != "")
                 {
+                    if( strpos( $receiverString, ';' ) !== false )
+                    {
+                        $receiverArray = explode( ";", $receiverString );
+                    }
+                    else
+                    {
+                        $receiverArray = array( $receiverString );
+                    }
+                    if ( count( $receiverArray ) == 0 )
+                    {
+                        $receiverArray = array( $ini->variable( "InformationCollectionSettings", "EmailReceiver" ) );
+                    }
+                }
+                if(is_array( $receiverArray ))
+                {
                     $sender = $inhalt["sender"];
                     if ( ! $xform->validate( $sender ) )
                     {
@@ -58,8 +73,10 @@ if(!empty($_GET["id"]))
                     $mail->charset = 'utf-8';
                     $mail->from = new ezcMailAddress( $sender, '', $mail->charset );
                     $mail->returnPath = $mail->from;
-                    $mail->addTo( new ezcMailAddress( $receiverString, '', $mail->charset ) );
-                    
+                    foreach ( $receiverArray as $receiver )
+                    {
+                        $mail->addTo( new ezcMailAddress( $receiver, '', $mail->charset ) );
+                    }
                     $mail->subject = $subject;
                     $mail->subjectCharset = $mail->charset;
                     $mail->plainText = $templateResult;
