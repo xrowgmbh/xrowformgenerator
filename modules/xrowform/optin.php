@@ -8,6 +8,9 @@ $ini = eZINI::instance();
 if(!empty($_GET["id"]))
 {
     $aktiv_id = $xform->urlsafe_b64decode($_GET["id"]);
+    $sql_check = $db->arrayQuery("SELECt data_int FROM ezinfocollection_attribute WHERE informationcollection_id='".$aktiv_id."'");
+    if($sql_check[0]["data_int"] == "1")
+    {
     $sql = "UPDATE ezinfocollection_attribute SET data_int =0 WHERE informationcollection_id='".$aktiv_id."'";
     $db->arrayQuery( $sql );
     $results= $db->arrayQuery('SELECT * FROM ezinfocollection_attribute WHERE informationcollection_id="'.$aktiv_id.'"');
@@ -142,9 +145,10 @@ if(!empty($_GET["id"]))
             }
         }
     }
+    }
 }
 
 $Result = array();
 $Result['content'] = $tpl->fetch( "design:content/collectedinfo/xrowform.tpl" );
-$Result['path'] = array( array( 'text' => ezpI18n::tr( 'extension/xrowformgenerator/modules/xrowform', 'active' ),
+$Result['path'] = array( array( 'text' => ezpI18n::tr( 'xrowformgenerator/mail', 'active' ),
                                 'url' => false ) );

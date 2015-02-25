@@ -104,5 +104,9 @@
 {/if}
 </div>
 {/if}
-<p><a href={$node.parent.url|ezurl}>{'Return to site'|i18n('design/ezwebin/collectedinfo/form')}</a></p>
+{if is_set($node)}
+    <p><a href={$node.parent.url|ezurl}>{'Return to site'|i18n('design/ezwebin/collectedinfo/form')}</a></p>
+{else}
+    <p><a href={ezurl(,'full')}>{'Return to site'|i18n('design/ezwebin/collectedinfo/form')}</a></p>
+{/if}
 </div>

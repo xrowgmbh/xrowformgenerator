@@ -421,5 +421,13 @@
         <source>We have received your data and have send you an email for validation. Please follow the intructions in the email and click the link.</source>
         <translation>Wir haben Ihre Daten erhalten und haben Ihnen eine E-Mail geschickt. Bitte folgen Sie den Anweisungen und klicken Sie den Link der E-Mail.</translation>
     </message>
+    <message>
+        <source>active</source>
+        <translation>Bestätigt</translation>
+    </message>
+    <message>
+        <source>please insert a Email Field.</source>
+        <translation>Bitte fügen Sie ein 'E-Mail'-Felder ein.</translation>
+    </message>
 </context>
 </TS>

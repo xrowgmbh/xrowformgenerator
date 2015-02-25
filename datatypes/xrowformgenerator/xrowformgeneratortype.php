@@ -46,7 +46,33 @@ class xrowFormGeneratorType extends eZDataType
      */
     function validateObjectAttributeHTTPInput( $http, $base, $contentObjectAttribute )
     {
-        return eZInputValidator::STATE_ACCEPTED;
+        //Checking the Double-Optin-Funktion
+        if ( $http->hasPostVariable('XrowFormOptin' . $contentObjectAttribute->attribute( 'id' ) ) )
+        {
+            $optin_attribute= $http->postVariable('XrowFormOptin' . $contentObjectAttribute->attribute( 'id' ) );
+        }
+        
+        if ( $http->hasPostVariable('XrowFormElementType' . $contentObjectAttribute->attribute( 'id' ) ) )
+        {
+            $num_emails= $http->postVariable('XrowFormElementType' . $contentObjectAttribute->attribute( 'id' ) );
+        }
+        
+        $i=0;
+        foreach($num_emails as $num_email)
+        {
+            if($num_email == "email")
+            {
+                $i++;
+            }
+        }
+        
+        if($optin_attribute == "1" && $i != 1 )
+        {
+            $contentObjectAttribute->setValidationError(ezpI18n::tr( 'xrowformgenerator/mail', "please insert a Email Field." ));
+            return eZInputValidator::STATE_INVALID;
+        }else{
+            return eZInputValidator::STATE_ACCEPTED;
+        }
     }
 
     function validateCollectionAttributeHTTPInput( $http, $base, $objectAttribute )
