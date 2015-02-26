@@ -427,7 +427,7 @@
     </message>
     <message>
         <source>please insert a Email Field.</source>
-        <translation>Bitte fügen Sie ein 'E-Mail'-Felder ein.</translation>
+        <translation>Wenn Sie 'Double Optin Funktion' benutzen,dann muss ein Formularfeld 'EMail' im Formular enthalten sein.</translation>
     </message>
 </context>
 </TS>
