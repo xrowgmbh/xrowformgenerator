@@ -37,7 +37,7 @@ if(!empty($_GET["id"]))
                 $tplc->setVariable( "active",0);
                 $tplc->setVariable( 'content', $content );
                 $templateResult = $tplc->fetch( 'design:xrowformgenerator/xrowformmail.tpl' );
-                $subject = $object->Name;
+                $subject = $content["subject"].": ".$object->Name;
                 $receiverString = $inhalt["receiver"];
                 if($receiverString != "")
                 {
