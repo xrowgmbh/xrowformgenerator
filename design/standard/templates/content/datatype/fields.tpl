@@ -149,9 +149,7 @@
                                                  {if and(is_set($pattern), is_set($invalidText), $invalidText|ne(''))}data-invalidtext="{$invalidText}"{/if}
                                                  {if is_set($cols)} cols="{$cols}"{/if}
                                                  {if is_set($rows)} rows="{$rows}"{/if}
-                                                 {if $content.has_error|not()}{if or(and(is_set($label)|not(), $item.def|eq('')), $item.def|ne(''))} placeholder="{if $item.def|eq('')}{$itemName}{else}{$item.def|wash}{/if}{if $item.req} *{/if}" {/if}>
-                                                 {else}>{$item.def|wash}
-                                                 {/if}</textarea>
+                                                 {if $content.has_error|not()}{if or(and(and(is_set($labelOff), $labelOff), $item.def|eq('')), $item.def|ne(''))} placeholder="{if $item.def|eq('')}{$itemName}{else}{$item.def|wash}{/if}{if $item.req} *{/if}" {/if}>{else}>{$item.def|wash}{/if}</textarea>
     {* UPLOAD *}
     {elseif $fieldType|eq('upload')}
         <input id="{$fieldType}:{$id}:{$key}" name="XrowFormInputFile_{$id}_{$key}"
