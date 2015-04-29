@@ -45,12 +45,6 @@
                         {case match="upload"}{cond( is_set( $item.def ), $item.original_filename|wash() ,'' )}{/case}
                         {case match="options"}
                             {switch match=$item.option_type}
-                                {case match="checkbox"}
-                                    {def $output = ''}
-                                    {foreach $item.option_array as $opt_key => $opt_item}{if $opt_item.def}{if $output|ne( '' ){set $output = concat( ', ', $output )}{/if}{set $output = concat( $output, $opt_item.name )}{/if}{/foreach}
-                                    {$output}
-                                    {undef $output}
-                                {/case}
                                 {case match="radio"}
                                     {foreach $item.option_array as $opt_key => $opt_item}
                                         {if $opt_item.def}{$opt_item.name}{/if}
@@ -61,9 +55,9 @@
                                         {if $opt_item.def}{$opt_item.name}{/if}
                                     {/foreach}
                                 {/case}
-                                {case match="select-all"}
+                                {case}
                                     {def $output = ''}
-                                    {foreach $item.option_array as $opt_key => $opt_item}{if $opt_item.def}{if $output|ne( '' ){set $output = concat( ', ', $output )}{/if}{set $output = concat( $output, $opt_item.name )}{/if}{/foreach}
+                                    {foreach $item.option_array as $opt_key => $opt_item}{if $opt_item.def}{if $output|ne('')}{set $output = concat($output, ', ')}{/if}{set $output = concat($output, $opt_item.name)}{/if}{/foreach}
                                     {$output}
                                     {undef $output}
                                 {/case}
@@ -73,7 +67,7 @@
                             {switch match=$item.option_type}
                                 {case match="checkbox"}
                                     {def $output = ''}
-                                    {foreach $item.option_array as $opt_key => $opt_item}{if $opt_item.def}{if $output|ne( '' ){set $output = concat( ', ', $output )}{/if}{set $output = concat( $output, $opt_item.name )}{/if}{/foreach}
+                                    {foreach $item.option_array as $opt_key => $opt_item}{if $opt_item.def}{if $output|ne('')}{set $output = concat($output, ', ')}{/if}{set $output = concat($output, $opt_item.name)}{/if}{/foreach}
                                     {$output}
                                     {undef $output}
                                 {/case}  /*checkbox*/
