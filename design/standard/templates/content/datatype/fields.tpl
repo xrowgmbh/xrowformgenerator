@@ -47,7 +47,7 @@
     {* INPUT TEXT|NUMBER|EMAIL|TELEPHONENUMBER *}
     {if $inputArray|contains($fieldType)}
         <input id="{$fieldType}:{$id}:{$key}" name="{if is_set($overwriteNameValue)}{$overwriteNameValue}{else}XrowFormInput[{$id}][{$key}]{/if}" type="{if $fieldType|eq('telephonenumber')}tel{else}{$fieldType}{/if}"
-                                              {if $content.has_error|not()}{if or(and(and(is_set($labelOff), $labelOff), $item.def|eq('')), $item.def|ne(''))} placeholder="{if $item.def|eq('')}{$itemName}{else}{$item.def|wash}{/if}{if $item.req} *{/if}" {/if}
+                                              {if $content.has_error|not()}{if or(and(and(is_set($labelOff), $labelOff), $item.def|eq('')), $item.def|ne(''))} placeholder="{if $item.def|eq('')}{$itemName}{else}{$item.def|wash}{/if}{if and($item.req, is_set($labelOff), $labelOff)} *{/if}" {/if}
                                               {else} value="{$item.def|wash}" 
                                               {/if}
                                               class="{if and(is_set($pattern), $loadFieldCheck)}onloadCheckFieldType {/if}{if is_set($cssClass)}{$cssClass}{/if}"
@@ -88,7 +88,7 @@
                     {foreach $item.option_array as $opt_key => $opt_item}
                         <li>
                             <span class="radio_button">
-                               <input id="{$fieldType}{$underFieldType}:{$id}:{$key}:{$opt_key}" name="XrowFormInput[{$id}][{$key}]{if $fieldType|eq('checkbox')}[{$opt_key}]{/if}"
+                               <input id="{$fieldType}{$underFieldType}:{$id}:{$key}:{$opt_key}" name="XrowFormInput[{$id}][{$key}]{if $underFieldType|eq('checkbox')}[{$opt_key}]{/if}"
                                                                                                  type="{$underFieldType}"
                                                                                                  value="{$opt_item.name|wash}"
                                                                                                  {if and($item.req, $loadFieldCheck)} required{/if}
@@ -172,7 +172,7 @@
                 <option value=""></option>
             {/if}
             {foreach $countries as $country_list_item}
-            <option value="{$country_list_item.Alpha3}">{$country_list_item.Name}</option>
+            <option value="{$country_list_item.Name}"{if and(is_set($item.def), $item.def|eq($country_list_item.Name))} selected{/if}>{$country_list_item.Name}</option>
             {/foreach}
         </select>
     {/if}
