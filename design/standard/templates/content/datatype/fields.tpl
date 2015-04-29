@@ -4,7 +4,7 @@
      $optionsCheckboxRadioArray = array('checkbox', 'radio')
      $cssClassDescription = 'input_desc'
      $itemName = $item.name|wash
-     $loadFieldCheck = cond(and(ezini_hasvariable('Settings', 'LoadFieldCheck', 'xrowformgenerator.ini'), ezini('Settings', 'LoadFieldCheck', 'xrowformgenerator.ini')|eq('false')), false(), true())}
+     $loadFieldCheck = cond(and(ezini_hasvariable('Settings', 'LoadFieldCheck', 'xrowformgenerator.ini'), ezini('Settings', 'LoadFieldCheck', 'xrowformgenerator.ini')|eq('disabled')), false(), true())}
 {if is_set($itemNameOverwrite)}{set $itemName = $itemNameOverwrite}{/if}
 {switch match=$fieldType}
     {case match="text"}
