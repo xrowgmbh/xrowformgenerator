@@ -43,6 +43,11 @@ li.xrow-form-passwort {
     border: 2px solid #e1071d;
 }
 
+.content-view-full .xrow-form-error input[type="checkbox"], .content-view-full .xrow-form-error input[type="radio"]
+{
+    outline: 1px solid #e1071d;
+}
+
 .xrow-form-full input[type="radio"].xrow-form-imageoptions,
 .xrow-form-full input[type="checkbox"].xrow-form-imageoptions
 {
