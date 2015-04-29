@@ -3,7 +3,8 @@
      $optionsSelectArray = array('select-one', 'select-all')
      $optionsCheckboxRadioArray = array('checkbox', 'radio')
      $cssClassDescription = 'input_desc'
-     $itemName = $item.name|wash}
+     $itemName = $item.name|wash
+     $loadFieldCheck = cond(and(ezini_hasvariable('Settings', 'LoadFieldCheck', 'xrowformgenerator.ini'), ezini('Settings', 'LoadFieldCheck', 'xrowformgenerator.ini')|eq('false')), false(), true())}
 {if is_set($itemNameOverwrite)}{set $itemName = $itemNameOverwrite}{/if}
 {switch match=$fieldType}
     {case match="text"}
@@ -49,7 +50,7 @@
                                               {if $content.has_error|not()}{if or(and(and(is_set($labelOff), $labelOff), $item.def|eq('')), $item.def|ne(''))} placeholder="{if $item.def|eq('')}{$itemName}{else}{$item.def|wash}{/if}{if $item.req} *{/if}" {/if}
                                               {else} value="{$item.def|wash}" 
                                               {/if}
-                                              class="{if is_set($pattern)}onloadCheckFieldType{/if}{if is_set($cssClass)} {$cssClass}{/if}"
+                                              class="{if and(is_set($pattern), $loadFieldCheck)}onloadCheckFieldType {/if}{if is_set($cssClass)}{$cssClass}{/if}"
                                               {if is_set($pattern)} pattern="{$pattern|format_pattern}"
                                                 {if and(is_set($invalidText), $invalidText|ne(''))}data-invalidtext="{$invalidText}"{/if}
                                               {/if}
@@ -67,7 +68,7 @@
         {if is_set($underFieldType)}
             {if $optionsSelectArray|contains($underFieldType)}
                 <select id="{$fieldType}{$underFieldType}:{$id}:{$key}" name="{if is_set($overwriteNameValue)}{$overwriteNameValue}{else}XrowFormInput[{$id}][{$key}]{/if}"
-                                                                        {if $item.req} required class="onloadCheckFieldType{if is_set($cssClass)} {$cssClass}{/if}"
+                                                                        {if $item.req} required class="{if $loadFieldCheck}onloadCheckFieldType {/if}{if is_set($cssClass)}{$cssClass}{/if}"
                                                                             {if and(is_set($emptyText), $emptyText|ne(''))}data-emptytext="{$emptyText}"{/if}
                                                                         {elseif is_set($cssClass)} class="{$cssClass}"{/if}
                                                                         {if is_set($size)} size="{$size}"{/if}
@@ -142,7 +143,7 @@
     {elseif $fieldType|eq('textarea')}
         <textarea id="{$fieldType}:{$id}:{$key}" name="{if is_set($overwriteNameValue)}{$overwriteNameValue}{else}XrowFormInput[{$id}][{$key}]{/if}" 
                                                  {if $item.req} required{/if}
-                                                 class="onloadCheckFieldType{if is_set($cssClass)} {$cssClass}{/if}"
+                                                 class="{if $loadFieldCheck}onloadCheckFieldType {/if}{if is_set($cssClass)}{$cssClass}{/if}"
                                                  {if is_set($pattern)} pattern="{$pattern|format_pattern}"{/if}
                                                  {if and($item.req, is_set($emptyText), $emptyText|ne(''))}data-emptytext="{$emptyText}"{/if}
                                                  {if and(is_set($pattern), is_set($invalidText), $invalidText|ne(''))}data-invalidtext="{$invalidText}"{/if}
@@ -164,7 +165,7 @@
         {if is_set($countries)|not()}{def $countries=fetch('content', 'country_list')}{/if}
         <input id="{$fieldType}:{$id}:{$key}" value="{if and( is_set( $item.def ), $item.def|ne('') )}{$item.def}{/if}" type="hidden" name="XrowFormInput[{$id}][{$key}]" />
         <select id="select_{$id}_{$key}" {if $item.req} required{/if}
-                                         class="field_half{if $item.req} onloadCheckFieldType{/if}"
+                                         class="field_half{if and($item.req, $loadFieldCheck)} onloadCheckFieldType{/if}"
                                          {if and(is_set($emptyText), $emptyText|ne(''))}data-emptytext="{$emptyText}"{/if}
                                          onchange="$('input[name=\'XrowFormInput[{$id}][{$key}]\']').val($('#select_{$id}_{$key} option:selected').text());">
             {if and(is_set($labelOff), $labelOff)}
@@ -185,9 +186,9 @@
         <input id="{$fieldType}:{$id}:{$key}" name="{if is_set($overwriteNameValue)}{$overwriteNameValue}{else}XrowFormInput[{$id}][{$key}]{/if}"
                                               type="{$fieldType}"
                                               value="1"
-                                              {if $item.req} required class="onloadCheckFieldType{if $itemName|eq('')} xrow-form-checkbox-emptyname{/if}"
+                                              {if $item.req} required class="{if $loadFieldCheck}onloadCheckFieldType{/if}{if $itemName|eq('')} xrow-form-checkbox-emptyname{/if}"
                                                 {if and(is_set($emptyText), $emptyText|ne(''))}data-emptytext="{$emptyText}"{/if}
-                                              {elseif $itemName|eq('')} class="xrow-form-checkbox-emptyname"{/if}v
+                                              {elseif $itemName|eq('')} class="xrow-form-checkbox-emptyname"{/if}
                                               {if is_set($autocompleteOff)} autocomplete="off"{/if}
                                               {if $item.def} checked="checked"{/if}
                                                />
