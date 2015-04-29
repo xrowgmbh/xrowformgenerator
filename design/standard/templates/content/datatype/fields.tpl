@@ -54,7 +54,7 @@
                                               {if is_set($pattern)} pattern="{$pattern|format_pattern}"
                                                 {if and(is_set($invalidText), $invalidText|ne(''))}data-invalidtext="{$invalidText}"{/if}
                                               {/if}
-                                              {if $item.req} required
+                                              {if and($item.req, $loadFieldCheck)} required
                                                 {if and(is_set($emptyText), $emptyText|ne(''))}data-emptytext="{$emptyText}"{/if}
                                               {/if}
                                               {if is_set($autocompleteOff)} autocomplete="off"{/if}
@@ -68,7 +68,7 @@
         {if is_set($underFieldType)}
             {if $optionsSelectArray|contains($underFieldType)}
                 <select id="{$fieldType}{$underFieldType}:{$id}:{$key}" name="{if is_set($overwriteNameValue)}{$overwriteNameValue}{else}XrowFormInput[{$id}][{$key}]{/if}"
-                                                                        {if $item.req} required class="{if $loadFieldCheck}onloadCheckFieldType {/if}{if is_set($cssClass)}{$cssClass}{/if}"
+                                                                        {if and($item.req, $loadFieldCheck)} required class="onloadCheckFieldType{if is_set($cssClass)} {$cssClass}{/if}"
                                                                             {if and(is_set($emptyText), $emptyText|ne(''))}data-emptytext="{$emptyText}"{/if}
                                                                         {elseif is_set($cssClass)} class="{$cssClass}"{/if}
                                                                         {if is_set($size)} size="{$size}"{/if}
@@ -91,7 +91,7 @@
                                <input id="{$fieldType}{$underFieldType}:{$id}:{$key}:{$opt_key}" name="XrowFormInput[{$id}][{$key}]{if $fieldType|eq('checkbox')}[{$opt_key}]{/if}"
                                                                                                  type="{$underFieldType}"
                                                                                                  value="{$opt_item.name|wash}"
-                                                                                                 {if $item.req} required{/if}
+                                                                                                 {if and($item.req, $loadFieldCheck)} required{/if}
                                                                                                  {if is_set($autocompleteOff)} autocomplete="off"{/if}
                                                                                                  {if $opt_item.def}checked="checked" {/if}
                                                                                                  {if is_set($cssClass)} class="{$cssClass}"{/if} />
@@ -142,7 +142,7 @@
     {* TEXTAREA *}
     {elseif $fieldType|eq('textarea')}
         <textarea id="{$fieldType}:{$id}:{$key}" name="{if is_set($overwriteNameValue)}{$overwriteNameValue}{else}XrowFormInput[{$id}][{$key}]{/if}" 
-                                                 {if $item.req} required{/if}
+                                                 {if and($item.req, $loadFieldCheck)} required{/if}
                                                  class="{if $loadFieldCheck}onloadCheckFieldType {/if}{if is_set($cssClass)}{$cssClass}{/if}"
                                                  {if is_set($pattern)} pattern="{$pattern|format_pattern}"{/if}
                                                  {if and($item.req, is_set($emptyText), $emptyText|ne(''))}data-emptytext="{$emptyText}"{/if}
@@ -156,7 +156,7 @@
     {elseif $fieldType|eq('upload')}
         <input id="{$fieldType}:{$id}:{$key}" name="XrowFormInputFile_{$id}_{$key}"
                                               type="file"
-                                              {if $item.req} required{/if}
+                                              {if and($item.req, $loadFieldCheck)} required{/if}
                                               value=""
                                               {if is_set($cssClass)} class="{$cssClass}"{/if} />
     {* COUNTRY *}
@@ -164,7 +164,7 @@
         {set $cssClassDescription = 'options'}
         {if is_set($countries)|not()}{def $countries=fetch('content', 'country_list')}{/if}
         <input id="{$fieldType}:{$id}:{$key}" value="{if and( is_set( $item.def ), $item.def|ne('') )}{$item.def}{/if}" type="hidden" name="XrowFormInput[{$id}][{$key}]" />
-        <select id="select_{$id}_{$key}" {if $item.req} required{/if}
+        <select id="select_{$id}_{$key}" {if and($item.req, $loadFieldCheck)} required{/if}
                                          class="field_half{if and($item.req, $loadFieldCheck)} onloadCheckFieldType{/if}"
                                          {if and(is_set($emptyText), $emptyText|ne(''))}data-emptytext="{$emptyText}"{/if}
                                          onchange="$('input[name=\'XrowFormInput[{$id}][{$key}]\']').val($('#select_{$id}_{$key} option:selected').text());">
@@ -186,7 +186,7 @@
         <input id="{$fieldType}:{$id}:{$key}" name="{if is_set($overwriteNameValue)}{$overwriteNameValue}{else}XrowFormInput[{$id}][{$key}]{/if}"
                                               type="{$fieldType}"
                                               value="1"
-                                              {if $item.req} required class="{if $loadFieldCheck}onloadCheckFieldType{/if}{if $itemName|eq('')} xrow-form-checkbox-emptyname{/if}"
+                                              {if and($item.req, $loadFieldCheck)} required class="onloadCheckFieldType{if $itemName|eq('')} xrow-form-checkbox-emptyname{/if}"
                                                 {if and(is_set($emptyText), $emptyText|ne(''))}data-emptytext="{$emptyText}"{/if}
                                               {elseif $itemName|eq('')} class="xrow-form-checkbox-emptyname"{/if}
                                               {if is_set($autocompleteOff)} autocomplete="off"{/if}
