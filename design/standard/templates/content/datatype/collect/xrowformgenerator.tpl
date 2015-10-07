@@ -95,12 +95,14 @@
                             {include uri='design:content/datatype/fields.tpl'
                                      fieldType=$item.type
                                      autocompleteOff=true()
+                                     validate=$item.val
                                      cssClass=concat("box xrow-form-", $item.type, cond( $item.class|ne(''), concat( ' ', $item.class ), ''))}
                         {/case}
                         {case match="telephonenumber"}
                             {include uri='design:content/datatype/fields.tpl'
                                      fieldType=$item.type
                                      autocompleteOff=true()
+                                     validate=$item.val
                                      cssClass=concat("box xrow-form-", $item.type, cond( $item.class|ne(''), concat( ' ', $item.class ), ''))}
                         {/case}
                         {case match="hidden"}
@@ -116,6 +118,7 @@
                             {include uri='design:content/datatype/fields.tpl' 
                                      fieldType=$item.type
                                      autocompleteOff=true()
+                                     validate=$item.val
                                      cssClass=concat("box xrow-form-", $item.type, cond( $item.class|ne(''), concat( ' ', $item.class ), ''))}
                         {/case}
                         {case}

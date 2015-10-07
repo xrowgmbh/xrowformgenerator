@@ -698,16 +698,13 @@ class xrowFormGeneratorType extends eZDataType
                                     $data = '';
                                     if ( isset( $inputArray[$elKey] ) )
                                     {
-                                        $data = $inputArray[$elKey];
+                                        $data = trim( $inputArray[$elKey] );
                                     }
-                                    if ( $item['req'] == true )
+                                    if ( $item['req'] == true && $data == '' )
                                     {
-                                        if ( trim( $data ) == '' )
-                                        {
-                                            $content['form_elements'][$key]['error'] = true;
-                                            $content['has_error'] = true;
-                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
-                                        }
+                                        $content['form_elements'][$key]['error'] = true;
+                                        $content['has_error'] = true;
+                                        $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
                                     }
                                     $content['form_elements'][$key]['def'] = $data;
                                 }break;
@@ -720,68 +717,23 @@ class xrowFormGeneratorType extends eZDataType
                                         $data = trim( $inputArray[$elKey] );
                                     }
 
-                                    if ( $item['req'] == true )
+                                    if ( $item['req'] == true && $data == '' )
                                     {
-                                        if ( $data == '' )
-                                        {
-                                            $content['form_elements'][$key]['error'] = true;
-                                            $content['has_error'] = true;
-                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
-                                        }
-                                        elseif( $item['val'] == true )
-                                        {
-                                            if ( !self::validate( $data ) )
-                                            {
-                                                $content['form_elements'][$key]['error'] = true;
-                                                $content['has_error'] = true;
-                                                $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Email address is not valid." );
-                                            }
-                                            elseif( $item['unique'] == true )
-                                            {
-                                                if ( !self::email_unique( $data, $contentobject_id ) )
-                                                {
-                                                    $content['form_elements'][$key]['error'] = true;
-                                                    $content['has_error'] = true;
-                                                    $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Your email was already submitted to us. You can't use the form twice." );
-                                                }
-                                            }
-                                        }
-                                        elseif( $item['unique'] == true )
-                                        {
-                                            if ( !self::email_unique( $data, $contentobject_id ) )
-                                            {
-                                                $content['form_elements'][$key]['error'] = true;
-                                                $content['has_error'] = true;
-                                                $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Your email was already submitted to us. You can't use the form twice." );
-                                            }
-                                        }
+                                        $content['form_elements'][$key]['error'] = true;
+                                        $content['has_error'] = true;
+                                        $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
                                     }
-                                    elseif ( $item['val'] == true && $data != '' )
+                                    elseif( $item['unique'] == true && !self::email_unique( $data, $contentobject_id ) )
                                     {
-                                        if ( !self::validate( $data ) )
-                                        {
-                                            $content['form_elements'][$key]['error'] = true;
-                                            $content['has_error'] = true;
-                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Email address is not valid." );
-                                        }
-                                        elseif( $item['unique'] == true ) 
-                                        {
-                                            if ( !self::email_unique( $data, $contentobject_id ) )
-                                            {
-                                                $content['form_elements'][$key]['error'] = true;
-                                                $content['has_error'] = true;
-                                                $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Your email was already submitted to us. You can't use the form twice." );
-                                            }
-                                        }
+                                        $content['form_elements'][$key]['error'] = true;
+                                        $content['has_error'] = true;
+                                        $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Your email was already submitted to us. You can't use the form twice." );
                                     }
-                                    elseif( $item['unique'] == true && $data != '' )
+                                    elseif( $item['val'] == true && !self::validate( $data ) )
                                     {
-                                        if ( !self::email_unique( $data, $contentobject_id ) )
-                                        {
-                                            $content['form_elements'][$key]['error'] = true;
-                                            $content['has_error'] = true;
-                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Your email was already submitted to us. You can't use the form twice." );
-                                        }
+                                        $content['form_elements'][$key]['error'] = true;
+                                        $content['has_error'] = true;
+                                        $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Email address is not valid." );
                                     }
 
                                     $content['form_elements'][$key]['def'] = $data;
@@ -794,14 +746,11 @@ class xrowFormGeneratorType extends eZDataType
                                     {
                                         $data = true;
                                     }
-                                    if ( $item['req'] == true )
+                                    if ( $item['req'] == true && !$data )
                                     {
-                                        if ( !$data )
-                                        {
-                                            $content['form_elements'][$key]['error'] = true;
-                                            $content['has_error'] = true;
-                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "You need to select this checkbox." );
-                                        }
+                                        $content['form_elements'][$key]['error'] = true;
+                                        $content['has_error'] = true;
+                                        $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "You need to select this checkbox." );
                                     }
                                     $content['form_elements'][$key]['def'] = $data;
                                 }break;
@@ -818,20 +767,13 @@ class xrowFormGeneratorType extends eZDataType
                                             $data = trim( $inputArray[$elKey] );
                                         }
                                     }
-                                    if ( $item['req'] == true )
+                                    if ( $item['req'] == true && $data == '' )
                                     {
-                                        if ( $data == '' )
-                                        {
-                                            $content['form_elements'][$key]['error'] = true;
-                                            $content['has_error'] = true;
-                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
-                                        }
-                                        else
-                                        {
-                                            $checkTelephone = true;
-                                        }
+                                        $content['form_elements'][$key]['error'] = true;
+                                        $content['has_error'] = true;
+                                        $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
                                     }
-                                    if( $checkTelephone )
+                                    elseif( $item['val'] == true )
                                     {
                                         $validate = self::telephone_validate( $data );
                                         if( !$validate['validateStatus'] || strlen( $data ) >= 25 )
@@ -852,16 +794,13 @@ class xrowFormGeneratorType extends eZDataType
                                         $data = trim( $inputArray[$elKey] );
                                         $data = str_replace(" ", "", $data );
                                     }
-                                    if ( $item['req'] == true )
+                                    if ( $item['req'] == true && $data == '' )
                                     {
-                                        if ( $data == '' )
-                                        {
-                                            $content['form_elements'][$key]['error'] = true;
-                                            $content['has_error'] = true;
-                                            $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
-                                        }
+                                        $content['form_elements'][$key]['error'] = true;
+                                        $content['has_error'] = true;
+                                        $content['error_array'][mb_strtolower( $trans->transformByGroup( $item['name'], 'urlalias' ) )] = $item['name'] . ": " . ezpI18n::tr( 'kernel/classes/datatypes', "Input required." );
                                     }
-                                    if ( $item['val'] == true && $data != '')
+                                    elseif ( $item['val'] == true )
                                     {
                                         $dataTest = $locale->internalNumber( $data );
                                         $floatValidator = new eZFloatValidator();
@@ -1412,56 +1351,56 @@ class xrowFormGeneratorType extends eZDataType
     */
     static function validate( $address )
     {
+        if ( trim($address) == '' ) {
+            return false;
+        }
         $mxhosts = array();
         $hosts = array();
         $disposable_ip = array();
         $ini = eZINI::instance( 'blacklist.ini' );
         $blacklist = $ini->variable( 'SetBlackList', 'DomainsList' );
-        foreach( $blacklist as $domain_disposable )
-        {
-            if( getmxrr( $domain_disposable, $hosts ) )
-            {
-                foreach( $hosts as $host )
-                {
+        foreach( $blacklist as $domain_disposable ) {
+            if( getmxrr( $domain_disposable, $hosts ) ){
+                foreach( $hosts as $host ) {
                     $disposable_ip[] = gethostbyname( $host );
                 }
             }
         }
         $ini = eZINI::instance('xrowformgenerator.ini');
-        if( $ini->hasVariable( "Settings", "InputEmail" ) && $ini->variable( "Settings", "InputEmail" ) != '' )
-        {
+        if( $ini->hasVariable( "Settings", "InputEmail" ) && $ini->variable( "Settings", "InputEmail" ) != '' ) {
             $regexp = $ini->variable( "Settings", "InputEmail" );
         }
-        else
-        {
+        else {
             $regexp = $ini->variable( "Settings", "EmailDefaultPattern" );
         }
-        if( preg_match( $regexp, $address ) )
-        {
+        if( !preg_match( $regexp, $address ) ) {
+            return false;
+        }
+        else {
             list( $alias, $domain ) = explode( "@", $address );
-            if ( checkdnsrr( $domain, "MX")) 
-            {
-                if( getmxrr( $domain, $mxhosts ) )
-                {
-                    foreach( $mxhosts as $host )
-                    {
+            if ( !checkdnsrr( $domain, "MX" ) ) {
+                return false;
+            }
+            else {
+                if( !getmxrr( $domain, $mxhosts ) ) {
+                    return false;
+                }
+                else {
+                    foreach( $mxhosts as $host ) {
                         if( in_array( gethostbyname( $host ), $disposable_ip ) )
                             return false;
                     }
                     return true;
                 }
-                else
-                    return false;
             }
-            else
-                return false;
         }
-        else
-            return false;
     }
 
     static function email_unique( $address, $contentobject_id )
     {
+        if ( trim($address) == '' ) {
+            return false;
+        }
         // gets DB instance
         $db = eZDB::instance();
 

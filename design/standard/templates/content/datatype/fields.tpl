@@ -13,24 +13,30 @@
         {/if}
     {/case}
     {case match="number"}
-        {if ezini_hasvariable( 'PatternSetting', 'InputNumber', 'xrowformgenerator.ini' )}
-            {def $pattern = ezini( 'PatternSetting', 'InputNumber', 'xrowformgenerator.ini' )}
+        {if and( is_set( $validate ), $validate )}
+            {if ezini_hasvariable( 'PatternSetting', 'InputNumber', 'xrowformgenerator.ini' )}
+                {def $pattern = ezini( 'PatternSetting', 'InputNumber', 'xrowformgenerator.ini' )}
+            {/if}
         {/if}
     {/case}
     {case match="email"}
-        {if ezini_hasvariable( 'PatternSetting', 'InputEmail', 'xrowformgenerator.ini' )}
-            {def $pattern = ezini( 'PatternSetting', 'InputEmail', 'xrowformgenerator.ini' )}
-        {else}
-            {def $pattern = ezini( 'Settings', 'EmailDefaultPattern', 'xrowformgenerator.ini' )}
+        {if and( is_set( $validate ), $validate )}
+            {if ezini_hasvariable( 'PatternSetting', 'InputEmail', 'xrowformgenerator.ini' )}
+                {def $pattern = ezini( 'PatternSetting', 'InputEmail', 'xrowformgenerator.ini' )}
+            {else}
+                {def $pattern = ezini( 'Settings', 'EmailDefaultPattern', 'xrowformgenerator.ini' )}
+            {/if}
         {/if}
     {/case}
     {case match="telephonenumber"}
-        {if ezini_hasvariable( 'Settings', 'TelephoneNumberPattern', 'xrowformgenerator.ini' )}
-            {def $pattern = ezini( 'Settings', 'TelephoneNumberPattern', 'xrowformgenerator.ini' )}
-        {else}
-            {def $areaCodes = ezini( 'Settings', 'TelephoneAreaCodes', 'xrowformgenerator.ini' )
-                 $defaultPattern = ezini( 'Settings', 'TelephoneDefaultPattern', 'xrowformgenerator.ini' )
-                 $pattern = concat( '/^\+(', $areaCodes, ')[ |]?', $defaultPattern, '/' )}
+        {if and( is_set( $validate ), $validate )}
+            {if ezini_hasvariable( 'Settings', 'TelephoneNumberPattern', 'xrowformgenerator.ini' )}
+                {def $pattern = ezini( 'Settings', 'TelephoneNumberPattern', 'xrowformgenerator.ini' )}
+            {else}
+                {def $areaCodes = ezini( 'Settings', 'TelephoneAreaCodes', 'xrowformgenerator.ini' )
+                     $defaultPattern = ezini( 'Settings', 'TelephoneDefaultPattern', 'xrowformgenerator.ini' )
+                     $pattern = concat( '/^\+(', $areaCodes, ')[ |]?', $defaultPattern, '/' )}
+            {/if}
         {/if}
     {/case}
     {case}{/case}
