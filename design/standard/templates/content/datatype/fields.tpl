@@ -1,5 +1,5 @@
 {def $inputArray = array('text', 'number', 'email', 'telephonenumber')
-     $optionsArray = array('options')
+     $optionsArray = array('options', 'imageoptions')
      $optionsSelectArray = array('select-one', 'select-all')
      $optionsCheckboxRadioArray = array('checkbox', 'radio')
      $cssClassDescription = 'input_desc'
@@ -108,9 +108,12 @@
         {set $cssClassDescription = 'desc_eingabe_bild'}
         {* SELECT ONE|SELECT MULTI *}
         {if is_set($underFieldType)}
+        <p class="{$cssClassDescription}">{$item.desc}</p>
         <div class="block">
+            {def $counterImg = 0}
             {foreach $item.option_array as $opt_key => $opt_item}
-            <div class="element">
+                {set $counterImg = $counterImg|inc()}
+            <div class="element{*if $opt_key|mod(2)} second{/if*}" data-valuemod="{$counterImg|mod(2)}" data-value="{$counterImg}">
                 <div class="che">
                     <input id="{$fieldType}{$underFieldType}:{$id}:{$key}:{$opt_key}" name="XrowFormInput[{$id}][{$key}]{if $fieldType|eq('checkbox')}[{$opt_key}]{/if}"
                                                                                       type="{$underFieldType}"
@@ -119,18 +122,13 @@
                                                                                       value="{$opt_item.name|wash}"
                                                                                       {if $opt_item.def}checked="checked" {/if} />
                 </div>
-                {def $tempimg = fetch('content', 'node', hash('node_id', $opt_item.image))}
-                {if $tempimg}
+                {def $imgage = fetch('content', 'node', hash('node_id', $opt_item.image))}
+                {if $imgage.data_map.image.has_content}
                 <div class="img">
-                    {foreach $tempimg.data_map as $ditem}
-                        {if and($ditem.data_type_string|eq('ezimage'), $ditem.has_content)}
-                        {attribute_view_gui attribute=$ditem image_class="evo_80x60"}
-                        {break}
-                        {/if}
-                    {/foreach}
+                    {attribute_view_gui attribute=$imgage.data_map.image image_class="medium"}
                 </div>
                 {/if}
-                {undef $tempimg}
+                {undef $imgage}
                 <div class="bes">&nbsp;{$opt_item.name|wash}</div>
             </div>
             {delimiter modulo=3}<div class="break"></div>{/delimiter}
