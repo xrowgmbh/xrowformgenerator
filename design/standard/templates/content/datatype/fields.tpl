@@ -113,7 +113,7 @@
             {def $counterImg = 0}
             {foreach $item.option_array as $opt_key => $opt_item}
                 {set $counterImg = $counterImg|inc()}
-            <div class="element{*if $opt_key|mod(2)} second{/if*}" data-valuemod="{$counterImg|mod(2)}" data-value="{$counterImg}">
+            <div class="element{if $opt_key|mod(2)|eq(0)} second{/if}">
                 <div class="che">
                     <input id="{$fieldType}{$underFieldType}:{$id}:{$key}:{$opt_key}" name="XrowFormInput[{$id}][{$key}]{if $fieldType|eq('checkbox')}[{$opt_key}]{/if}"
                                                                                       type="{$underFieldType}"
@@ -125,7 +125,7 @@
                 {def $imgage = fetch('content', 'node', hash('node_id', $opt_item.image))}
                 {if $imgage.data_map.image.has_content}
                 <div class="img">
-                    {attribute_view_gui attribute=$imgage.data_map.image image_class="medium"}
+                    {attribute_view_gui attribute=$imgage.data_map.image image_class="small"}
                 </div>
                 {/if}
                 {undef $imgage}
