@@ -127,7 +127,7 @@
                 {def $image = fetch('content', 'node', hash('node_id', $opt_item.image))}
                 {if $image.data_map.image.has_content}
                 <div class="img">
-                    {attribute_view_gui attribute=$image image_class=$attribute_image_class}
+                    {attribute_view_gui attribute=$image.data_map.image image_class=$attribute_image_class}
                 </div>
                 {/if}
                 {undef $image}
