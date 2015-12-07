@@ -113,6 +113,8 @@
     {* OPTIONS WITH IMAGES *}
     {elseif $fieldType|eq('imageoptions')}
         {set $cssClassDescription = 'desc_eingabe_bild'}
+        {def $attribute_image_class = 'small'}
+        {if is_set($image_class)}{set $attribute_image_class = $image_class}{/if}
         {* SELECT ONE|SELECT MULTI *}
         {if is_set($underFieldType)}
         <div class="block">
@@ -131,7 +133,7 @@
                 <div class="img">
                     {foreach $tempimg.data_map as $ditem}
                         {if and($ditem.data_type_string|eq('ezimage'), $ditem.has_content)}
-                        {attribute_view_gui attribute=$ditem image_class="small"}
+                        {attribute_view_gui attribute=$ditem image_class=$attribute_image_class}
                         {break}
                         {/if}
                     {/foreach}
