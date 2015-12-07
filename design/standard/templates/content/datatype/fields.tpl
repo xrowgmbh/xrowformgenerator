@@ -106,31 +106,36 @@
     {* OPTIONS WITH IMAGES *}
     {elseif $fieldType|eq('imageoptions')}
         {set $cssClassDescription = 'desc_eingabe_bild'}
+        {def $attribute_image_class = 'small'}
+        {if is_set($image_class)}{set $attribute_image_class = $image_class}{/if}
         {* SELECT ONE|SELECT MULTI *}
         {if is_set($underFieldType)}
-        <p class="{$cssClassDescription}">{$item.desc}</p>
         <div class="block">
-            {def $counterImg = 0}
             {foreach $item.option_array as $opt_key => $opt_item}
-                {set $counterImg = $counterImg|inc()}
-            <div class="element{if $counterImg|mod(2)|eq(1)} left{else} right{/if}-item">
+            <div class="element">
                 <div class="che">
                     <input id="{$fieldType}{$underFieldType}:{$id}:{$key}:{$opt_key}" name="XrowFormInput[{$id}][{$key}]{if $fieldType|eq('checkbox')}[{$opt_key}]{/if}"
                                                                                       type="{$underFieldType}"
                                                                                       {if is_set($cssClass)} class="{$cssClass}"{/if}
                                                                                       {if is_set($autocompleteOff)} autocomplete="off"{/if}
                                                                                       value="{$opt_item.name|wash}"
-                                                                                      {if $opt_item.def}checked="checked" {/if} />{if $opt_item.name|ne('')}<div class="bes">&nbsp;{$opt_item.name|wash}</div>{/if}
+                                                                                      {if $opt_item.def}checked="checked" {/if} />
                 </div>
-                {def $imgage = fetch('content', 'node', hash('node_id', $opt_item.image))}
-                {if $imgage.data_map.image.has_content}
+                {def $tempimg = fetch('content', 'node', hash('node_id', $opt_item.image))}
+                {if $tempimg}
                 <div class="img">
-                    {attribute_view_gui attribute=$imgage.data_map.image image_class="small"}
+                    {foreach $tempimg.data_map as $ditem}
+                        {if and($ditem.data_type_string|eq('ezimage'), $ditem.has_content)}
+                        {attribute_view_gui attribute=$ditem image_class=$attribute_image_class}
+                        {break}
+                        {/if}
+                    {/foreach}
                 </div>
                 {/if}
-                {undef $imgage}
+                {undef $tempimg}
+                <div class="bes">&nbsp;{$opt_item.name|wash}</div>
             </div>
-            {delimiter modulo=2}<div class="break"></div>{/delimiter}
+            {delimiter modulo=3}<div class="break"></div>{/delimiter}
             {/foreach}
         </div>
         <div class="break"></div>
