@@ -130,7 +130,7 @@
                 {/if}
                 {undef $imgage}
             </div>
-            {delimiter modulo=3}<div class="break"></div>{/delimiter}
+            {delimiter modulo=2}<div class="break"></div>{/delimiter}
             {/foreach}
         </div>
         <div class="break"></div>
