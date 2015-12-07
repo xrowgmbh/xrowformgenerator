@@ -113,14 +113,14 @@
             {def $counterImg = 0}
             {foreach $item.option_array as $opt_key => $opt_item}
                 {set $counterImg = $counterImg|inc()}
-            <div class="element{if $opt_key|mod(2)|eq(0)} second{/if}">
+            <div class="element{if $counterImg|mod(2)|eq(1)} left{else} right{/if}-item">
                 <div class="che">
                     <input id="{$fieldType}{$underFieldType}:{$id}:{$key}:{$opt_key}" name="XrowFormInput[{$id}][{$key}]{if $fieldType|eq('checkbox')}[{$opt_key}]{/if}"
                                                                                       type="{$underFieldType}"
                                                                                       {if is_set($cssClass)} class="{$cssClass}"{/if}
                                                                                       {if is_set($autocompleteOff)} autocomplete="off"{/if}
                                                                                       value="{$opt_item.name|wash}"
-                                                                                      {if $opt_item.def}checked="checked" {/if} />
+                                                                                      {if $opt_item.def}checked="checked" {/if} />{if $opt_item.name|ne('')}<div class="bes">&nbsp;{$opt_item.name|wash}</div>{/if}
                 </div>
                 {def $imgage = fetch('content', 'node', hash('node_id', $opt_item.image))}
                 {if $imgage.data_map.image.has_content}
@@ -129,7 +129,6 @@
                 </div>
                 {/if}
                 {undef $imgage}
-                <div class="bes">&nbsp;{$opt_item.name|wash}</div>
             </div>
             {delimiter modulo=3}<div class="break"></div>{/delimiter}
             {/foreach}
