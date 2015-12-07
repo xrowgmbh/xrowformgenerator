@@ -198,5 +198,5 @@
         </div>
     {/if}
 {/if}
-{if and(is_set($item.desc), $item.desc|ne(''), $fieldType|ne('checkbox'))}<p class="{$cssClassDescription}">{$item.desc}</p>{/if}
+{if and(is_set($item.desc), $item.desc|ne(''), $fieldType|ne('checkbox'), $fieldType|ne('imageoptions'))}<p class="{$cssClassDescription}">{$item.desc}</p>{/if}
 {undef}
