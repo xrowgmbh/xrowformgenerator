@@ -58,7 +58,12 @@ class xrowFormOperator
                 {
                     $operatorValue = preg_replace( '/{/', '&#123;', $operatorValue );
                     $operatorValue = preg_replace( '/}/', '&#125;', $operatorValue );
-                    $operatorValue = preg_replace( '/\//', '', $operatorValue );
+                    $startsWithSlash = strpos( $operatorValue, '/' );
+                    $endsWithSlash = ( strrpos( $operatorValue, '/' ) === ( strlen( $operatorValue ) - strlen ( '/' ) ) );
+                    if( $startsWithSlash === 0 && $endsWithSlash !== false )
+                    {
+                        $operatorValue = substr( $operatorValue, 1, -1);
+                    }
                 }break;
             }
         }
