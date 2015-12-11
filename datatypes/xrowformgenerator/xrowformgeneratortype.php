@@ -821,21 +821,28 @@ class xrowFormGeneratorType extends eZDataType
                                 {
                                     if ( isset( $inputArray[$elKey] ) )
                                     {
+                                        if (strpos($inputArray[$elKey], '|')) {
+                                            $valueExplode = explode('|', $inputArray[$elKey]);
+                                            $inputArray[$elKey] = $optionKey = $valueExplode[1];
+                                            $optionValue = $valueExplode[0];
+                                        }
                                         $dataArray = $inputArray[$elKey];
                                         if ( !is_array( $dataArray ) )
                                         {
                                             $dataArray = array( $dataArray );
                                         }
-                                        
+
                                         $optSelected = false;
                                         if( isset( $item['option_array'] ) )
                                         {
                                             foreach ( $item['option_array'] as $optKey => $optItem )
                                             {
                                                 $content['form_elements'][$key]['option_array'][$optKey]['def'] = false;
-                                                if ( in_array( $optItem['name'], $dataArray ) )
+                                                if ( in_array( $optItem['name'], $dataArray ) || (isset($optionKey) && $optKey == $optionKey))
                                                 {
                                                     $content['form_elements'][$key]['option_array'][$optKey]['def'] = true;
+                                                    if (isset($optionKey) && $optKey == $optionKey)
+                                                        $content['form_elements'][$key]['option_array'][$optKey]['value'] = $optionValue;
                                                     $optSelected = true;
                                                 }
                                             }
