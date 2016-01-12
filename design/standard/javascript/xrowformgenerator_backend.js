@@ -274,21 +274,21 @@ function xrow_add_form_default(attr_value_id, ol_con_id, attribute_id, opt, attr
             }
         }
         temphtml = temphtml.replace( pattern_def, def );
-        
+
         var min='';
         if ( opt.min != undefined )
         {
             min = opt.min;
         }
         temphtml = temphtml.replace( pattern_min, min );
-       
+
         var max='';
         if ( opt.max != undefined )
         {
             max = opt.max;
         }
         temphtml = temphtml.replace( pattern_max, max );
-        
+
         var step='';
         if ( opt.step != undefined )
         {
@@ -358,6 +358,7 @@ function xrow_add_option( opt_tpl_id, ol_id, opt, xrow_form_index )
         var pattern_index_z = /zzzxrowindexzzz/gi;
         var pattern_name = /zzzxrowoptionnamezzz/gi;
         var pattern_image = /zzzxrowoptionimagezzz/gi;
+        var pattern_value = /zzzxrowoptionvaluezzz/gi;
         var pattern_def = /zzzxrowoptiondefzzz/gi;
 
         var pattern_xrow = /x1Xrow/g;
@@ -374,11 +375,13 @@ function xrow_add_option( opt_tpl_id, ol_id, opt, xrow_form_index )
 
         var myimage = 0;
         if ( opt.image != undefined )
-        {
             myimage = opt.image;
-
-        }
         temphtml = temphtml.replace( pattern_image, myimage );
+
+        var myvalue = '';
+        if ( opt.optional_value != undefined )
+            myvalue = opt.optional_value;
+        temphtml = temphtml.replace( pattern_value, myvalue );
 
         new_li.innerHTML = temphtml;
 
