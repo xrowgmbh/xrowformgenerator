@@ -99,6 +99,9 @@
             <div class="element" style="width:50%;"><label>{"Option"|i18n( 'xrowformgenerator/edit' )}:</label>
                 <input type="hidden" name="x1XrowFormElementOptionArray{$id}[yyyxrowindexyyy][]" value="zzzxrowindexzzz" />
                 <textarea class="box" cols="30" rows="3" name="x1XrowFormElementOption{$id}[yyyxrowindexyyy][zzzxrowindexzzz]">zzzxrowoptionnamezzz</textarea>
+                <br />
+                <label>{"Value (optional)"|i18n( 'xrowformgenerator/edit' )}:</label>
+                <input type="text" name="x1XrowFormElementOptionValueArray{$id}[yyyxrowindexyyy][zzzxrowindexzzz]" value="zzzxrowoptionvaluezzz" />
             </div>
             <div class="element">
                 <input class="xrow-option-default-button" type="checkbox" name="x1XrowFormElementOptionDefault{$id}[yyyxrowindexyyy][zzzxrowindexzzz]" value="zzzxrowindexzzz" title="{"Click here to select this value by default"|i18n( 'xrowformgenerator/edit' )}" /> {"Default value"|i18n( 'xrowformgenerator/edit' )}
