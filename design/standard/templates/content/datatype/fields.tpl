@@ -127,7 +127,7 @@
                                                                                       type="{$underFieldType}"
                                                                                       {if is_set($cssClass)} class="{$cssClass}"{/if}
                                                                                       {if is_set($autocompleteOff)} autocomplete="off"{/if}
-                                                                                      value="{if is_set($input_value)}{concat($input_value, '_', $counterOption, '|', $opt_key)}{else}{$opt_item.name|wash}{/if}"
+                                                                                      value="{if is_set($input_value)}{concat($input_value, '_', $counterOption, '|', $opt_key)}{elseif and(is_set($opt_item.optional_value), $opt_item.optional_value|ne(''))}{concat($opt_item.optional_value, '|', $opt_key)}{else}{$opt_item.name|wash}{/if}"
                                                                                       {if $opt_item.def}checked="checked" {/if} />
                 </div>
                 {def $tempimg = fetch('content', 'node', hash('node_id', $opt_item.image))}

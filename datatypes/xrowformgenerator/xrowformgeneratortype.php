@@ -145,7 +145,8 @@ class xrowFormGeneratorType extends eZDataType
                                "XrowFormElementOptionArray" . $id => "option",
                                "XrowFormElementOption" . $id => "option_name",
                                "XrowFormElementOptionDefault" . $id => "option_def",
-                               "XrowFormElementOptionImageArray" . $id => "option_image" );
+                               "XrowFormElementOptionImageArray" . $id => "option_image",
+                               "XrowFormElementOptionValueArray" . $id => "option_value" );
 
             // Read the formular config array
             foreach ( $keyArray as $tplFormKey => $dataKey )
@@ -272,6 +273,10 @@ class xrowFormGeneratorType extends eZDataType
                                 if ( isset( $option_imageArray[$key][$optKey] ) )
                                 {
                                     $item['image'] = $option_imageArray[$key][$optKey];
+                                }
+                                if ( isset( $option_valueArray[$key][$optKey] ) )
+                                {
+                                    $item['optional_value'] = $option_valueArray[$key][$optKey];
                                 }
                                 $options[$optKey] = $item;
                             }

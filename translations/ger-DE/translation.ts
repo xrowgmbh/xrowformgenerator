@@ -247,6 +247,10 @@
         <translation>Wählen Sie den Options Typ aus</translation>
     </message>
     <message>
+        <source>Value (optional)</source>
+        <translation>Wert (optional)</translation>
+    </message>
+    <message>
         <source>Choose how to display your option list in the form.</source>
         <translation>Wählen Sie aus, wie die Optionen im Formular dargestellt werden sollen.</translation>
     </message>
