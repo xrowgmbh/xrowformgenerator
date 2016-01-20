@@ -398,8 +398,8 @@
         <translation>Sender</translation>
     </message>
     <message>
-        <source>Please note that if the sender e-mail domain differs from the server domain, some recipients will block them as spam. In that case, ensure that the "foreign" mailing server allows you to send via its e-mail domain.</source>
-        <translation>Bitte beachten Sie, dass wenn die Domain der Sender-E-Mail von der des Servers abweicht, dass einige Empfänger diese als Spam blockieren. Stellen Sie in diesen Fällen sicher, dass der "fremde" Mailing-Servers Ihnen erlaubt, über seine E-Mail-Domain zu verschicken.</translation>
+        <source>Please note that if the sender e-mail domain differs from the server domain, some recipients will block them as spam. In that case, ensure that the 'foreign' mailing server allows you to send via its e-mail domain.</source>
+        <translation>Bitte beachten Sie, dass wenn die Domain der Sender-E-Mail von der des Servers abweicht, dass einige Empfänger diese als Spam blockieren. Stellen Sie in diesen Fällen sicher, dass der 'fremde' Mailing-Servers Ihnen erlaubt, über seine E-Mail-Domain zu verschicken.</translation>
     </message>
     <message>
         <source>Form sent successfully</source>
