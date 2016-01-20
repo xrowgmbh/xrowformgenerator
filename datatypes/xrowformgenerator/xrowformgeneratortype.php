@@ -359,14 +359,14 @@ class xrowFormGeneratorType extends eZDataType
 
         $tpl->setVariable( 'content', $content );
 
-        if ( $content['optin'] )
+        if( $content['optin'] )
         {
             $info_collect_id = $collectionAttribute->InformationCollectionID;
-            $hash= self::urlsafe_b64encode($info_collect_id);
-            $actual_link="http://$_SERVER[HTTP_HOST]/xrowform/optin/?id=".$hash;
+            $hash = self::urlsafe_b64encode($info_collect_id);
+            $actual_link = "http://$_SERVER[HTTP_HOST]/xrowform/optin/?id=".$hash;
             $tpl->setVariable( 'actual_link', $actual_link );
             $templateResult = $tpl->fetch( 'design:xrowformgenerator/xrowformmail_noaktive.tpl' );
-            $subject=$tpl->variable( 'subject' );
+            $subject = $tpl->variable( 'subject' );
             foreach ( $content['form_elements'] as $item )
             {
                 if ( $item['type'] == 'email' and isset( $item['def'] ) and $item['def'] != '' )
@@ -374,7 +374,9 @@ class xrowFormGeneratorType extends eZDataType
                     $receiverString = $item['def'];
                 }
             }
-        }else{
+        }
+        else
+        {
             $templateResult = $tpl->fetch( 'design:xrowformgenerator/xrowformmail.tpl' );
             $subject = $tpl->variable( 'subject' );
             $receiverString = $tpl->variable( 'email_receiver_xrow' );
@@ -398,18 +400,24 @@ class xrowFormGeneratorType extends eZDataType
 
         if( is_array( $receiverArray ) )
         {
-            $ccReceivers = $tpl->variable( 'email_cc_receivers' );
-            $bccReceivers = $tpl->variable( 'email_bcc_receivers' );
-            $sender = $tpl->variable( 'email_sender' );
+            $ccReceivers = false;
+            $bccReceivers = false;
+            $sender = false;
+            if ($tpl->hasVariable( 'email_cc_receivers' ))
+                $ccReceivers = $tpl->variable( 'email_cc_receivers' );
+            if ($tpl->hasVariable( 'email_bcc_receivers' ))
+                $bccReceivers = $tpl->variable( 'email_bcc_receivers' );
+            if ($tpl->hasVariable( 'email_sender' ))
+                $sender = $tpl->variable( 'email_sender' );
             if ( !self::validate( $sender ) )
             {
                 if( $ini->hasVariable( 'MailSettings', 'EmailSender' ) )
                 {
-                    $sender = $ini->variable( "MailSettings", "EmailSender" );
+                    $sender = $ini->variable( 'MailSettings', 'EmailSender' );
                 }
                 else
                 {
-                    $sender = $ini->variable( "MailSettings", "AdminEmail" );
+                    $sender = $ini->variable( 'MailSettings', 'AdminEmail' );
                 }
             }
 
@@ -1363,7 +1371,7 @@ class xrowFormGeneratorType extends eZDataType
     */
     static function validate( $address )
     {
-        if ( trim($address) == '' ) {
+        if ( $address === false || trim($address) == '' ) {
             return false;
         }
         $mxhosts = array();
