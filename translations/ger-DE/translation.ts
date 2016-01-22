@@ -398,8 +398,8 @@
         <translation>Sender</translation>
     </message>
     <message>
-        <source>Please note that if the sender e-mail domain differs from the server domain, some recipients will block them as spam. In that case, ensure that it is allow for the 'foreign' mailing server to send e-mails for your domain (SPF Records).</source>
-        <translation>Bitte beachten Sie, dass wenn die Domain der Sender-E-Mail von der des Servers abweicht, dass einige Empfänger diese als Spam blockieren. Stellen Sie in diesem Fall sicher, dass es dem 'fremden' Mailing-Server erlaubt ist, für Ihre Domain E-Mails zu verschicken (SPF Records).</translation>
+        <source>Please note that if the domain of sender e-mail differs from the server domain, some recipients will block them as spam. In that case, ensure that it is allow for the 'foreign' mailserver to send e-mails for your domain (SPF Records).</source>
+        <translation>Bitte beachten Sie, dass wenn die Domain der E-Mail-Adresse des Senders von der des Servers abweicht, dass einige Empfänger diese als Spam blockieren. Stellen Sie in diesem Fall sicher, dass es dem 'fremden' Mailserver erlaubt ist, für Ihre Domain E-Mails zu verschicken (SPF Records).</translation>
     </message>
     <message>
         <source>Form sent successfully</source>
