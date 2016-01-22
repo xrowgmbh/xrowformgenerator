@@ -38,7 +38,7 @@
 </div>
 
 <div class="block ezcca-edit-datatype-ezemail ezcca-edit-sender">
-    <label>{"Sender"|i18n( 'xrowformgenerator/mail' )} <abbr style="font-weight: normal" title="{"Please note that if the sender e-mail domain differs from the server domain, some recipients will block them as spam. In that case, ensure that it is allow for the 'foreign' mailing server to send e-mails for your domain (SPF Records)."|i18n( 'xrowformgenerator/mail' )}">(<u>?</u>)</abbr></label>
+    <label>{"Sender"|i18n( 'xrowformgenerator/mail' )} <abbr style="font-weight: normal" onclick="javascript:alert(this.title);" title="{"Please note that if the domain of sender e-mail differs from the server domain, some recipients will block them as spam. In that case, ensure that it is allow for the 'foreign' mailserver to send e-mails for your domain (SPF Records)."|i18n( 'xrowformgenerator/mail' )}">(<u>?</u>)</abbr></label>
     <input type="text" class="box" name="XrowFormSender{$id}" value="{$content.sender}" />
 </div>
 
