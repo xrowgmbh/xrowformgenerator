@@ -1467,77 +1467,81 @@ class xrowFormGeneratorType extends eZDataType
 
     static function encryptData( $planeTextData )
     {
-        if ( $planeTextData != '' || is_object( $planeTextData ) || is_array( $planeTextData ) )
+        $sys = eZSys::instance();
+        $storage_dir = $sys->rootDir()."/settings/override/";
+        //if the key doesn't exist,then generate a new key.
+        if (!is_file($storage_dir.'xrow-formular-private.key') && !is_file($storage_dir.'xrow-formular-public.key'))
         {
-            $xrowini = eZINI::instance( 'xrowformgenerator.ini' );
-            $key = $xrowini->variable( 'EncryptionSettings', 'Key' );
-            $algorithm = $xrowini->variable( 'EncryptionSettings', 'Algorithm' );
-            $mode = $xrowini->variable( 'EncryptionSettings', 'Mode' );
-            if ( is_object( $planeTextData ) || is_array( $planeTextData ) )
-            {
-                foreach ( $planeTextData as $planeTextItem )
-                {
-                    $planeText = $planeTextItem;
+            $config = array('private_key_bits' => 2048,
+                            'private_key_type' => OPENSSL_KEYTYPE_RSA);
+            $privateKey = openssl_pkey_new($config);
+            openssl_pkey_export_to_file($privateKey, $storage_dir.'xrow-formular-private.key');
+            $key = openssl_pkey_get_details($privateKey);
+            file_put_contents($storage_dir.'xrow-formular-public.key', $key['key']);
+            openssl_free_key($privateKey);
+        }
+        
+        if ( $planeTextData != '' )
+        {
+            $publicKey = file_get_contents($storage_dir.'xrow-formular-public.key');
+            $planeText = gzcompress($planeTextData);
+            $getPublicKey = openssl_pkey_get_public($publicKey);
+            $p_key = openssl_pkey_get_details($getPublicKey);
+            $chunkSize = ceil($p_key['bits'] / 8) - 11;
+            $output = '';
+            while ($planeText) {
+                $chunk = substr($planeText, 0, $chunkSize);
+                $planeText = substr($planeText, $chunkSize);
+                $encrypted = '';
+                if ( !openssl_public_encrypt($chunk, $encrypted, $getPublicKey)) {
+                    eZDebug::writeError( "failed to encrypt data!" );
+                    return false;
                 }
+                $output .= $encrypted;
             }
-            else
-            {
-                $planeText = $planeTextData;
-            }
-            $td = mcrypt_module_open( $algorithm, '', $mode, '' );
-            $iv = mcrypt_create_iv( mcrypt_enc_get_iv_size( $td ), MCRYPT_RAND );
-            $okey = substr( md5( $key . rand( 0, 9 ) ), 0, mcrypt_enc_get_key_size( $td ) );
-            mcrypt_generic_init( $td, $okey, $iv );
-            $encrypted = mcrypt_generic( $td, $planeText . chr( 194 ) );
-            $encryptedString = $encrypted . $iv;
-
-            return base64_encode( $encryptedString );
+            openssl_free_key($getPublicKey);
+            $output = base64_encode($output);
+            return $output;
         }
     }
 
     static function decryptData( $encryptedStringData, $limit = 0 )
     {
-        if ( $encryptedStringData != '' || is_object( $encryptedStringData ) || is_array( $encryptedStringData ) )
-        {
-            $xrowini = eZINI::instance( 'xrowformgenerator.ini' );
-            $key = $xrowini->variable( 'EncryptionSettings', 'Key' );
-            $algorithm = $xrowini->variable( 'EncryptionSettings', 'Algorithm' );
-            $mode = $xrowini->variable( 'EncryptionSettings', 'Mode' );
-
-            if ( is_object( $encryptedStringData ) || is_array( $encryptedStringData ) )
-            {
-                foreach ( $encryptedStringData as $encryptedStringDataItem )
-                {
-                    $encryptedString = base64_decode( $encryptedStringDataItem );
-                }
-            }
-            else
-            {
-                $encryptedString = base64_decode( $encryptedStringData );
-            }
-
-            $td = mcrypt_module_open( $algorithm, '', $mode, '' );
-            $iv = substr( $encryptedString, - 8 );
-            $encrypted = substr( $encryptedString, 0, - 8 );
-            for ( $i = 0; $i < 10; $i ++ )
-            {
-                $okey = substr( md5( $key . $i ), 0, mcrypt_enc_get_key_size( $td ) );
-                mcrypt_generic_init( $td, $okey, $iv );
-                $decrypted = trim( mdecrypt_generic( $td, $encrypted ) );
-                mcrypt_generic_deinit( $td );
-                $planeText = substr( $decrypted, 0, - 1 );
-                if ( ord( substr( $decrypted, - 1 ) ) == 194 )
-                    break;
-            }
-            mcrypt_module_close( $td );
-            // cut the result, if a limit is greater than 0
-            if ( $limit > 0 )
-            {
-                $planeText = strrev( substr( strrev( $planeText ), 0, 4 ) );
-            }
-
-            return $planeText;
+        $sys = eZSys::instance();
+        $storage_dir = $sys->rootDir()."/settings/override/";
+        $keyStr = file_get_contents($storage_dir.'xrow-formular-private.key');
+        if (!$privateKey = openssl_pkey_get_private($keyStr)) {
+             eZDebug::writeError( "get private key failed!" );
+             return false;
         }
+        if ( $encryptedStringData != '')
+        {
+            $encrypted = base64_decode($encryptedStringData);
+        }
+        
+        $p_key = openssl_pkey_get_details($privateKey);
+        $chunkSize = ceil($p_key['bits'] / 8);
+        $output = '';
+        
+        while ($encrypted) {
+            $chunk = substr($encrypted, 0, $chunkSize);
+            $encrypted = substr($encrypted, $chunkSize);
+            $decryptd = '';
+            if (!openssl_private_decrypt($chunk, $decryptd, $privateKey)) {
+                eZDebug::writeError("failed to decrypt data!");
+                return false;
+            }
+            $output .= $decryptd;
+        }
+        openssl_free_key($privateKey);
+        $output = gzuncompress($output);
+        
+        // cut the result, if a limit is greater than 0
+        if ( $limit > 0 )
+        {
+            $output = strrev( substr( strrev( $output ), 0, 4 ) );
+        }
+        return $output;
     }
     
     static function urlsafe_b64encode($string) {
