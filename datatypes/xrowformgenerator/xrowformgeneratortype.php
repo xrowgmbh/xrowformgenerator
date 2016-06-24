@@ -1467,10 +1467,10 @@ class xrowFormGeneratorType extends eZDataType
 
     static function encryptData( $planeTextData )
     {
-        $sys = eZSys::instance();
+       //generate a new key(standby).
+       /*$sys = eZSys::instance();
         $storage_dir = $sys->rootDir()."/settings/override/";
-        //if the key doesn't exist,then generate a new key.
-        if (!is_file($storage_dir.'xrow-formular-private.key') && !is_file($storage_dir.'xrow-formular-public.key'))
+       if (!is_file($storage_dir.'xrow-formular-private.key') && !is_file($storage_dir.'xrow-formular-public.key'))
         {
             $config = array('private_key_bits' => 2048,
                             'private_key_type' => OPENSSL_KEYTYPE_RSA);
@@ -1479,11 +1479,12 @@ class xrowFormGeneratorType extends eZDataType
             $key = openssl_pkey_get_details($privateKey);
             file_put_contents($storage_dir.'xrow-formular-public.key', $key['key']);
             openssl_free_key($privateKey);
-        }
-        
+        }*/
         if ( $planeTextData != '' )
         {
-            $publicKey = file_get_contents($storage_dir.'xrow-formular-public.key');
+            $xrowini = eZINI::instance( 'xrowformgenerator.ini' );
+            $publicKey_array = $xrowini->variable( 'EncryptionSettings', 'PublicKey' );
+            $publicKey = join("\n",$publicKey_array);
             $planeText = gzcompress($planeTextData);
             $getPublicKey = openssl_pkey_get_public($publicKey);
             $p_key = openssl_pkey_get_details($getPublicKey);
@@ -1507,9 +1508,9 @@ class xrowFormGeneratorType extends eZDataType
 
     static function decryptData( $encryptedStringData, $limit = 0 )
     {
-        $sys = eZSys::instance();
-        $storage_dir = $sys->rootDir()."/settings/override/";
-        $keyStr = file_get_contents($storage_dir.'xrow-formular-private.key');
+        $xrowini = eZINI::instance( 'xrowformgenerator.ini' );
+        $keyStr_array = $xrowini->variable( 'EncryptionSettings', 'PrivateKey' );
+        $keyStr = join("\n",$keyStr_array);
         if (!$privateKey = openssl_pkey_get_private($keyStr)) {
              eZDebug::writeError( "get private key failed!" );
              return false;
