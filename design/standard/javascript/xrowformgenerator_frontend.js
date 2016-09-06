@@ -15,7 +15,7 @@ jQuery(document).ready(function($){
                 else {
                     if(input.hasAttribute('data-emptytext') && $.trim($(this).val()) == '')
                         input.setCustomValidity($(this).data('emptytext'));
-                    $(this).keyup(function() {
+                    $(this).change(function() {
                         checkFieldType(this);
                     });
                 }
