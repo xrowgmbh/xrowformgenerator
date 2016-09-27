@@ -1390,7 +1390,16 @@ class xrowFormGeneratorType extends eZDataType
         if( $ini->hasVariable( "Settings", "InputEmail" ) && $ini->variable( "Settings", "InputEmail" ) != '' ) {
             $regexp = $ini->variable( "Settings", "InputEmail" );
         }
-        else {
+        else if( $ini->hasVariable( "Settings", "PHPInputEmail" ) && $ini->variable( "Settings", "PHPInputEmail" ) != '' )
+        {
+            $regexp = $ini->variable( "Settings", "PHPInputEmail" );
+        }
+        else if( $ini->hasVariable( "Settings", "PHPEmailDefaultPattern" ) && $ini->variable( "Settings", "PHPEmailDefaultPattern" ) != '' )
+        {
+            $regexp = $ini->variable( "Settings", "PHPEmailDefaultPattern" );
+        }
+        else
+        {
             $regexp = $ini->variable( "Settings", "EmailDefaultPattern" );
         }
         if( !preg_match( $regexp, $address ) ) {
